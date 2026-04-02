@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 图片工作流解析器</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f0f8f2;
+  --surface: #ffffff;
+  --surface2: #eaf6ee;
+  --primary: #3a9e5f;
+  --primary-light: #5fbb7e;
+  --primary-dark: #257048;
+  --accent: #27ae60;
+  --text: #162b20;
+  --text-muted: #527a60;
+  --border: #c3dfc9;
+  --border-light: #ddf0e3;
+  --shadow: 0 4px 24px rgba(40,100,60,0.10);
+  --shadow-lg: 0 8px 40px rgba(40,100,60,0.16);
+  --radius: 13px;
+  --mono: 'JetBrains Mono', 'Consolas', monospace;
+  --sans: 'Nunito', 'Segoe UI', sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 15% 60%,rgba(58,158,95,.06) 0%,transparent 55%),radial-gradient(ellipse at 85% 15%,rgba(39,174,96,.05) 0%,transparent 55%);pointer-events:none;z-index:0}
+
+/* HEADER */
+.header{position:relative;z-index:10;padding:18px 28px;background:var(--surface);border-bottom:1.5px solid var(--border);box-shadow:0 2px 14px rgba(40,100,60,.07);display:flex;align-items:center;gap:14px}
+.hicon{width:42px;height:42px;background:linear-gradient(135deg,var(--primary),var(--primary-light));border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.header h1{font-size:20px;font-weight:800;color:var(--primary-dark)}
+.header p{font-size:13px;color:var(--text-muted);margin-top:1px}
+.main{position:relative;z-index:1;max-width:1400px;margin:0 auto;padding:28px 24px}
+
+/* UPLOAD */
+.upload-wrap{position:relative;border:2.5px dashed var(--border);border-radius:var(--radius);background:var(--surface);overflow:hidden;cursor:pointer;transition:all .25s}
+.upload-wrap::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(58,158,95,.04),rgba(39,174,96,.04));opacity:0;transition:opacity .25s}
+.upload-wrap:hover,.upload-wrap.over{border-color:var(--primary);box-shadow:var(--shadow)}
+.upload-wrap:hover::before,.upload-wrap.over::before{opacity:1}
+.upload-inner{padding:52px 24px;text-align:center;pointer-events:none}
+.uicon{font-size:54px;display:block;margin-bottom:14px;filter:drop-shadow(0 4px 8px rgba(58,158,95,.25))}
+.upload-wrap h2{font-size:19px;font-weight:700;margin-bottom:7px}
+.upload-wrap p{color:var(--text-muted);font-size:14px}
+.upload-wrap input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+
+/* RESULT */
+.result{margin-top:24px;display:none}
+.result.on{display:block}
+
+/* INFO BAR */
+.infobar{display:flex;align-items:center;gap:16px;padding:14px 20px;background:var(--surface);border-radius:var(--radius);border:1.5px solid var(--border);margin-bottom:20px;box-shadow:var(--shadow)}
+.prev-img{width:60px;height:60px;object-fit:cover;border-radius:9px;border:2px solid var(--border);flex-shrink:0}
+.imeta{flex:1;min-width:0}
+.imeta h3{font-size:15px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.imeta p{font-size:12px;color:var(--text-muted);margin-top:2px}
+.badge{padding:5px 14px;border-radius:20px;font-size:12px;font-weight:800;letter-spacing:.4px;flex-shrink:0}
+.badge.sd{background:#e3f2fd;color:#1055b0}
+.badge.cf{background:#e8f5e9;color:#1f7e40}
+.badge.uk{background:#f3e5f5;color:#6a1b9a}
+
+/* SD WEBUI */
+.card{background:var(--surface);border-radius:var(--radius);border:1.5px solid var(--border);overflow:hidden;box-shadow:var(--shadow)}
+.sec-hd{padding:12px 20px;background:var(--surface2);border-bottom:1.5px solid var(--border);font-weight:700;font-size:13.5px;color:var(--primary-dark);display:flex;align-items:center;gap:8px}
+.prompt-box{padding:16px 20px;border-bottom:1px solid var(--border-light)}
+.plabel{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:8px}
+.ptext{font-family:var(--mono);font-size:12.5px;line-height:1.7;background:var(--bg);padding:12px 14px;border-radius:9px;border:1px solid var(--border-light);white-space:pre-wrap;word-break:break-word;position:relative}
+.ptext.neg{background:#fff5f6;border-color:#fbd5da;color:#6b1a23}
+.pcopy{position:absolute;top:8px;right:8px;padding:3px 10px;background:var(--primary);color:#fff;border:none;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;font-family:var(--sans);transition:background .2s}
+.pcopy:hover{background:var(--primary-dark)}
+
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
+.pitem{display:flex;align-items:center;padding:11px 18px;border-bottom:1px solid var(--border-light);border-right:1px solid var(--border-light);gap:10px;transition:background .15s}
+.pitem:hover{background:var(--surface2)}
+.pkey{font-size:11.5px;font-weight:700;color:var(--text-muted);min-width:95px;flex-shrink:0}
+.pval{font-family:var(--mono);font-size:12px;color:var(--text);flex:1;word-break:break-all}
+.cbtn{flex-shrink:0;width:26px;height:26px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;transition:all .18s;color:var(--text-muted)}
+.cbtn:hover{background:var(--primary);border-color:var(--primary);color:#fff;transform:scale(1.08)}
+.cbtn.ok{background:var(--accent);border-color:var(--accent);color:#fff}
+
+/* COMFYUI CANVAS */
+.cf-card{background:var(--surface);border-radius:var(--radius);border:1.5px solid var(--border);overflow:hidden;box-shadow:var(--shadow)}
+.toolbar{padding:9px 16px;background:var(--surface2);border-bottom:1.5px solid var(--border);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.tlbl{font-size:11.5px;color:var(--text-muted);font-weight:700}
+.tbtn{padding:5px 12px;background:var(--surface);border:1.5px solid var(--border);border-radius:7px;font-size:12px;font-family:var(--sans);font-weight:700;color:var(--text);cursor:pointer;transition:all .18s;display:flex;align-items:center;gap:4px;white-space:nowrap}
+.tbtn:hover{background:var(--primary-light);border-color:var(--primary-light);color:#fff}
+.tbtn.act{background:var(--primary);border-color:var(--primary);color:#fff}
+.tsep{width:1px;height:20px;background:var(--border)}
+.tinfo{margin-left:auto;font-size:11.5px;color:var(--text-muted);font-family:var(--mono)}
+.node-count{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:3px 9px;font-size:11px;font-weight:700;color:var(--primary-dark)}
+
+.viewport{height:620px;overflow:hidden;position:relative;background-color:#eef7f1;background-image:radial-gradient(circle,rgba(58,158,95,.25) 1.2px,transparent 1.2px);background-size:22px 22px;cursor:grab;user-select:none}
+.viewport:active{cursor:grabbing}
+.world{position:absolute;top:0;left:0;transform-origin:0 0;will-change:transform}
+.conn-svg{position:absolute;top:0;left:0;width:8000px;height:8000px;pointer-events:none;overflow:visible}
+
+/* NODES */
+.cfnode{position:absolute;min-width:215px;max-width:300px;background:#fff;border:2px solid #d4e8db;border-radius:11px;box-shadow:0 4px 18px rgba(40,100,60,.12);transition:box-shadow .2s,border-color .2s}
+.cfnode:hover{box-shadow:0 6px 28px rgba(40,100,60,.2);border-color:var(--primary)}
+.cfnode.sel{border-color:var(--primary);box-shadow:0 0 0 3px rgba(58,158,95,.18),0 6px 28px rgba(40,100,60,.2)}
+.nhead{padding:9px 13px;border-radius:9px 9px 0 0;cursor:move;display:flex;align-items:center;gap:7px}
+.ntitle{font-size:11.5px;font-weight:800;color:#fff;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:.2px;pointer-events:none}
+.nid{font-size:10px;font-family:var(--mono);color:rgba(255,255,255,.8);background:rgba(0,0,0,.2);padding:2px 6px;border-radius:4px;flex-shrink:0;pointer-events:none}
+.nbody{padding:0}
+
+/* Slots */
+.slots-wrap{padding:5px 0 4px}
+.srow{display:flex;justify-content:space-between;align-items:center;min-height:24px}
+.sinput,.soutput{display:flex;align-items:center;gap:5px;padding:3px 0}
+.sinput{padding-left:6px}
+.soutput{padding-right:6px;justify-content:flex-end}
+.sdot{width:11px;height:11px;border-radius:50%;border:2.5px solid currentColor;background:#fff;flex-shrink:0;cursor:default}
+.sinput .sdot{margin-left:-12px}
+.soutput .sdot{margin-right:-12px}
+.sname{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px}
+
+/* Node params */
+.nparams{padding:5px 10px 8px;border-top:1px solid #eef5f1;margin-top:3px}
+.npitem{display:flex;align-items:center;gap:5px;padding:2.5px 0}
+.npkey{font-size:10.5px;color:var(--text-muted);font-weight:700;min-width:68px;flex-shrink:0}
+.npval{font-family:var(--mono);font-size:10.5px;color:var(--text);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ncbtn{flex-shrink:0;width:19px;height:19px;background:var(--surface2);border:1px solid var(--border);border-radius:4px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:10px;transition:all .15s;color:var(--text-muted)}
+.ncbtn:hover{background:var(--primary);border-color:var(--primary);color:#fff}
+
+/* Node colors */
+.nc-loader{background:linear-gradient(135deg,#6d28d9,#8b5cf6)}
+.nc-sampler{background:linear-gradient(135deg,#c2410c,#f97316)}
+.nc-clip{background:linear-gradient(135deg,#047857,#10b981)}
+.nc-latent{background:linear-gradient(135deg,#9d174d,#ec4899)}
+.nc-image{background:linear-gradient(135deg,#1e40af,#60a5fa)}
+.nc-upscale{background:linear-gradient(135deg,#92400e,#f59e0b)}
+.nc-lora{background:linear-gradient(135deg,#065f46,#34d399)}
+.nc-default{background:linear-gradient(135deg,#374151,#6b7280)}
+
+/* RAW */
+.raw-wrap{margin-top:18px}
+.raw-tog{width:100%;padding:10px 18px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);cursor:pointer;font-size:13px;font-weight:700;color:var(--text-muted);display:flex;align-items:center;gap:8px;transition:all .2s;font-family:var(--sans)}
+.raw-tog:hover{border-color:var(--primary);color:var(--primary)}
+.raw-body{display:none;padding:16px;background:#0f1e14;border:1.5px solid var(--border);border-top:none;border-radius:0 0 var(--radius) var(--radius);font-family:var(--mono);font-size:11px;color:#7de0a8;white-space:pre-wrap;overflow:auto;max-height:280px;line-height:1.65}
+.raw-body.on{display:block}
+
+/* MISC */
+.error{padding:14px 20px;background:#fff5f6;border:1.5px solid #fbd5da;border-radius:var(--radius);color:#be123c;font-size:14px;display:flex;align-items:center;gap:10px}
+.loading{display:flex;align-items:center;justify-content:center;padding:52px;gap:14px;color:var(--text-muted);font-size:14px}
+.spin{width:26px;height:26px;border:3px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:spin .75s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.toast{position:fixed;bottom:26px;right:26px;background:#1a3d26;color:#fff;padding:10px 20px;border-radius:9px;font-size:13px;font-weight:700;z-index:9999;transform:translateY(80px);transition:transform .3s cubic-bezier(.34,1.56,.64,1);pointer-events:none;box-shadow:0 4px 20px rgba(0,0,0,.18)}
+.toast.on{transform:translateY(0)}
+@media(max-width:768px){.main{padding:16px 14px}.pgrid{grid-template-columns:1fr}.viewport{height:480px}.header h1{font-size:17px}}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="hicon">🌿</div>
+  <div>
+    <h1>AI 图片工作流解析器</h1>
+    <p>解析 ComfyUI · Stable Diffusion WebUI 生成图片的参数与工作流</p>
+  </div>
+</div>
+
+<div class="main">
+  <div class="upload-wrap" id="uploadWrap">
+    <div class="upload-inner">
+      <span class="uicon">🖼️</span>
+      <h2>拖拽图片至此，或点击上传</h2>
+      <p>支持 ComfyUI 和 SD WebUI 生成的 PNG 图片</p>
+    </div>
+    <input type="file" id="fileInput" accept="image/png,image/jpeg,image/webp" />
+  </div>
+  <div class="result" id="result">
+    <div id="rc"></div>
+  </div>
+</div>
+<div class="toast" id="toast">✓ 已复制到剪贴板</div>
+
+<script>
+// ─── Utilities ───────────────────────────────────────────────────────────────
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function showToast(m='✓ 已复制'){const t=document.getElementById('toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2000)}
+function copy(text,btn){
+  navigator.clipboard.writeText(text).then(()=>{
+    showToast();
+    if(btn){btn.classList.add('ok');const prev=btn.textContent;btn.textContent='✓';setTimeout(()=>{btn.classList.remove('ok');btn.textContent=prev},1500)}
+  }).catch(()=>{
+    const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);showToast();
+  })
+}
+function safeJSON(s){try{return JSON.parse(s)}catch{return null}}
+
+// ─── PNG Metadata Reader ──────────────────────────────────────────────────────
+async function readPNGMeta(file){
+  const buf=await file.arrayBuffer();
+  const u8=new Uint8Array(buf);
+  const SIG=[137,80,78,71,13,10,26,10];
+  for(let i=0;i<8;i++) if(u8[i]!==SIG[i]) return null;
+  const view=new DataView(buf);
+  const dec=new TextDecoder('utf-8');
+  const meta={};
+  let off=8;
+  while(off+12<=u8.length){
+    const len=view.getUint32(off);
+    if(len<0||len>buf.byteLength) break;
+    const type=String.fromCharCode(u8[off+4],u8[off+5],u8[off+6],u8[off+7]);
+    if(type==='IEND') break;
+    if(type==='tEXt'){
+      try{
+        const d=u8.slice(off+8,off+8+len);
+        const ni=d.indexOf(0);
+        if(ni>=0){
+          const kw=dec.decode(d.slice(0,ni));
+          let val;try{val=dec.decode(d.slice(ni+1))}catch{val=new TextDecoder('latin1').decode(d.slice(ni+1))}
+          meta[kw]=val;
+        }
+      }catch{}
+    } else if(type==='iTXt'){
+      try{
+        const d=u8.slice(off+8,off+8+len);
+        let p=0;
+        while(p<d.length&&d[p]!==0) p++;
+        const kw=dec.decode(d.slice(0,p));p++;
+        const cf=d[p++];p++;
+        while(p<d.length&&d[p]!==0) p++;p++;
+        while(p<d.length&&d[p]!==0) p++;p++;
+        const td=d.slice(p);
+        let val;
+        if(cf===1){
+          try{
+            const ds=new DecompressionStream('deflate');
+            const w=ds.writable.getWriter();w.write(td);w.close();
+            const r=ds.readable.getReader();const ch=[];let res;
+            while(!(res=await r.read()).done) ch.push(res.value);
+            let tot=0;for(const c of ch) tot+=c.length;
+            const all=new Uint8Array(tot);let pp=0;
+            for(const c of ch){all.set(c,pp);pp+=c.length}
+            val=dec.decode(all);
+          }catch{val=dec.decode(td)}
+        } else {val=dec.decode(td)}
+        meta[kw]=val;
+      }catch{}
+    }
+    off+=12+len;
+  }
+  return meta;
+}
+
+// ─── SD WebUI Parser ──────────────────────────────────────────────────────────
+function parseSDParams(raw){
+  const r={pos:'',neg:'',params:[]};
+  const ni=raw.indexOf('\nNegative prompt:');
+  let settings='',rest=raw;
+  if(ni>=0){
+    r.pos=raw.slice(0,ni).trim();
+    rest=raw.slice(ni+1);
+  } else if(raw.startsWith('Negative prompt:')){
+    rest=raw;
+  } else {
+    const si=raw.search(/\nSteps:/);
+    if(si>=0){r.pos=raw.slice(0,si).trim();settings=raw.slice(si+1).trim();rest='';}
+    else{r.pos=raw.trim();rest='';}
+  }
+  if(rest){
+    const np=rest.indexOf('Negative prompt:');
+    if(np>=0){
+      const after=rest.slice(np+'Negative prompt:'.length);
+      const si=after.search(/\nSteps:/);
+      if(si>=0){r.neg=after.slice(0,si).trim();settings=after.slice(si+1).trim();}
+      else r.neg=after.trim();
+      if(!r.pos){const pp=rest.slice(0,np).trim();if(pp) r.pos=pp;}
+    } else if(!settings){
+      const si=rest.search(/\nSteps:/);
+      if(si>=0){if(!r.pos) r.pos=rest.slice(0,si).trim();settings=rest.slice(si+1).trim();}
+    }
+  }
+  if(settings){
+    const all=settings.replace(/\n/g,', ');
+    // Split at comma followed by word(s)+colon (lookahead)
+    const parts=all.split(/,\s*(?=[A-Za-z][^:,]*:)/);
+    for(const p of parts){
+      const ci=p.indexOf(':');
+      if(ci>0){
+        const k=p.slice(0,ci).trim();
+        const v=p.slice(ci+1).trim();
+        if(k&&v) r.params.push({k,v});
+      }
+    }
+  }
+  return r;
+}
+
+// ─── ComfyUI Parser ───────────────────────────────────────────────────────────
+function nodeColorClass(t){
+  const s=(t||'').toLowerCase();
+  if(/checkpoint|loader|load(?!.*image)/.test(s)) return 'nc-loader';
+  if(/ksampler|sampler/.test(s)) return 'nc-sampler';
+  if(/clip|text.*enc|enc.*text|condition/.test(s)) return 'nc-clip';
+  if(/latent|vae|decode|encode(?!.*clip)/.test(s)) return 'nc-latent';
+  if(/image|save|preview|upscale/.test(s)) return s.includes('upscale')?'nc-upscale':'nc-image';
+  if(/lora|control/.test(s)) return 'nc-lora';
+  return 'nc-default';
+}
+function connColor(t){
+  const s=(t||'').toUpperCase();
+  const MAP={MODEL:'#7c3aed',CLIP:'#059669',VAE:'#e11d48',LATENT:'#db2777',IMAGE:'#2563eb',CONDITIONING:'#d97706',INT:'#64748b',FLOAT:'#64748b',STRING:'#65a30d'};
+  return MAP[s]||'#94a3b8';
+}
+
+function parseComfyWorkflow(wfStr,promptStr){
+  const wf=safeJSON(wfStr);
+  const pr=safeJSON(promptStr);
+  if(!wf&&!pr) return null;
+  // Workflow format (has .nodes array)
+  if(wf&&Array.isArray(wf.nodes)) return fromWorkflow(wf,pr);
+  // Prompt-only or workflow is prompt format
+  const candidate=wf||pr;
+  if(candidate){
+    const keys=Object.keys(candidate);
+    if(keys.length&&candidate[keys[0]]&&candidate[keys[0]].class_type) return fromPrompt(candidate);
+  }
+  if(pr) return fromPrompt(pr);
+  return null;
+}
+
+function fromWorkflow(wf,pr){
+  const links={};
+  for(const lk of (wf.links||[])){
+    // [id, srcNode, srcSlot, dstNode, dstSlot, type]
+    links[lk[0]]={id:lk[0],srcNode:String(lk[1]),srcSlot:lk[2],dstNode:String(lk[3]),dstSlot:lk[4],type:lk[5]||'default'};
+  }
+  const nodes=[];
+  for(const wn of wf.nodes){
+    const pn=pr?pr[String(wn.id)]:null;
+    const promptInputs=pn?pn.inputs||{}:{};
+    const wv=wn.widgets_values||[];
+    // Build params: match non-link inputs from prompt
+    const params=[];
+    const nonLinkKeys=Object.keys(promptInputs).filter(k=>!Array.isArray(promptInputs[k]));
+    for(let i=0;i<wv.length;i++){
+      const k=nonLinkKeys[i]||`widget_${i+1}`;
+      if(wv[i]!==null&&wv[i]!==undefined) params.push({k,v:String(wv[i])});
+    }
+    if(params.length===0&&pn){
+      for(const [k,v] of Object.entries(promptInputs)){
+        if(!Array.isArray(v)) params.push({k,v:String(v)});
+      }
+    }
+    const inputs=(wn.inputs||[]).map((inp,i)=>({name:inp.name||`in_${i}`,type:inp.type||'default',linkId:inp.link??null,slot:i}));
+    const outputs=(wn.outputs||[]).map((out,i)=>({name:out.name||`out_${i}`,type:out.type||'default',links:out.links||[],slot:out.slot_index!==undefined?out.slot_index:i}));
+    const pos=wn.pos||[0,0];
+    nodes.push({id:String(wn.id),type:wn.type||pn?.class_type||'Node',title:wn.title||wn.type||pn?.class_type||'Node',pos:[Array.isArray(pos)?pos[0]:(pos['0']||0),Array.isArray(pos)?pos[1]:(pos['1']||0)],inputs,outputs,params});
+  }
+  return {nodes,links};
+}
+
+function fromPrompt(pr){
+  const nodes=[];const links={};let lid=0;
+  // First pass: create nodes
+  for(const [id,nd] of Object.entries(pr)){
+    if(!nd.class_type) continue;
+    nodes.push({id,type:nd.class_type,title:nd._meta?.title||nd.class_type,pos:null,inputs:[],outputs:[],params:[]});
+  }
+  // Second pass: inputs & connections
+  for(const [id,nd] of Object.entries(pr)){
+    if(!nd.class_type) continue;
+    const node=nodes.find(n=>n.id===id);
+    if(!node) continue;
+    const ins=[],params=[];
+    for(const [k,v] of Object.entries(nd.inputs||{})){
+      if(Array.isArray(v)&&v.length===2&&typeof v[1]==='number'){
+        const fromNode=String(v[0]),fromSlot=v[1];
+        lid++;
+        links[lid]={id:lid,srcNode:fromNode,srcSlot:fromSlot,dstNode:id,dstSlot:ins.length,type:k.toUpperCase()};
+        ins.push({name:k,type:k.toUpperCase(),linkId:lid,slot:ins.length});
+      } else {
+        params.push({k,v:String(v)});
+      }
+    }
+    node.inputs=ins;node.params=params;
+  }
+  // Build outputs from links
+  for(const lk of Object.values(links)){
+    const src=nodes.find(n=>n.id===lk.srcNode);
+    if(!src) continue;
+    let out=src.outputs.find(o=>o.slot===lk.srcSlot);
+    if(!out){out={name:lk.type,type:lk.type,links:[],slot:lk.srcSlot};src.outputs.push(out);src.outputs.sort((a,b)=>a.slot-b.slot);}
+    out.links.push(lk.id);
+  }
+  autoLayout(nodes,links);
+  return {nodes,links};
+}
+
+function autoLayout(nodes,links){
+  const adj={},inDeg={};
+  for(const n of nodes){adj[n.id]=[];inDeg[n.id]=inDeg[n.id]||0;}
+  for(const lk of Object.values(links)){
+    (adj[lk.srcNode]=adj[lk.srcNode]||[]).push(lk.dstNode);
+    inDeg[lk.dstNode]=(inDeg[lk.dstNode]||0)+1;
+  }
+  const cols={};const visited=new Set();
+  let queue=nodes.filter(n=>!(inDeg[n.id]>0)).map(n=>n.id);
+  if(!queue.length) queue=nodes.slice(0,1).map(n=>n.id);
+  let col=0;
+  while(queue.length){
+    const next=[];
+    for(const id of [...new Set(queue)]){if(visited.has(id)) continue;cols[id]=col;visited.add(id);for(const c of adj[id]||[]) if(!visited.has(c)) next.push(c);}
+    queue=next;col++;
+  }
+  for(const n of nodes){if(cols[n.id]===undefined) cols[n.id]=col++;}
+  const rowCnt={};
+  for(const n of nodes){
+    const c=cols[n.id]||0;const row=rowCnt[c]||0;rowCnt[c]=row+1;
+    n.pos=[c*310+40,row*220+40];
+  }
+}
+
+// ─── SD WebUI Renderer ────────────────────────────────────────────────────────
+function renderSD(parsed,el){
+  let h=`<div class="card">`;
+  h+=`<div class="sec-hd">🎨 Stable Diffusion WebUI 参数</div>`;
+  if(parsed.pos){
+    const sv=JSON.stringify(parsed.pos);
+    h+=`<div class="prompt-box"><div class="plabel">正向提示词 (Positive Prompt)</div><div class="ptext"><button class="pcopy" onclick="copy(${sv},this)">复制</button>${esc(parsed.pos)}</div></div>`;
+  }
+  if(parsed.neg){
+    const sv=JSON.stringify(parsed.neg);
+    h+=`<div class="prompt-box"><div class="plabel">负向提示词 (Negative Prompt)</div><div class="ptext neg"><button class="pcopy" onclick="copy(${sv},this)">复制</button>${esc(parsed.neg)}</div></div>`;
+  }
+  if(parsed.params.length){
+    h+=`<div class="sec-hd">⚙️ 生成参数 (${parsed.params.length} 项)</div><div class="pgrid">`;
+    for(const {k,v} of parsed.params){
+      h+=`<div class="pitem"><span class="pkey">${esc(k)}</span><span class="pval" title="${esc(v)}">${esc(v)}</span><button class="cbtn" onclick="copy(${JSON.stringify(v)},this)">⎘</button></div>`;
+    }
+    h+=`</div>`;
+  }
+  h+=`</div>`;
+  el.innerHTML=h;
+}
+
+// ─── ComfyUI Canvas ───────────────────────────────────────────────────────────
+const CS={scale:1,ox:0,oy:0,panning:false,dragNode:null,nodes:[],links:{},lineStyle:'bezier',vp:null,world:null,svg:null};
+
+function renderCF(parsed,el){
+  CS.nodes=parsed.nodes;CS.links=parsed.links;CS.scale=1;CS.ox=0;CS.oy=0;
+  const nc=parsed.nodes.length,lc=Object.keys(parsed.links).length;
+  el.innerHTML=`<div class="cf-card">
+    <div class="toolbar">
+      <span class="tlbl">视图</span>
+      <button class="tbtn" onclick="resetView()">🔄 重置</button>
+      <button class="tbtn" onclick="fitView()">⊞ 适应</button>
+      <div class="tsep"></div>
+      <span class="tlbl">连线</span>
+      <button class="tbtn act" id="btn-bezier" onclick="setLine('bezier')">曲线</button>
+      <button class="tbtn" id="btn-straight" onclick="setLine('straight')">直线</button>
+      <button class="tbtn" id="btn-step" onclick="setLine('step')">折线</button>
+      <div class="tsep"></div>
+      <span class="node-count">${nc} 节点 · ${lc} 连接</span>
+      <span class="tinfo" id="zi">缩放 100%</span>
+    </div>
+    <div class="viewport" id="vp">
+      <div class="world" id="world">
+        <svg class="conn-svg" id="csvg"></svg>
+      </div>
+    </div>
+  </div>`;
+  CS.vp=document.getElementById('vp');
+  CS.world=document.getElementById('world');
+  CS.svg=document.getElementById('csvg');
+  for(const n of CS.nodes){
+    const ne=buildNodeEl(n);
+    CS.world.appendChild(ne);
+    ne.style.left=n.pos[0]+'px';
+    ne.style.top=n.pos[1]+'px';
+  }
+  setupCanvas();
+  setTimeout(()=>{drawConns();fitView();},80);
+}
+
+function buildNodeEl(node){
+  const el=document.createElement('div');
+  el.className='cfnode';
+  el.id='cfn-'+node.id;
+  el.dataset.nid=node.id;
+  const cc=nodeColorClass(node.type);
+  let h=`<div class="nhead ${cc}" data-nid="${node.id}"><span class="ntitle">${esc(node.title||node.type)}</span><span class="nid">#${esc(node.id)}</span></div><div class="nbody">`;
+  // Slots
+  const maxR=Math.max(node.inputs.length,node.outputs.length);
+  if(maxR>0){
+    h+=`<div class="slots-wrap">`;
+    for(let i=0;i<maxR;i++){
+      const inp=node.inputs[i],out=node.outputs[i];
+      h+=`<div class="srow">`;
+      if(inp){
+        const c=connColor(inp.type);
+        h+=`<div class="sinput"><div class="sdot" id="si-${node.id}-${inp.slot}" style="color:${c};background:${c}22"></div><span class="sname" style="color:${c}">${esc(inp.name)}</span></div>`;
+      } else h+=`<div></div>`;
+      if(out){
+        const c=connColor(out.type);
+        h+=`<div class="soutput"><span class="sname" style="color:${c}">${esc(out.name)}</span><div class="sdot" id="so-${node.id}-${out.slot}" style="color:${c};background:${c}22"></div></div>`;
+      } else h+=`<div></div>`;
+      h+=`</div>`;
+    }
+    h+=`</div>`;
+  }
+  // Params
+  if(node.params&&node.params.length){
+    h+=`<div class="nparams">`;
+    for(const {k,v} of node.params){
+      const disp=String(v).length>32?String(v).slice(0,32)+'…':String(v);
+      h+=`<div class="npitem"><span class="npkey">${esc(k)}</span><span class="npval" title="${esc(String(v))}">${esc(disp)}</span><button class="ncbtn" onclick="copy(${JSON.stringify(String(v))},this)" title="${esc(String(v))}">⎘</button></div>`;
+    }
+    h+=`</div>`;
+  }
+  h+=`</div>`;
+  el.innerHTML=h;
+  return el;
+}
+
+function slotPos(nodeId,slotIdx,dir){
+  const node=CS.nodes.find(n=>n.id===String(nodeId));
+  if(!node) return null;
+  const el=document.getElementById('cfn-'+nodeId);
+  const nw=el?el.offsetWidth:240;
+  const slots=dir==='out'?node.outputs:node.inputs;
+  let rowIdx=slots.findIndex(s=>s.slot===slotIdx);
+  if(rowIdx<0) rowIdx=Math.min(slotIdx,slots.length-1);
+  if(rowIdx<0) rowIdx=0;
+  const HDR=42,SPY=8,SH=24;
+  return{x:node.pos[0]+(dir==='out'?nw:0),y:node.pos[1]+HDR+SPY+rowIdx*SH+SH/2};
+}
+
+function drawConns(){
+  const svg=CS.svg;if(!svg) return;
+  while(svg.firstChild) svg.removeChild(svg.firstChild);
+  const defs=document.createElementNS('http://www.w3.org/2000/svg','defs');
+  const types=new Set(Object.values(CS.links).map(l=>l.type||'default'));
+  for(const t of types){
+    const c=connColor(t);
+    const m=document.createElementNS('http://www.w3.org/2000/svg','marker');
+    m.setAttribute('id','arr-'+t);m.setAttribute('markerWidth','8');m.setAttribute('markerHeight','7');
+    m.setAttribute('refX','7');m.setAttribute('refY','3.5');m.setAttribute('orient','auto');
+    const p=document.createElementNS('http://www.w3.org/2000/svg','path');
+    p.setAttribute('d','M0,0 L0,7 L8,3.5 z');p.setAttribute('fill',c);
+    m.appendChild(p);defs.appendChild(m);
+  }
+  svg.appendChild(defs);
+  for(const lk of Object.values(CS.links)){
+    const s=slotPos(lk.srcNode,lk.srcSlot,'out');
+    const d=slotPos(lk.dstNode,lk.dstSlot,'in');
+    if(!s||!d) continue;
+    const c=connColor(lk.type);
+    const g=document.createElementNS('http://www.w3.org/2000/svg','g');
+    // Shadow
+    const ps=document.createElementNS('http://www.w3.org/2000/svg','path');
+    ps.setAttribute('fill','none');ps.setAttribute('stroke','rgba(0,0,0,.12)');ps.setAttribute('stroke-width','4');
+    ps.setAttribute('d',pathD(s,d));
+    // Line
+    const pl=document.createElementNS('http://www.w3.org/2000/svg','path');
+    pl.setAttribute('fill','none');pl.setAttribute('stroke',c);pl.setAttribute('stroke-width','2.2');
+    pl.setAttribute('stroke-opacity','0.85');pl.setAttribute('d',pathD(s,d));
+    pl.setAttribute('marker-end','url(#arr-'+(lk.type||'default')+')');
+    g.appendChild(ps);g.appendChild(pl);svg.appendChild(g);
+  }
+}
+
+function pathD(s,d){
+  const{x:x1,y:y1}=s,{x:x2,y:y2}=d;
+  if(CS.lineStyle==='straight') return `M${x1} ${y1} L${x2} ${y2}`;
+  if(CS.lineStyle==='step'){const mx=(x1+x2)/2;return `M${x1} ${y1} L${mx} ${y1} L${mx} ${y2} L${x2} ${y2}`;}
+  const dx=Math.max(Math.abs(x2-x1)*.45,60);
+  return `M${x1} ${y1} C${x1+dx} ${y1},${x2-dx} ${y2},${x2} ${y2}`;
+}
+
+function updTrans(){
+  if(!CS.world) return;
+  CS.world.style.transform=`translate(${CS.ox}px,${CS.oy}px) scale(${CS.scale})`;
+  const zi=document.getElementById('zi');if(zi) zi.textContent=`缩放 ${Math.round(CS.scale*100)}%`;
+}
+
+function resetView(){CS.scale=1;CS.ox=0;CS.oy=0;updTrans();drawConns();}
+
+function fitView(){
+  if(!CS.nodes.length||!CS.vp) return;
+  let mnx=Infinity,mny=Infinity,mxx=-Infinity,mxy=-Infinity;
+  for(const n of CS.nodes){
+    const e=document.getElementById('cfn-'+n.id);
+    const w=e?e.offsetWidth:250,hh=e?e.offsetHeight:200;
+    mnx=Math.min(mnx,n.pos[0]);mny=Math.min(mny,n.pos[1]);
+    mxx=Math.max(mxx,n.pos[0]+w);mxy=Math.max(mxy,n.pos[1]+hh);
+  }
+  const vw=CS.vp.offsetWidth,vh=CS.vp.offsetHeight;
+  const cw=mxx-mnx+80,ch=mxy-mny+80;
+  CS.scale=Math.min(vw/cw,vh/ch,1.2);
+  CS.ox=(vw-cw*CS.scale)/2-mnx*CS.scale+40;
+  CS.oy=(vh-ch*CS.scale)/2-mny*CS.scale+40;
+  updTrans();setTimeout(drawConns,60);
+}
+
+function setLine(s){
+  CS.lineStyle=s;
+  ['bezier','straight','step'].forEach(x=>{const b=document.getElementById('btn-'+x);if(b) b.classList.toggle('act',x===s)});
+  drawConns();
+}
+
+function setupCanvas(){
+  const vp=CS.vp;if(!vp) return;
+  let panStart={},nodeDrag=null,ndStart={};
+  vp.addEventListener('mousedown',e=>{
+    if(e.button!==0) return;
+    const nh=e.target.closest('.nhead');
+    if(nh){
+      const nid=nh.dataset.nid;
+      const node=CS.nodes.find(n=>n.id===String(nid));
+      if(node){nodeDrag=node;ndStart={mx:e.clientX,my:e.clientY,nx:node.pos[0],ny:node.pos[1]};e.stopPropagation();return;}
+    }
+    if(!e.target.closest('.cfnode')){
+      CS.panning=true;panStart={mx:e.clientX,my:e.clientY,ox:CS.ox,oy:CS.oy};
+      e.preventDefault();
+    }
+  });
+  document.addEventListener('mousemove',e=>{
+    if(CS.panning){
+      CS.ox=panStart.ox+(e.clientX-panStart.mx);
+      CS.oy=panStart.oy+(e.clientY-panStart.my);
+      updTrans();
+    }
+    if(nodeDrag){
+      const dx=(e.clientX-ndStart.mx)/CS.scale,dy=(e.clientY-ndStart.my)/CS.scale;
+      nodeDrag.pos=[ndStart.nx+dx,ndStart.ny+dy];
+      const ne=document.getElementById('cfn-'+nodeDrag.id);
+      if(ne){ne.style.left=nodeDrag.pos[0]+'px';ne.style.top=nodeDrag.pos[1]+'px';}
+      drawConns();
+    }
+  });
+  document.addEventListener('mouseup',()=>{CS.panning=false;nodeDrag=null;});
+  // Touch support
+  let lt=null;
+  vp.addEventListener('touchstart',e=>{
+    if(e.touches.length===1){
+      const t=e.touches[0];
+      const nh=e.target.closest('.nhead');
+      if(nh){const nid=nh.dataset.nid;const node=CS.nodes.find(n=>n.id===String(nid));if(node){nodeDrag=node;ndStart={mx:t.clientX,my:t.clientY,nx:node.pos[0],ny:node.pos[1]};e.preventDefault();return;}}
+      CS.panning=true;panStart={mx:t.clientX,my:t.clientY,ox:CS.ox,oy:CS.oy};e.preventDefault();
+    }
+    lt=e.touches.length===2?{d:Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY),s:CS.scale}:null;
+  },{passive:false});
+  vp.addEventListener('touchmove',e=>{
+    if(e.touches.length===2&&lt){
+      const nd=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);
+      CS.scale=Math.max(0.15,Math.min(3,lt.s*(nd/lt.d)));updTrans();drawConns();e.preventDefault();return;
+    }
+    if(e.touches.length===1){
+      const t=e.touches[0];
+      if(CS.panning){CS.ox=panStart.ox+(t.clientX-panStart.mx);CS.oy=panStart.oy+(t.clientY-panStart.my);updTrans();}
+      if(nodeDrag){const dx=(t.clientX-ndStart.mx)/CS.scale,dy=(t.clientY-ndStart.my)/CS.scale;nodeDrag.pos=[ndStart.nx+dx,ndStart.ny+dy];const ne=document.getElementById('cfn-'+nodeDrag.id);if(ne){ne.style.left=nodeDrag.pos[0]+'px';ne.style.top=nodeDrag.pos[1]+'px';}drawConns();}
+      e.preventDefault();
+    }
+  },{passive:false});
+  vp.addEventListener('touchend',()=>{CS.panning=false;nodeDrag=null;lt=null;});
+  vp.addEventListener('wheel',e=>{
+    e.preventDefault();
+    const d=e.deltaY>0?0.88:1.12;
+    const r=vp.getBoundingClientRect();
+    const mx=e.clientX-r.left,my=e.clientY-r.top;
+    const wx=(mx-CS.ox)/CS.scale,wy=(my-CS.oy)/CS.scale;
+    CS.scale=Math.max(0.15,Math.min(3,CS.scale*d));
+    CS.ox=mx-wx*CS.scale;CS.oy=my-wy*CS.scale;
+    updTrans();drawConns();
+  },{passive:false});
+}
+
+// ─── Main Handler ─────────────────────────────────────────────────────────────
+async function handleFile(file){
+  const res=document.getElementById('result');const rc=document.getElementById('rc');
+  res.classList.add('on');
+  rc.innerHTML=`<div class="loading"><div class="spin"></div> 正在读取图片元数据...</div>`;
+  try{
+    const meta=await readPNGMeta(file);
+    if(!meta){rc.innerHTML=`<div class="error">⚠️ 无法读取元数据，请上传 PNG 格式的 AI 生成图片。</div>`;return;}
+    const keys=Object.keys(meta);
+    if(!keys.length){rc.innerHTML=`<div class="error">⚠️ 图片中未发现 AI 元数据，可能已被清除或不是 AI 生成图片。</div>`;return;}
+    let type='unknown';
+    if(meta.workflow||(meta.prompt&&!meta.parameters)) type='comfyui';
+    else if(meta.parameters) type='sdwebui';
+    const imgURL=URL.createObjectURL(file);
+    const typeLbl={sdwebui:'SD WebUI',comfyui:'ComfyUI',unknown:'未知格式'}[type];
+    const typeCls={sdwebui:'sd',comfyui:'cf',unknown:'uk'}[type];
+    const bar=document.createElement('div');
+    bar.className='infobar';
+    bar.innerHTML=`<img src="${imgURL}" class="prev-img" alt=""><div class="imeta"><h3>${esc(file.name)}</h3><p>${(file.size/1024).toFixed(1)} KB · PNG</p></div><span class="badge ${typeCls}">${typeLbl}</span>`;
+    const main=document.createElement('div');
+    rc.innerHTML='';rc.appendChild(bar);rc.appendChild(main);
+    if(type==='sdwebui'){
+      renderSD(parseSDParams(meta.parameters),main);
+    } else if(type==='comfyui'){
+      const parsed=parseComfyWorkflow(meta.workflow,meta.prompt);
+      if(parsed&&parsed.nodes.length) renderCF(parsed,main);
+      else main.innerHTML=`<div class="error">⚠️ ComfyUI 工作流数据解析失败，格式可能不受支持。</div>`;
+    } else {
+      let h=`<div class="card"><div class="sec-hd">🔍 发现的元数据字段 (${keys.length})</div><div class="pgrid">`;
+      for(const [k,v] of Object.entries(meta)){
+        h+=`<div class="pitem"><span class="pkey">${esc(k)}</span><span class="pval">${esc(String(v).slice(0,80))}</span><button class="cbtn" onclick="copy(${JSON.stringify(v)},this)">⎘</button></div>`;
+      }
+      h+=`</div></div>`;main.innerHTML=h;
+    }
+    const raw=document.createElement('div');
+    raw.className='raw-wrap';
+    raw.innerHTML=`<button class="raw-tog" onclick="this.nextElementSibling.classList.toggle('on');this.querySelector('span').textContent=this.nextElementSibling.classList.contains('on')?'▼':'▶'"><span>▶</span> 查看原始元数据 JSON</button><div class="raw-body">${esc(JSON.stringify(meta,null,2))}</div>`;
+    rc.appendChild(raw);
+  } catch(err){
+    rc.innerHTML=`<div class="error">⚠️ 解析出错: ${esc(err.message)}</div>`;
+    console.error(err);
+  }
+}
+
+// ─── Event Setup ─────────────────────────────────────────────────────────────
+const wrap=document.getElementById('uploadWrap');
+const fi=document.getElementById('fileInput');
+fi.addEventListener('change',e=>{if(e.target.files[0]) handleFile(e.target.files[0]);});
+wrap.addEventListener('dragover',e=>{e.preventDefault();wrap.classList.add('over');});
+wrap.addEventListener('dragleave',()=>wrap.classList.remove('over'));
+wrap.addEventListener('drop',e=>{e.preventDefault();wrap.classList.remove('over');if(e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);});
+</script>
+</body>
+</html>
