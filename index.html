@@ -184,11 +184,29 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .header p{font-size:13px;color:var(--text-muted);margin-top:1px}
 
 /* SETTINGS (主题与模式菜单) */
-.settings-wrap { position: relative; margin-left: auto; }
+.header-actions{margin-left:auto;display:flex;align-items:center;gap:10px;flex-shrink:0}
+.settings-wrap { position: relative; margin-left: 0; }
 .settings-btn { width: 38px; height: 38px; background: var(--surface2); border: 1.5px solid var(--border); border-radius: 10px; cursor: pointer; color: var(--text-muted); display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
-.settings-btn:hover { background: var(--border-light); color: var(--primary); }
+.settings-btn:hover,.settings-btn.on { background: var(--border-light); color: var(--primary); }
 .settings-menu { position: absolute; top: calc(100% + 12px); right: 0; background: var(--surface); border: 1.5px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-lg); padding: 18px; width: 260px; display: none; flex-direction: column; z-index: 100; animation: fade-in 0.2s ease-out; }
 .settings-menu.on { display: flex; }
+.fav-wrap { position: relative; margin-left: 0; }
+.fav-btn { width: 38px; height: 38px; background: var(--surface2); border: 1.5px solid var(--border); border-radius: 10px; cursor: pointer; color: var(--text-muted); display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+.fav-btn:hover,.fav-btn.on { background: var(--border-light); color: #d97706; }
+.fav-menu { position: absolute; top: calc(100% + 12px); right: 0; background: var(--surface); border: 1.5px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-lg); padding: 16px; width: 340px; display: none; flex-direction: column; gap: 12px; z-index: 100; animation: fade-in 0.2s ease-out; max-height: min(75vh, 680px); overflow: auto; }
+.fav-menu.on { display: flex; }
+.fav-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.fav-act { padding: 8px 10px; background: var(--surface2); border: 1.5px solid var(--border); border-radius: 8px; font-size: 12px; font-weight: 700; color: var(--text); cursor: pointer; font-family: var(--sans); transition: all .18s; }
+.fav-act:hover { background: var(--primary); border-color: var(--primary); color: var(--c-on-p); }
+.fav-list { display: flex; flex-direction: column; gap: 8px; }
+.fav-item { border: 1.5px solid var(--border); border-radius: 10px; background: var(--surface2); padding: 10px; display: flex; gap: 10px; align-items: flex-start; }
+.fav-main { flex: 1; min-width: 0; }
+.fav-title { font-size: 12.5px; font-weight: 800; color: var(--text); display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.fav-meta { font-size: 11px; color: var(--text-muted); margin-top: 4px; line-height: 1.5; word-break: break-word; }
+.fav-ops { display: flex; flex-direction: column; gap: 6px; }
+.fav-op { padding: 6px 9px; background: var(--surface); border: 1px solid var(--border); border-radius: 7px; font-size: 11px; font-weight: 800; color: var(--text); cursor: pointer; font-family: var(--sans); }
+.fav-op:hover { border-color: var(--primary); color: var(--primary-dark); }
+.fav-empty { padding: 16px 12px; border: 1.5px dashed var(--border); border-radius: 10px; text-align: center; color: var(--text-muted); font-size: 12px; }
 @keyframes fade-in { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 .sm-title { font-size: 11.5px; font-weight: 800; color: var(--text-muted); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
 .theme-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
@@ -234,6 +252,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .badge.sd{background:var(--badge-sd-bg);color:var(--badge-sd-text)}
 .badge.cf{background:var(--badge-cf-bg);color:var(--badge-cf-text)}
 .badge.nai{background:var(--badge-nai-bg);color:var(--badge-nai-text)}
+.badge.mj{background:#ede9fe;color:#6d28d9}
 .badge.uk{background:var(--badge-uk-bg);color:var(--badge-uk-text)}
 .dl-btn{padding:6px 14px;background:var(--primary);color:var(--c-on-p);border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--sans);display:flex;align-items:center;gap:5px;flex-shrink:0;transition:background .2s}
 .dl-btn:hover{background:var(--primary-dark)}
@@ -364,6 +383,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .cmp-ftype{font-size:9.5px;color:#fff;padding:2px 7px;border-radius:10px;font-weight:800;letter-spacing:.3px}
 .cmp-ftype.sd{background:#2563eb}
 .cmp-ftype.nai{background:#9333ea}
+.cmp-ftype.mj{background:#6d28d9}
 .cmp-ftype.cf{background:#16a34a}
 .cmp-ftype.uk{background:#7e22ce}
 .cmp-add-hint{padding:20px;text-align:center;color:var(--text-muted);font-size:13px;border-top:1.5px dashed var(--border-light)}
@@ -382,8 +402,23 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .cmp-expand:hover{background:var(--primary);border-color:var(--primary);color:var(--c-on-p)}
 .cmp-diff-part{display:inline;border-radius:4px;padding:0 2px;background:var(--diff-bg);border:1px solid var(--diff-border);color:var(--diff-text);font-weight:800}
 .cmp-empty-box{padding:16px 20px;color:var(--text-muted);font-size:12.5px;background:var(--surface);border-radius:0 0 var(--radius) var(--radius)}
+.cmp-stack{display:flex;flex-direction:column;gap:12px;padding:14px}
+.cmp-card{border:1.5px solid var(--border-light);border-radius:12px;background:var(--surface)}
+.cmp-card.diff{border-color:var(--diff-border);box-shadow:inset 0 0 0 1px var(--diff-border)}
+.cmp-card-hd{padding:10px 14px;border-bottom:1px solid var(--border-light);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.cmp-card-key{font-size:12px;font-weight:800;color:var(--primary-dark)}
+.cmp-stack-list{display:flex;flex-direction:column}
+.cmp-stack-item{padding:12px 14px;border-top:1px solid var(--border-light)}
+.cmp-stack-item:first-child{border-top:none}
+.cmp-stack-name{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:7px;font-size:11px;font-weight:800;color:var(--text-muted)}
+.cmp-stack-fname{max-width:100%;word-break:break-all}
+.cmp-stack-type{font-size:9.5px;color:#fff;padding:2px 7px;border-radius:999px;font-weight:800;letter-spacing:.25px}
+.cmp-stack-type.sd{background:#2563eb}.cmp-stack-type.nai{background:#9333ea}.cmp-stack-type.mj{background:#6d28d9}.cmp-stack-type.cf{background:#16a34a}.cmp-stack-type.uk{background:#7e22ce}
+.thumb-ph{display:flex;align-items:center;justify-content:center;background:var(--surface2);color:var(--text-muted);font-size:20px}
 
-@media(max-width:768px){.main{padding:16px 14px}.pgrid{grid-template-columns:1fr}.viewport{height:480px}.header h1{font-size:17px}.cmp-val-wrap,.cmp-val{max-width:180px}}
+@media(max-width:768px){.main{padding:16px 14px}.pgrid{grid-template-columns:1fr}.viewport{height:480px}.header h1{font-size:17px}.cmp-val-wrap,.cmp-val{max-width:180px}.fav-menu{width:min(92vw,340px)}}
+@media(max-width:768px) and (orientation:portrait){.cmp-scroll{display:none}.cmp-mobile-stack{display:block}}
+@media(min-width:769px), (max-width:768px) and (orientation:landscape){.cmp-mobile-stack{display:none}}
 </style>
 </head>
 <body>
@@ -392,12 +427,34 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
   <div class="hicon">🌿</div>
   <div>
     <h1>AI 图片工作流解析器</h1>
-    <p>解析 ComfyUI · SD WebUI · NovelAI 生成图片的参数与工作流</p>
+    <p>解析 Midjourney · ComfyUI · SD WebUI · NovelAI 生成图片的参数与工作流</p>
   </div>
   
+  <div class="header-actions">
+    <div class="fav-wrap">
+    <button class="fav-btn" id="favBtn" title="收藏元数据" type="button" aria-haspopup="true" aria-expanded="false">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l2.021 6.218a1 1 0 0 0 .95.69h6.537c.969 0 1.371 1.24.588 1.81l-5.288 3.842a1 1 0 0 0-.364 1.118l2.02 6.218c.3.922-.755 1.688-1.539 1.118l-5.287-3.842a1 1 0 0 0-1.176 0l-5.287 3.842c-.784.57-1.838-.196-1.539-1.118l2.02-6.218a1 1 0 0 0-.364-1.118L.953 11.645c-.783-.57-.38-1.81.588-1.81h6.537a1 1 0 0 0 .95-.69z"></path></svg>
+    </button>
+    <div class="fav-menu" id="favMenu">
+      <div>
+        <div class="sm-title">收藏夹 Favorites</div>
+        <div class="fav-actions">
+          <button class="fav-act" type="button" onclick="saveCurrentFavorite()">⭐ 收藏当前结果</button>
+          <button class="fav-act" type="button" onclick="exportFavorites()">⬇ 导出收藏</button>
+          <button class="fav-act" type="button" onclick="triggerImportFavorites()">⬆ 导入收藏</button>
+        </div>
+      </div>
+      <div>
+        <div class="sm-title">本地收藏列表</div>
+        <div class="fav-list" id="favList"></div>
+      </div>
+    </div>
+    <input type="file" id="favImportInput" accept="application/json" style="display:none">
+  </div>
+
   <!-- 设置菜单按钮及弹窗 -->
   <div class="settings-wrap">
-    <button class="settings-btn" id="settingsBtn" title="主题与模式设置">
+    <button class="settings-btn" id="settingsBtn" title="主题与模式设置" type="button" aria-haspopup="true" aria-expanded="false">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
     </button>
     <div class="settings-menu" id="settingsMenu">
@@ -421,6 +478,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
       </div>
     </div>
   </div>
+  </div>
 </div>
 
 <div class="main">
@@ -436,7 +494,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
     <div class="upload-inner">
       <span class="uicon">🖼️</span>
       <h2 id="uploadTitle">拖拽图片至此，或点击上传</h2>
-      <p id="uploadSub">支持 ComfyUI · SD WebUI · NovelAI 生成的 PNG 图片</p>
+      <p id="uploadSub">支持 Midjourney / ComfyUI / SD WebUI / NovelAI 的 PNG / JPG / WEBP 图片</p>
     </div>
     <input type="file" id="fileInput" accept="image/png,image/jpeg,image/webp" />
   </div>
@@ -450,15 +508,69 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 <script>
 // ─── Global State ─────────────────────────────────────────────────────────────
 const CS={scale:1,ox:0,oy:0,panning:false,dragNode:null,nodes:[],links:{},lineStyle:'bezier',vp:null,world:null,svg:null};
+const FAVORITE_KEY='awp_favorites_v1';
+let currentViewData=null;
 
 // ─── Theme & Mode Logic ───────────────────────────────────────────────────────
 function initThemeMode() {
   const sm = document.getElementById('settingsMenu');
   const sb = document.getElementById('settingsBtn');
-  
-  sb.onclick = (e) => { e.stopPropagation(); sm.classList.toggle('on'); };
+  const fm = document.getElementById('favMenu');
+  const fb = document.getElementById('favBtn');
+
+  const closeSettingsMenu = () => {
+    sm.classList.remove('on');
+    sb.classList.remove('on');
+    sb.setAttribute('aria-expanded', 'false');
+  };
+  const closeFavMenu = () => {
+    if(!fm || !fb) return;
+    fm.classList.remove('on');
+    fb.classList.remove('on');
+    fb.setAttribute('aria-expanded', 'false');
+  };
+  const openSettingsMenu = () => {
+    closeFavMenu();
+    sm.classList.add('on');
+    sb.classList.add('on');
+    sb.setAttribute('aria-expanded', 'true');
+  };
+  const toggleSettingsMenu = () => {
+    if(sm.classList.contains('on')) closeSettingsMenu();
+    else openSettingsMenu();
+  };
+  const openFavMenu = () => {
+    if(!fm || !fb) return;
+    closeSettingsMenu();
+    renderFavoritesMenu();
+    fm.classList.add('on');
+    fb.classList.add('on');
+    fb.setAttribute('aria-expanded', 'true');
+  };
+  const toggleFavMenu = () => {
+    if(!fm || !fb) return;
+    if(fm.classList.contains('on')) closeFavMenu();
+    else openFavMenu();
+  };
+
+  sb.onclick = (e) => { e.stopPropagation(); toggleSettingsMenu(); };
+  if(sm) sm.addEventListener('click', e => e.stopPropagation());
+
+  if(fb && fm){
+    fb.onclick = (e) => { e.stopPropagation(); toggleFavMenu(); };
+    fm.addEventListener('click', e => e.stopPropagation());
+  }
+
   document.addEventListener('click', (e) => {
-    if(!sm.contains(e.target) && e.target !== sb) sm.classList.remove('on');
+    if(sm && !sm.contains(e.target) && e.target !== sb) closeSettingsMenu();
+    if(fm && !fm.contains(e.target) && e.target !== fb) closeFavMenu();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if(e.key === 'Escape'){
+      closeSettingsMenu();
+      closeFavMenu();
+    }
   });
 
   function apply(theme, mode) {
@@ -494,6 +606,7 @@ function initThemeMode() {
   apply(savedT, savedM);
 }
 initThemeMode();
+initFavorites();
 
 // ─── Utilities ───────────────────────────────────────────────────────────────
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
@@ -512,6 +625,93 @@ function downloadJSON(obj,filename){
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=filename;a.click();URL.revokeObjectURL(a.href);
   showToast('✓ JSON 已下载');
 }
+function dedupeParams(arr){
+  const out=[];const seen=new Set();
+  for(const item of (arr||[])){
+    if(!item||item.v===undefined||item.v===null||item.v==='') continue;
+    const key=`${item.k}@@${String(item.v)}`;
+    if(seen.has(key)) continue;
+    seen.add(key);out.push({k:String(item.k),v:String(item.v)});
+  }
+  return out;
+}
+function firstNonEmpty(...vals){
+  for(const v of vals){if(v!==undefined&&v!==null&&String(v).trim()) return String(v).trim();}
+  return '';
+}
+function isMobilePortraitCompare(){
+  return window.matchMedia('(max-width: 768px) and (orientation: portrait)').matches;
+}
+function getPlaceholderThumb(label='META'){
+  const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120"><rect width="100%" height="100%" rx="18" fill="#e5e7eb"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="20" fill="#6b7280">${label}</text></svg>`;
+  return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+}
+function getEntryThumb(entry){
+  return entry && entry.imgURL ? entry.imgURL : getPlaceholderThumb((entry?.type||'META').slice(0,2).toUpperCase());
+}
+function splitSmartCommaSegments(str){
+  const out=[];let buf='';let quote='';let depth=0;
+  for(let i=0;i<str.length;i++){
+    const ch=str[i], prev=str[i-1];
+    if((ch=='"'||ch==="'") && prev!=='\\'){
+      if(quote===ch) quote='';
+      else if(!quote) quote=ch;
+      buf+=ch;continue;
+    }
+    if(!quote){
+      if('([{<'.includes(ch)) depth++;
+      else if(')]}>'.includes(ch) && depth>0) depth--;
+      if(ch===',' && depth===0){ out.push(buf.trim()); buf=''; continue; }
+    }
+    buf+=ch;
+  }
+  if(buf.trim()) out.push(buf.trim());
+  return out;
+}
+function flattenObjectToParams(obj,prefix=''){
+  const out=[];
+  const walk=(value,path)=>{
+    if(value===null||value===undefined) return;
+    if(Array.isArray(value)){
+      if(value.every(v=>typeof v!=='object' || v===null)) out.push({k:path||prefix||'value',v:value.map(v=>String(v)).join(', ')});
+      else value.forEach((v,i)=>walk(v, path?`${path}[${i}]`:`[${i}]`));
+      return;
+    }
+    if(typeof value==='object'){
+      for(const [k,v] of Object.entries(value)) walk(v, path?`${path}.${k}`:k);
+      return;
+    }
+    out.push({k:path||prefix||'value', v:String(value)});
+  };
+  walk(obj,prefix);
+  return out;
+}
+function decodeBytesAsText(bytes){
+  try{return new TextDecoder('utf-8').decode(bytes).replace(/\0+$/,'').trim();}
+  catch{return new TextDecoder('latin1').decode(bytes).replace(/\0+$/,'').trim();}
+}
+function parseXMPString(xmp){
+  const meta={XMP:xmp};
+  try{
+    const doc=new DOMParser().parseFromString(xmp,'application/xml');
+    const nodes=doc.querySelectorAll('*');
+    nodes.forEach(node=>{
+      const name=node.nodeName;
+      const text=(node.textContent||'').trim();
+      if(text && text.length<4000 && /[A-Za-z\u4e00-\u9fff0-9]/.test(text)){
+        if(!meta[name]) meta[name]=text;
+      }
+      for(const attr of Array.from(node.attributes||[])){
+        const val=(attr.value||'').trim();
+        if(val && val.length<2000){
+          const key=`${name}@${attr.name}`;
+          if(!meta[key]) meta[key]=val;
+        }
+      }
+    });
+  }catch{}
+  return meta;
+}
 
 // ─── Mode Management ─────────────────────────────────────────────────────────
 let currentMode='single';
@@ -525,21 +725,29 @@ function setMode(m){
   if(m==='compare'){
     fi.multiple=true;
     document.getElementById('uploadTitle').textContent='拖拽多张图片至此，或点击上传';
-    document.getElementById('uploadSub').textContent='上传同类型 AI 图片进行参数对比（最多 6 张）';
+    document.getElementById('uploadSub').textContent='上传同类型 AI 图片进行参数对比（支持 PNG / JPG / WEBP，最多 6 张）';
     document.getElementById('modeHint').textContent='上传多张同类型图片，高亮显示不同参数';
     if(compareQueue.length) renderComparison();
   } else {
     fi.multiple=false;
     document.getElementById('uploadTitle').textContent='拖拽图片至此，或点击上传';
-    document.getElementById('uploadSub').textContent='支持 ComfyUI · SD WebUI · NovelAI 生成的 PNG 图片';
+    document.getElementById('uploadSub').textContent='支持 Midjourney / ComfyUI / SD WebUI / NovelAI 的 PNG / JPG / WEBP 图片';
     document.getElementById('modeHint').textContent='上传一张 AI 图片解析元数据';
     compareQueue=[];
   }
 }
 
-// ─── PNG Metadata Reader ──────────────────────────────────────────────────────
-async function readPNGMeta(file){
+// ─── Image Metadata Reader ────────────────────────────────────────────────────
+async function readImageMeta(file){
   const buf=await file.arrayBuffer();
+  const u8=new Uint8Array(buf);
+  if(u8.length>=8 && u8[0]===137 && u8[1]===80 && u8[2]===78 && u8[3]===71) return await readPNGMetaFromBuffer(buf);
+  if(u8.length>=3 && u8[0]===0xFF && u8[1]===0xD8 && u8[2]===0xFF) return readJPEGMetaFromBuffer(buf);
+  if(u8.length>=12 && String.fromCharCode(...u8.slice(0,4))==='RIFF' && String.fromCharCode(...u8.slice(8,12))==='WEBP') return readWEBPMetaFromBuffer(buf);
+  return null;
+}
+
+async function readPNGMetaFromBuffer(buf){
   const u8=new Uint8Array(buf);
   const SIG=[137,80,78,71,13,10,26,10];
   for(let i=0;i<8;i++) if(u8[i]!==SIG[i]) return null;
@@ -593,16 +801,118 @@ async function readPNGMeta(file){
   return meta;
 }
 
+function parseExifData(bytes){
+  const u8=bytes instanceof Uint8Array ? bytes : new Uint8Array(bytes);
+  let base=0;
+  if(u8.length>=6 && String.fromCharCode(...u8.slice(0,4))==='Exif') base=6;
+  if(base+8>u8.length) return {};
+  const dv=new DataView(u8.buffer, u8.byteOffset+base, u8.byteLength-base);
+  const little=(dv.getUint8(0)===0x49 && dv.getUint8(1)===0x49);
+  const get16=(o)=>dv.getUint16(o,little), get32=(o)=>dv.getUint32(o,little);
+  const typeSize={1:1,2:1,3:2,4:4,5:8,7:1,9:4,10:8};
+  const tagNames={0x010e:'ImageDescription',0x010f:'Make',0x0110:'Model',0x0131:'Software',0x013b:'Artist',0x0132:'DateTime',0x8769:'ExifIFDPointer',0x9003:'DateTimeOriginal',0x9286:'UserComment',0x9c9b:'XPTitle',0x9c9c:'XPComment',0x9c9d:'XPAuthor',0x9c9e:'XPKeywords'};
+  const meta={};
+  const visited=new Set();
+  if(!((dv.getUint8(0)===0x49 && dv.getUint8(1)===0x49) || (dv.getUint8(0)===0x4D && dv.getUint8(1)===0x4D))) return {};
+  const ifd0=get32(4);
+  const decodeValue=(tag,type,count,dataOffsetRaw)=>{
+    const unit=typeSize[type]||1, total=unit*count;
+    let start;
+    if(total<=4) start=dataOffsetRaw;
+    else start=get32(dataOffsetRaw);
+    if(start<0||start+total>dv.byteLength) return null;
+    const data=new Uint8Array(dv.buffer,dv.byteOffset+start,total);
+    if(type===2) return decodeBytesAsText(data);
+    if(type===7 && tag===0x9286){
+      let d=data;
+      const head=decodeBytesAsText(data.slice(0,8));
+      if(/^ASCII/i.test(head)) d=data.slice(8);
+      return decodeBytesAsText(d);
+    }
+    if((tag===0x9c9b||tag===0x9c9c||tag===0x9c9d||tag===0x9c9e) && (type===1||type===7)){
+      try{return new TextDecoder('utf-16le').decode(data).replace(/\0+$/,'').trim();}catch{}
+    }
+    if(type===3){ const dd=new DataView(data.buffer,data.byteOffset,data.byteLength); const vals=[]; for(let i=0;i<count;i++) vals.push(dd.getUint16(i*2,little)); return vals.join(', '); }
+    if(type===4){ const dd=new DataView(data.buffer,data.byteOffset,data.byteLength); const vals=[]; for(let i=0;i<count;i++) vals.push(dd.getUint32(i*4,little)); return vals.join(', '); }
+    return decodeBytesAsText(data);
+  };
+  const readIFD=(offset)=>{
+    if(!offset || visited.has(offset) || offset+2>dv.byteLength) return;
+    visited.add(offset);
+    const count=get16(offset);
+    for(let i=0;i<count;i++){
+      const entry=offset+2+i*12;
+      if(entry+12>dv.byteLength) break;
+      const tag=get16(entry), type=get16(entry+2), num=get32(entry+4);
+      const name=tagNames[tag]||`Tag_${tag.toString(16)}`;
+      const val=decodeValue(tag,type,num,entry+8);
+      if(val!==null && val!=='' && meta[name]===undefined) meta[name]=val;
+      if(tag===0x8769){ const ptr=get32(entry+8); if(ptr) readIFD(ptr); }
+    }
+    const nextPos=offset+2+count*12;
+    if(nextPos+4<=dv.byteLength){ const next=get32(nextPos); if(next) readIFD(next); }
+  };
+  readIFD(ifd0);
+  return meta;
+}
+
+function readJPEGMetaFromBuffer(buf){
+  const u8=new Uint8Array(buf); const meta={}; let off=2;
+  while(off+4<=u8.length){
+    while(off<u8.length && u8[off]===0xFF) off++;
+    if(off>=u8.length) break;
+    const marker=u8[off++];
+    if(marker===0xD9 || marker===0xDA) break;
+    if((marker>=0xD0&&marker<=0xD7) || marker===0x01) continue;
+    if(off+2>u8.length) break;
+    const len=(u8[off]<<8)|u8[off+1]; off+=2;
+    if(len<2 || off+len-2>u8.length) break;
+    const data=u8.slice(off, off+len-2);
+    if(marker===0xE1){
+      const head=decodeBytesAsText(data.slice(0,40));
+      if(head.startsWith('Exif')) Object.assign(meta, parseExifData(data));
+      else if(head.startsWith('http://ns.adobe.com/xap/1.0/')){
+        const zero=data.indexOf(0);
+        const xmp=decodeBytesAsText(zero>=0?data.slice(zero+1):data);
+        Object.assign(meta, parseXMPString(xmp));
+      }
+    } else if(marker===0xFE){
+      meta.Comment=decodeBytesAsText(data);
+    }
+    off+=len-2;
+  }
+  return Object.keys(meta).length?meta:null;
+}
+
+function readWEBPMetaFromBuffer(buf){
+  const u8=new Uint8Array(buf); const meta={}; let off=12;
+  const dv=new DataView(buf);
+  while(off+8<=u8.length){
+    const type=String.fromCharCode(u8[off],u8[off+1],u8[off+2],u8[off+3]);
+    const size=dv.getUint32(off+4,true);
+    const start=off+8, end=Math.min(start+size, u8.length);
+    const data=u8.slice(start,end);
+    if(type==='EXIF') Object.assign(meta, parseExifData(data));
+    else if(type==='XMP ') Object.assign(meta, parseXMPString(decodeBytesAsText(data)));
+    else if(type==='ICCP' && !meta.ICCProfile) meta.ICCProfile='Present';
+    off=end + (size%2);
+  }
+  return Object.keys(meta).length?meta:null;
+}
+
 // ─── Type Detection ───────────────────────────────────────────────────────────
 function detectType(meta){
   if(!meta) return 'unknown';
-  if(meta.Software==='NovelAI') return 'novelai';
+  const software=(meta.Software||meta['xmp:CreatorTool']||meta['rdf:Description@xmp:CreatorTool']||'').toLowerCase();
+  const textBlob=Object.entries(meta).slice(0,60).map(([k,v])=>`${k}:${String(v)}`).join('\n').toLowerCase();
+  if(software.includes('novelai')) return 'novelai';
   if(meta.Description && meta.Comment){
     const c=safeJSON(meta.Comment);
     if(c && (c.uc!==undefined||c.scale!==undefined||c.sampler!==undefined)) return 'novelai';
   }
+  if(/midjourney/.test(software) || /midjourney/.test(textBlob) || /\/imagine prompt:/.test(textBlob)) return 'midjourney';
   if(meta.workflow||(meta.prompt&&!meta.parameters)) return 'comfyui';
-  if(meta.parameters) return 'sdwebui';
+  if(meta.parameters || /\bsteps: .*sampler:/i.test(textBlob) || /adetailer|controlnet|ti hashes|version:/i.test(textBlob)) return 'sdwebui';
   return 'unknown';
 }
 
@@ -639,6 +949,68 @@ function parseNAI(meta){
   return {pos,neg,params};
 }
 
+
+function parseMidjourneyFlags(rawPrompt){
+  const cleaned=String(rawPrompt||'').replace(/^\/imagine\s+prompt:\s*/i,'').trim();
+  const match=cleaned.match(/\s--[A-Za-z]/);
+  const pos=(match?cleaned.slice(0,match.index):cleaned).trim();
+  const flagsPart=match?cleaned.slice(match.index).trim():'';
+  const params=[];
+  const rx=/--([a-zA-Z][\w-]*)(?:\s+([^\-].*?))?(?=(?:\s+--[a-zA-Z])|$)/g;
+  let m;
+  while((m=rx.exec(flagsPart))){
+    const rawKey=m[1];
+    const rawVal=(m[2]||'true').trim().replace(/^['"]|['"]$/g,'');
+    const keyMap={ar:'Aspect Ratio',chaos:'Chaos',stylize:'Stylize',s:'Stylize',weird:'Weird',seed:'Seed',v:'Version',q:'Quality',iw:'Image Weight',style:'Style',stop:'Stop',tile:'Tile',raw:'Raw Mode',cref:'Character Ref',sref:'Style Ref',profile:'Profile',exp:'Exp'};
+    params.push({k:keyMap[rawKey]||`--${rawKey}`, v:rawVal});
+  }
+  return {pos,params};
+}
+
+function parseMidjourney(meta){
+  const rawPrompt=firstNonEmpty(
+    meta.Prompt, meta.prompt, meta.Description, meta.ImageDescription,
+    meta['dc:description'], meta['rdf:li'], meta.UserComment, meta.Comment
+  );
+  const parsedFlags=parseMidjourneyFlags(rawPrompt);
+  const params=[...parsedFlags.params];
+  const directMap={
+    Software:'Software',
+    'xmp:CreatorTool':'Creator Tool',
+    'rdf:Description@xmp:CreatorTool':'Creator Tool',
+    Model:'Model',
+    Seed:'Seed',
+    JobID:'Job ID',
+    'midjourney:job_id':'Job ID',
+    'midjourney:seed':'Seed'
+  };
+  for(const [src,label] of Object.entries(directMap)){
+    if(meta[src]) params.push({k:label,v:String(meta[src])});
+  }
+  for(const [k,v] of Object.entries(meta)){
+    if(v===null||v===undefined) continue;
+    if(typeof v!=='string') continue;
+    if(k==='XMP' || k==='Comment' || k==='UserComment' || k==='Prompt' || k==='prompt' || k==='Description' || k==='ImageDescription') continue;
+    if(/midjourney|creatortool|job|seed|model|stylize|chaos|aspect|version/i.test(k) && String(v).length<300){
+      params.push({k,v:String(v)});
+    }
+  }
+  return {pos:parsedFlags.pos||rawPrompt||'', params:dedupeParams(params)};
+}
+
+function renderMJ(parsed,el){
+  let h=`<div class="card">`;
+  h+=`<div class="sec-hd">🪄 Midjourney 元数据</div>`;
+  if(parsed.pos){const sv=JSON.stringify(parsed.pos);h+=`<div class="prompt-box"><div class="plabel">提示词 (Prompt)</div><div class="ptext"><button class="pcopy" onclick="copy(${sv},this)">复制</button>${esc(parsed.pos)}</div></div>`;}
+  if(parsed.params.length){
+    h+=`<div class="sec-hd">⚙️ 参数 (${parsed.params.length} 项)</div><div class="pgrid">`;
+    for(const {k,v} of parsed.params){h+=`<div class="pitem"><span class="pkey">${esc(k)}</span><span class="pval" title="${esc(v)}">${esc(v)}</span><button class="cbtn" onclick="copy(${JSON.stringify(v)},this)">⎘</button></div>`;}
+    h+=`</div>`;
+  }
+  h+=`</div>`;
+  el.innerHTML=h;
+}
+
 function renderNAI(parsed,el){
   let h=`<div class="nai-wrap">`;
   h+=`<div class="sec-hd">🎨 NovelAI 生成参数</div>`;
@@ -662,8 +1034,35 @@ function renderNAI(parsed,el){
 }
 
 // ─── SD WebUI Parser ──────────────────────────────────────────────────────────
-function parseSDParams(raw){
-  const r={pos:'',neg:'',params:[]};
+function collectSDPluginParams(meta){
+  const extras=[];
+  const skip=new Set(['parameters','prompt','workflow','Software','Description','XMP']);
+  for(const [k,v] of Object.entries(meta||{})){
+    if(skip.has(k) || v===null || v===undefined) continue;
+    if(typeof v==='string'){
+      const trimmed=v.trim();
+      if(!trimmed) continue;
+      const json=safeJSON(trimmed);
+      if(json && typeof json==='object'){ extras.push(...flattenObjectToParams(json, k)); continue; }
+      if(trimmed.includes('\n') && /:\s*/.test(trimmed)){
+        trimmed.split(/\n+/).forEach(line=>{
+          const idx=line.indexOf(':');
+          if(idx>0){
+            const kk=line.slice(0,idx).trim(), vv=line.slice(idx+1).trim();
+            if(kk && vv) extras.push({k:`${k}::${kk}`, v:vv});
+          }
+        });
+        continue;
+      }
+      if(trimmed.length<=400 && /adetailer|controlnet|refiner|animatediff|tiled|version|hash|lora|module|schedule|hires/i.test(k+':'+trimmed)) extras.push({k,v:trimmed});
+    }
+  }
+  return dedupeParams(extras);
+}
+
+function parseSDParams(raw, meta={}){
+  const r={pos:'',neg:'',params:[],pluginParams:[]};
+  raw=String(raw||'');
   const ni=raw.indexOf('\nNegative prompt:');
   let settings='',rest=raw;
   if(ni>=0){
@@ -690,13 +1089,19 @@ function parseSDParams(raw){
     }
   }
   if(settings){
-    const all=settings.replace(/\n/g,', ');
-    const parts=all.split(/,\s*(?=[A-Za-z][^:,]*:)/);
+    const all=settings.replace(/\r?\n/g,', ');
+    const parts=splitSmartCommaSegments(all);
     for(const p of parts){
       const ci=p.indexOf(':');
-      if(ci>0){const k=p.slice(0,ci).trim();const v=p.slice(ci+1).trim();if(k&&v) r.params.push({k,v});}
+      if(ci>0){
+        const k=p.slice(0,ci).trim();
+        const v=p.slice(ci+1).trim();
+        if(k&&v) r.params.push({k,v});
+      }
     }
   }
+  r.params=dedupeParams(r.params);
+  r.pluginParams=collectSDPluginParams(meta);
   return r;
 }
 
@@ -708,6 +1113,11 @@ function renderSD(parsed,el){
   if(parsed.params.length){
     h+=`<div class="sec-hd">⚙️ 生成参数 (${parsed.params.length} 项)</div><div class="pgrid">`;
     for(const {k,v} of parsed.params){h+=`<div class="pitem"><span class="pkey">${esc(k)}</span><span class="pval" title="${esc(v)}">${esc(v)}</span><button class="cbtn" onclick="copy(${JSON.stringify(v)},this)">⎘</button></div>`;}
+    h+=`</div>`;
+  }
+  if(parsed.pluginParams && parsed.pluginParams.length){
+    h+=`<div class="sec-hd">🧩 插件 / 附加元数据 (${parsed.pluginParams.length} 项)</div><div class="pgrid">`;
+    for(const {k,v} of parsed.pluginParams){h+=`<div class="pitem"><span class="pkey">${esc(k)}</span><span class="pval" title="${esc(v)}">${esc(v)}</span><button class="cbtn" onclick="copy(${JSON.stringify(v)},this)">⎘</button></div>`;}
     h+=`</div>`;
   }
   h+=`</div>`;
@@ -899,10 +1309,11 @@ function setupCanvas(){
 // ─── Flat Params Extractor (for comparison) ───────────────────────────────────
 function extractFlatParams(type, parsed, meta){
   const flat={};
-  if(type==='sdwebui'||type==='novelai'){
+  if(type==='sdwebui'||type==='novelai'||type==='midjourney'){
     if(parsed.pos) flat['__pos__']=parsed.pos;
     if(parsed.neg) flat['__neg__']=parsed.neg;
-    for(const {k,v} of parsed.params) flat[k]=v;
+    for(const {k,v} of (parsed.params||[])) flat[k]=v;
+    for(const {k,v} of (parsed.pluginParams||[])) flat[`插件::${k}`]=v;
   } else if(type==='comfyui'){
     for(const n of (parsed.nodes||[])){
       for(const {k,v} of (n.params||[])){
@@ -940,8 +1351,8 @@ function renderComparison(){
     if(uniq.size>1) diffKeys.add(k);
   }
 
-  const typeLabel={sdwebui:'SD WebUI',comfyui:'ComfyUI',novelai:'NovelAI',unknown:'Unknown'};
-  const typeCls={sdwebui:'sd',comfyui:'cf',novelai:'nai',unknown:'uk'};
+  const typeLabel={sdwebui:'SD WebUI',comfyui:'ComfyUI',novelai:'NovelAI',midjourney:'Midjourney',unknown:'Unknown'};
+  const typeCls={sdwebui:'sd',comfyui:'cf',novelai:'nai',midjourney:'mj',unknown:'uk'};
   const diffRenderMap=buildDiffRenderMap(diffKeys, allFlat);
 
   const hdr=document.createElement('div');
@@ -997,6 +1408,7 @@ function renderComparison(){
     mainWrap.appendChild(hint);
   }
 
+  currentViewData={mode:'compare', entries:compareQueue.slice()};
   const dlWrap=document.createElement('div');dlWrap.style.cssText='margin-top:16px;display:flex;gap:10px;flex-wrap:wrap';
   for(let i=0;i<compareQueue.length;i++){
     const entry=compareQueue[i];
@@ -1011,6 +1423,7 @@ function renderComparison(){
 
 function clearCompare(){
   compareQueue=[];
+  currentViewData=null;
   const res=document.getElementById('result');
   const rc=document.getElementById('rc');
   res.classList.remove('on');
@@ -1134,11 +1547,29 @@ function renderCompareCell(rawValue, isDiff, diffHTML=''){
   return `<td class="${cellCls}">${renderCmpValueBlock(value,htmlValue)}</td>`;
 }
 
+function buildCompareStackHTML(keys, allFlat, diffKeys, diffRenderMap, typeLabel, typeCls){
+  let html='<div class="cmp-mobile-stack"><div class="cmp-stack">';
+  for(const k of keys){
+    const vals=allFlat.map(f=>f[k]??null);
+    const isDiff=diffKeys.has(k);
+    const renderInfo=diffRenderMap[k];
+    html+=`<div class="cmp-card ${isDiff?'diff':''}"><div class="cmp-card-hd"><span class="cmp-card-key">${getCompareDisplayKey(k)}</span>${isDiff?'<span class="diff-badge">差异</span>':''}</div><div class="cmp-stack-list">`;
+    for(let i=0;i<compareQueue.length;i++){
+      const entry=compareQueue[i];
+      const cellHTML=renderCompareCell(vals[i], isDiff, renderInfo?renderInfo.htmls[i]:'').replace(/^<td[^>]*>/,'').replace(/<\/td>$/,'');
+      html+=`<div class="cmp-stack-item"><div class="cmp-stack-name"><span class="cmp-stack-fname">${esc(entry.file.name)}</span><span class="cmp-stack-type ${typeCls[entry.type]||'uk'}">${typeLabel[entry.type]||'Unknown'}</span></div>${cellHTML}</div>`;
+    }
+    html+='</div></div>';
+  }
+  html+='</div></div>';
+  return html;
+}
+
 function buildCompareTableHTML(keys, allFlat, diffKeys, diffRenderMap, typeLabel, typeCls){
   let th=`<div class="cmp-scroll"><table class="cmp-table"><thead><tr><th><div class="cmp-th-inner"><span style="font-size:11px;color:var(--text-muted)">参数</span></div></th>`;
   for(const entry of compareQueue){
     th+=`<th><div class="cmp-th-inner">
-      <img src="${entry.imgURL}" class="cmp-thumb" alt="">
+      <img src="${getEntryThumb(entry)}" class="cmp-thumb ${entry.imgURL?'':'thumb-ph'}" alt="">
       <span class="cmp-fname" title="${esc(entry.file.name)}">${esc(entry.file.name)}</span>
       <span class="cmp-ftype ${typeCls[entry.type]||'uk'}">${typeLabel[entry.type]||'Unknown'}</span>
     </div></th>`;
@@ -1158,7 +1589,7 @@ function buildCompareTableHTML(keys, allFlat, diffKeys, diffRenderMap, typeLabel
     rows+=`</tr>`;
   }
   rows+=`</tbody></table></div>`;
-  return th+rows;
+  return rows ? (th + rows + buildCompareStackHTML(keys, allFlat, diffKeys, diffRenderMap, typeLabel, typeCls)) : (th + buildCompareStackHTML(keys, allFlat, diffKeys, diffRenderMap, typeLabel, typeCls));
 }
 
 function appendCompareSection(container, title, note, keys, allFlat, diffKeys, diffRenderMap, typeLabel, typeCls){
@@ -1176,6 +1607,167 @@ function toggleCmpExpand(btn){
   btn.textContent=wrap.classList.contains('expanded')?'收起':'展开';
 }
 
+// ─── Favorites ───────────────────────────────────────────────────────────────
+function getFavorites(){
+  try{
+    const list=JSON.parse(localStorage.getItem(FAVORITE_KEY)||'[]');
+    return Array.isArray(list)?list:[];
+  }catch{return [];}
+}
+function setFavorites(list){
+  localStorage.setItem(FAVORITE_KEY, JSON.stringify(list));
+}
+function buildFavoriteTitle(payload){
+  if(payload.mode==='compare') return `对比收藏 · ${payload.entries.length} 张`;
+  const e=payload.entries[0];
+  return `单图收藏 · ${e?.name||'未命名图片'}`;
+}
+function serializeEntry(entry){
+  return {name:entry.file.name,size:entry.file.size||0,type:entry.type,meta:entry.meta,parsed:entry.parsed};
+}
+function parseByType(type, meta){
+  if(type==='sdwebui') return parseSDParams(meta.parameters||meta.Comment||'', meta);
+  if(type==='novelai') return parseNAI(meta);
+  if(type==='midjourney') return parseMidjourney(meta);
+  if(type==='comfyui') return parseComfyWorkflow(meta.workflow,meta.prompt)||{nodes:[],links:{}};
+  return {params:[]};
+}
+function hydrateEntry(item){
+  return {file:{name:item.name||'favorite.png',size:item.size||0},meta:item.meta||{},type:item.type||detectType(item.meta||{}),parsed:item.parsed||parseByType(item.type||detectType(item.meta||{}), item.meta||{}),imgURL:null};
+}
+function saveCurrentFavorite(){
+  if(!currentViewData || !currentViewData.entries || !currentViewData.entries.length){ showToast('⚠️ 当前没有可收藏的元数据'); return; }
+  const favorites=getFavorites();
+  const payload={id:`fav_${Date.now()}_${Math.random().toString(36).slice(2,8)}`,createdAt:new Date().toISOString(),mode:currentViewData.mode,entries:currentViewData.entries.map(serializeEntry)};
+  payload.title=buildFavoriteTitle(payload);
+  favorites.unshift(payload);
+  try{
+    setFavorites(favorites.slice(0,40));
+    renderFavoritesMenu();
+    showToast('⭐ 已收藏到本地');
+  }catch(err){
+    showToast('⚠️ 收藏失败，可能超出 localStorage 容量');
+  }
+}
+function deleteFavorite(id){
+  const list=getFavorites().filter(x=>x.id!==id);
+  setFavorites(list);
+  renderFavoritesMenu();
+  showToast('🗑 已删除收藏');
+}
+function exportFavorites(){
+  downloadJSON({version:1, exportedAt:new Date().toISOString(), favorites:getFavorites()}, 'awp_favorites_export.json');
+}
+function triggerImportFavorites(){
+  document.getElementById('favImportInput').click();
+}
+async function importFavoritesFromFile(file){
+  try{
+    const txt=await file.text();
+    const data=JSON.parse(txt);
+    const items=Array.isArray(data)?data:(Array.isArray(data.favorites)?data.favorites:[]);
+    if(!items.length){ showToast('⚠️ 未发现可导入的收藏数据'); return; }
+    const merged=[...items.filter(x=>x&&x.id&&Array.isArray(x.entries)), ...getFavorites()];
+    const dedup=[]; const seen=new Set();
+    for(const item of merged){ if(seen.has(item.id)) continue; seen.add(item.id); dedup.push(item); }
+    setFavorites(dedup.slice(0,80));
+    renderFavoritesMenu();
+    showToast(`✓ 已导入 ${items.length} 条收藏`);
+  }catch(err){
+    console.error(err);
+    showToast('⚠️ 收藏导入失败');
+  }
+}
+function loadFavorite(id){
+  const fav=getFavorites().find(x=>x.id===id); if(!fav) return;
+  const entries=fav.entries.map(hydrateEntry);
+  currentViewData={mode:fav.mode, entries};
+  if(fav.mode==='compare'){
+    setMode('compare');
+    compareQueue=entries;
+    renderComparison();
+  } else {
+    setMode('single');
+    renderSingleEntry(entries[0]);
+  }
+  document.getElementById('favMenu').classList.remove('on');
+  document.getElementById('favBtn').classList.remove('on');
+  document.getElementById('favBtn').setAttribute('aria-expanded','false');
+  showToast('✓ 已载入收藏元数据');
+}
+function renderFavoritesMenu(){
+  const host=document.getElementById('favList'); if(!host) return;
+  const list=getFavorites();
+  if(!list.length){
+    host.innerHTML='<div class="fav-empty">还没有本地收藏。先解析图片，再点星标收藏当前结果。</div>';
+    return;
+  }
+  host.innerHTML='';
+  for(const item of list){
+    const div=document.createElement('div');
+    div.className='fav-item';
+    const time=new Date(item.createdAt).toLocaleString('zh-CN',{hour12:false});
+    div.innerHTML=`<div class="fav-main"><div class="fav-title">${esc(item.title||buildFavoriteTitle(item))}<span class="badge ${item.mode==='compare'?'cf':'sd'}">${item.mode==='compare'?'对比':'单图'}</span></div><div class="fav-meta">${esc(time)}<br>${esc(item.entries.map(e=>e.name).join(' · '))}</div></div><div class="fav-ops"><button class="fav-op" type="button">载入</button><button class="fav-op" type="button">删除</button></div>`;
+    const [loadBtn,delBtn]=div.querySelectorAll('.fav-op');
+    loadBtn.onclick=()=>loadFavorite(item.id);
+    delBtn.onclick=()=>deleteFavorite(item.id);
+    host.appendChild(div);
+  }
+}
+function initFavorites(){
+  renderFavoritesMenu();
+  const input=document.getElementById('favImportInput');
+  if(input){
+    input.addEventListener('change', e=>{
+      const file=e.target.files?.[0];
+      if(file) importFavoritesFromFile(file);
+      input.value='';
+    });
+  }
+}
+
+function renderSingleEntry(entry){
+  const res=document.getElementById('result');
+  const rc=document.getElementById('rc');
+  res.classList.add('on');
+  const typeLabel={sdwebui:'SD WebUI',comfyui:'ComfyUI',novelai:'NovelAI',midjourney:'Midjourney',unknown:'未知格式'};
+  const typeCls={sdwebui:'sd',comfyui:'cf',novelai:'nai',midjourney:'mj',unknown:'uk'};
+  const meta=entry.meta||{};
+  const type=entry.type||detectType(meta);
+  const parsed=entry.parsed||parseByType(type, meta);
+  currentViewData={mode:'single', entries:[{...entry, type, parsed}]};
+
+  const safeName=entry.file?.name||'收藏元数据';
+  const jsonName=(safeName.replace(/\.[^.]+$/,'')||'metadata')+'.json';
+  const bar=document.createElement('div');
+  bar.className='infobar';
+  const sizeText=entry.file && entry.file.size ? `${(entry.file.size/1024).toFixed(1)} KB · ` : '';
+  bar.innerHTML=`<img src="${getEntryThumb(entry)}" class="prev-img ${entry.imgURL?'':'thumb-ph'}" alt=""><div class="imeta"><h3>${esc(safeName)}</h3><p>${sizeText}${typeLabel[type]||'Unknown'}</p></div><span class="badge ${typeCls[type]||'uk'}">${typeLabel[type]||'Unknown'}</span><button class="dl-btn" onclick='downloadJSON(${JSON.stringify(meta)}, ${JSON.stringify(jsonName)})'>⬇ 下载 JSON</button>`;
+
+  const main=document.createElement('div');
+  rc.innerHTML='';
+  rc.appendChild(bar);
+  rc.appendChild(main);
+
+  if(type==='sdwebui') renderSD(parsed,main);
+  else if(type==='novelai') renderNAI(parsed,main);
+  else if(type==='midjourney') renderMJ(parsed,main);
+  else if(type==='comfyui'){
+    if(parsed&&parsed.nodes&&parsed.nodes.length) renderCF(parsed,main);
+    else main.innerHTML=`<div class="error">⚠️ ComfyUI 工作流数据解析失败，格式可能不受支持。</div>`;
+  } else {
+    let h=`<div class="card"><div class="sec-hd">🔍 发现的元数据字段 (${Object.keys(meta).length})</div><div class="pgrid">`;
+    for(const [k,v] of Object.entries(meta)){h+=`<div class="pitem"><span class="pkey">${esc(k)}</span><span class="pval">${esc(String(v).slice(0,120))}</span><button class="cbtn" onclick="copy(${JSON.stringify(v)},this)">⎘</button></div>`;}
+    h+=`</div></div>`;
+    main.innerHTML=h;
+  }
+
+  const raw=document.createElement('div');
+  raw.className='raw-wrap';
+  raw.innerHTML=`<button class="raw-tog" onclick="this.nextElementSibling.classList.toggle('on');this.querySelector('span').textContent=this.nextElementSibling.classList.contains('on')?'▼':'▶'"><span>▶</span> 查看原始元数据 JSON</button><div class="raw-body">${esc(JSON.stringify(meta,null,2))}</div>`;
+  rc.appendChild(raw);
+}
+
 // ─── Main Handler ─────────────────────────────────────────────────────────────
 async function handleFile(file){
   const res=document.getElementById('result');
@@ -1183,16 +1775,13 @@ async function handleFile(file){
 
   if(currentMode==='compare'){
     if(compareQueue.length>=6){showToast('⚠️ 最多支持 6 张图片对比');return;}
-    const meta=await readPNGMeta(file);
+    const meta=await readImageMeta(file);
     if(!meta){showToast('⚠️ 无法读取元数据');return;}
     const type=detectType(meta);
-    let parsed=null;
-    if(type==='sdwebui') parsed=parseSDParams(meta.parameters);
-    else if(type==='novelai') parsed=parseNAI(meta);
-    else if(type==='comfyui') parsed=parseComfyWorkflow(meta.workflow,meta.prompt)||{nodes:[],links:{}};
-    else parsed={params:[]};
+    const parsed=parseByType(type, meta);
     const imgURL=URL.createObjectURL(file);
     compareQueue.push({file,meta,type,parsed,imgURL});
+    currentViewData={mode:'compare', entries:compareQueue.slice()};
     renderComparison();
     return;
   }
@@ -1200,39 +1789,14 @@ async function handleFile(file){
   res.classList.add('on');
   rc.innerHTML=`<div class="loading"><div class="spin"></div> 正在读取图片元数据...</div>`;
   try{
-    const meta=await readPNGMeta(file);
-    if(!meta){rc.innerHTML=`<div class="error">⚠️ 无法读取元数据，请上传 PNG 格式的 AI 生成图片。</div>`;return;}
+    const meta=await readImageMeta(file);
+    if(!meta){rc.innerHTML=`<div class="error">⚠️ 无法读取元数据，请上传带有元数据的 PNG / JPG / WEBP 格式 AI 图片。</div>`;return;}
     const keys=Object.keys(meta);
     if(!keys.length){rc.innerHTML=`<div class="error">⚠️ 图片中未发现 AI 元数据，可能已被清除或不是 AI 生成图片。</div>`;return;}
-
     const type=detectType(meta);
+    const parsed=parseByType(type, meta);
     const imgURL=URL.createObjectURL(file);
-    const typeLabel={sdwebui:'SD WebUI',comfyui:'ComfyUI',novelai:'NovelAI',unknown:'未知格式'};
-    const typeCls={sdwebui:'sd',comfyui:'cf',novelai:'nai',unknown:'uk'};
-
-    const bar=document.createElement('div');bar.className='infobar';
-    bar.innerHTML=`<img src="${imgURL}" class="prev-img" alt=""><div class="imeta"><h3>${esc(file.name)}</h3><p>${(file.size/1024).toFixed(1)} KB · PNG · ${typeLabel[type]||'Unknown'}</p></div><span class="badge ${typeCls[type]||'uk'}">${typeLabel[type]||'Unknown'}</span><button class="dl-btn" onclick='downloadJSON(${JSON.stringify(meta)}, ${JSON.stringify(file.name.replace(/\.[^.]+$/,"")+".json")})'>⬇ 下载 JSON</button>`;
-
-    const main=document.createElement('div');
-    rc.innerHTML='';rc.appendChild(bar);rc.appendChild(main);
-
-    if(type==='sdwebui'){
-      renderSD(parseSDParams(meta.parameters),main);
-    } else if(type==='novelai'){
-      renderNAI(parseNAI(meta),main);
-    } else if(type==='comfyui'){
-      const parsed=parseComfyWorkflow(meta.workflow,meta.prompt);
-      if(parsed&&parsed.nodes.length) renderCF(parsed,main);
-      else main.innerHTML=`<div class="error">⚠️ ComfyUI 工作流数据解析失败，格式可能不受支持。</div>`;
-    } else {
-      let h=`<div class="card"><div class="sec-hd">🔍 发现的元数据字段 (${keys.length})</div><div class="pgrid">`;
-      for(const [k,v] of Object.entries(meta)){h+=`<div class="pitem"><span class="pkey">${esc(k)}</span><span class="pval">${esc(String(v).slice(0,80))}</span><button class="cbtn" onclick="copy(${JSON.stringify(v)},this)">⎘</button></div>`;}
-      h+=`</div></div>`;main.innerHTML=h;
-    }
-
-    const raw=document.createElement('div');raw.className='raw-wrap';
-    raw.innerHTML=`<button class="raw-tog" onclick="this.nextElementSibling.classList.toggle('on');this.querySelector('span').textContent=this.nextElementSibling.classList.contains('on')?'▼':'▶'"><span>▶</span> 查看原始元数据 JSON</button><div class="raw-body">${esc(JSON.stringify(meta,null,2))}</div>`;
-    rc.appendChild(raw);
+    renderSingleEntry({file,meta,type,parsed,imgURL});
   } catch(err){
     rc.innerHTML=`<div class="error">⚠️ 解析出错: ${esc(err.message)}</div>`;
     console.error(err);
