@@ -6,52 +6,216 @@
 <title>AI 图片工作流解析器</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
+/* ── 主题与模式变量系统 ── */
 :root {
-  --bg: #f0f8f2;
-  --surface: #ffffff;
-  --surface2: #eaf6ee;
-  --primary: #3a9e5f;
-  --primary-light: #5fbb7e;
-  --primary-dark: #257048;
-  --accent: #27ae60;
-  --text: #162b20;
-  --text-muted: #527a60;
-  --border: #c3dfc9;
-  --border-light: #ddf0e3;
-  --shadow: 0 4px 24px rgba(40,100,60,0.10);
-  --shadow-lg: 0 8px 40px rgba(40,100,60,0.16);
-  --radius: 13px;
   --mono: 'JetBrains Mono', 'Consolas', monospace;
   --sans: 'Nunito', 'Segoe UI', sans-serif;
-  --diff-bg: #fff8e1;
-  --diff-border: #f59e0b;
-  --diff-text: #92400e;
+  --radius: 13px;
+  
+  /* 默认主题：淡绿 */
+  --h: 142; --s: 46%; --l: 42%; --c-on-p: #ffffff;
 }
+
+/* 主题颜色定义 (Hue, Saturation, Lightness, Primary Text Color) */
+[data-theme="green"]  { --h: 142; --s: 46%; --l: 42%; --c-on-p: #ffffff; }
+[data-theme="blue"]   { --h: 212; --s: 65%; --l: 48%; --c-on-p: #ffffff; }
+[data-theme="purple"] { --h: 265; --s: 55%; --l: 52%; --c-on-p: #ffffff; }
+[data-theme="red"]    { --h: 350; --s: 65%; --l: 48%; --c-on-p: #ffffff; }
+[data-theme="pink"]   { --h: 330; --s: 70%; --l: 55%; --c-on-p: #ffffff; }
+[data-theme="yellow"] { --h: 42;  --s: 90%; --l: 45%; --c-on-p: #111111; }
+[data-theme="cyan"]   { --h: 185; --s: 65%; --l: 40%; --c-on-p: #ffffff; }
+[data-theme="orange"] { --h: 25;  --s: 85%; --l: 50%; --c-on-p: #ffffff; }
+
+/* 模式定义：白天 (默认) */
+:root, [data-mode="day"] {
+  --bg: hsl(var(--h), 30%, 96%);
+  --surface: #ffffff;
+  --surface2: hsl(var(--h), 40%, 94%);
+  --primary: hsl(var(--h), var(--s), var(--l));
+  --primary-light: hsl(var(--h), var(--s), calc(var(--l) + 13%));
+  --primary-dark: hsl(var(--h), var(--s), calc(var(--l) - 13%));
+  --accent: var(--primary);
+  --text: hsl(var(--h), 30%, 13%);
+  --text-muted: hsl(var(--h), 20%, 40%);
+  --border: hsl(var(--h), 30%, 82%);
+  --border-light: hsl(var(--h), 30%, 90%);
+  --shadow: 0 4px 24px hsla(var(--h), 40%, 20%, 0.10);
+  --shadow-lg: 0 8px 40px hsla(var(--h), 40%, 20%, 0.16);
+  
+  --diff-bg: #fff8e1; --diff-border: #f59e0b; --diff-text: #92400e;
+  --diff-row: #fffbeb; --diff-row-first: #fef3c7;
+  --raw-bg: #0f1e14; --raw-text: #7de0a8;
+  --vp-bg: hsl(var(--h), 30%, 94%); --vp-dot: hsla(var(--h), var(--s), var(--l), 0.25);
+  
+  --nai-bg-1: #fdf4ff; --nai-bg-2: #fce7f3; --nai-border: #e879f9;
+  --nai-hd-1: #a21caf; --nai-hd-2: #db2777; --nai-text-bg: #fdf4ff; --nai-text-border: #f0abfc; --nai-text-c: #fff;
+  
+  --neg-bg: #fff5f6; --neg-border: #fbd5da; --neg-text: #6b1a23;
+  --row-hover: hsl(var(--h), 40%, 97%);
+  
+  --badge-sd-bg: #e3f2fd; --badge-sd-text: #1055b0;
+  --badge-cf-bg: #e8f5e9; --badge-cf-text: #1f7e40;
+  --badge-nai-bg: #fdf2f8; --badge-nai-text: #86198f;
+  --badge-uk-bg: #f3e5f5; --badge-uk-text: #6a1b9a;
+  
+  --conn-shadow: rgba(0,0,0,0.12);
+}
+
+/* 模式定义：黄昏 */
+[data-mode="dusk"] {
+  --bg: hsl(var(--h), 15%, 16%);
+  --surface: hsl(var(--h), 15%, 21%);
+  --surface2: hsl(var(--h), 15%, 26%);
+  --primary: hsl(var(--h), var(--s), var(--l));
+  --primary-light: hsl(var(--h), var(--s), calc(var(--l) + 15%));
+  --primary-dark: hsl(var(--h), var(--s), calc(var(--l) - 15%));
+  --accent: var(--primary);
+  --text: hsl(var(--h), 10%, 90%);
+  --text-muted: hsl(var(--h), 10%, 65%);
+  --border: hsl(var(--h), 15%, 32%);
+  --border-light: hsl(var(--h), 15%, 26%);
+  --shadow: 0 4px 24px rgba(0,0,0,0.3);
+  --shadow-lg: 0 8px 40px rgba(0,0,0,0.4);
+  
+  --diff-bg: hsla(40, 100%, 20%, 0.4); --diff-border: #d97706; --diff-text: #fcd34d;
+  --diff-row: hsla(40, 100%, 10%, 0.3); --diff-row-first: hsla(40, 100%, 15%, 0.4);
+  --raw-bg: hsl(var(--h), 20%, 10%); --raw-text: hsl(var(--h), 40%, 70%);
+  --vp-bg: hsl(var(--h), 15%, 18%); --vp-dot: hsla(var(--h), var(--s), 60%, 0.15);
+  
+  --nai-bg-1: #2d1b33; --nai-bg-2: #331b28; --nai-border: #9b4dca;
+  --nai-hd-1: #5e0e66; --nai-hd-2: #7a1540; --nai-text-bg: #221226; --nai-text-border: #7a329c; --nai-text-c: #fff;
+  
+  --neg-bg: hsla(350, 40%, 30%, 0.3); --neg-border: hsla(350, 40%, 40%, 0.5); --neg-text: #fca5a5;
+  --row-hover: hsla(var(--h), 20%, 25%, 0.4);
+  
+  --badge-sd-bg: hsla(210, 80%, 40%, 0.2); --badge-sd-text: #60a5fa;
+  --badge-cf-bg: hsla(140, 80%, 40%, 0.2); --badge-cf-text: #4ade80;
+  --badge-nai-bg: hsla(320, 80%, 40%, 0.2); --badge-nai-text: #f472b6;
+  --badge-uk-bg: hsla(280, 80%, 40%, 0.2); --badge-uk-text: #c084fc;
+  
+  --conn-shadow: rgba(0,0,0,0.5);
+}
+
+/* 模式定义：夜间 */
+[data-mode="night"] {
+  --bg: hsl(var(--h), 10%, 8%);
+  --surface: hsl(var(--h), 10%, 12%);
+  --surface2: hsl(var(--h), 10%, 16%);
+  --primary: hsl(var(--h), var(--s), var(--l));
+  --primary-light: hsl(var(--h), var(--s), calc(var(--l) + 15%));
+  --primary-dark: hsl(var(--h), var(--s), calc(var(--l) - 15%));
+  --accent: var(--primary);
+  --text: hsl(var(--h), 10%, 85%);
+  --text-muted: hsl(var(--h), 10%, 60%);
+  --border: hsl(var(--h), 10%, 20%);
+  --border-light: hsl(var(--h), 10%, 15%);
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+  --shadow-lg: 0 8px 40px rgba(0,0,0,0.6);
+  
+  --diff-bg: hsla(40, 100%, 20%, 0.3); --diff-border: #b45309; --diff-text: #fde68a;
+  --diff-row: hsla(40, 100%, 10%, 0.2); --diff-row-first: hsla(40, 100%, 15%, 0.3);
+  --raw-bg: hsl(var(--h), 15%, 5%); --raw-text: hsl(var(--h), 40%, 65%);
+  --vp-bg: hsl(var(--h), 10%, 10%); --vp-dot: hsla(var(--h), var(--s), 60%, 0.1);
+  
+  --nai-bg-1: #2d1b33; --nai-bg-2: #331b28; --nai-border: #9b4dca;
+  --nai-hd-1: #5e0e66; --nai-hd-2: #7a1540; --nai-text-bg: #221226; --nai-text-border: #7a329c; --nai-text-c: #fff;
+  
+  --neg-bg: hsla(350, 40%, 20%, 0.3); --neg-border: hsla(350, 40%, 30%, 0.5); --neg-text: #f87171;
+  --row-hover: hsla(var(--h), 20%, 20%, 0.4);
+  
+  --badge-sd-bg: hsla(210, 80%, 40%, 0.2); --badge-sd-text: #60a5fa;
+  --badge-cf-bg: hsla(140, 80%, 40%, 0.2); --badge-cf-text: #4ade80;
+  --badge-nai-bg: hsla(320, 80%, 40%, 0.2); --badge-nai-text: #f472b6;
+  --badge-uk-bg: hsla(280, 80%, 40%, 0.2); --badge-uk-text: #c084fc;
+  
+  --conn-shadow: rgba(0,0,0,0.8);
+}
+
+/* 模式定义：纯黑 */
+[data-mode="black"] {
+  --bg: #000000;
+  --surface: #080808;
+  --surface2: #121212;
+  --primary: hsl(var(--h), var(--s), var(--l));
+  --primary-light: hsl(var(--h), var(--s), calc(var(--l) + 15%));
+  --primary-dark: hsl(var(--h), var(--s), calc(var(--l) - 15%));
+  --accent: var(--primary);
+  --text: #e0e0e0;
+  --text-muted: #888888;
+  --border: #222222;
+  --border-light: #111111;
+  --shadow: none;
+  --shadow-lg: none;
+  
+  --diff-bg: #2a1a00; --diff-border: #92400e; --diff-text: #fef3c7;
+  --diff-row: #110a00; --diff-row-first: #1f1400;
+  --raw-bg: #000000; --raw-text: hsl(var(--h), 40%, 60%);
+  --vp-bg: #030303; --vp-dot: hsla(var(--h), var(--s), 60%, 0.15);
+  
+  --nai-bg-1: #1a0a1f; --nai-bg-2: #1f0a17; --nai-border: #7e22ce;
+  --nai-hd-1: #4a044e; --nai-hd-2: #831843; --nai-text-bg: #120516; --nai-text-border: #6b21a8; --nai-text-c: #fff;
+  
+  --neg-bg: hsla(350, 40%, 15%, 0.3); --neg-border: hsla(350, 40%, 20%, 0.5); --neg-text: #ef4444;
+  --row-hover: hsla(var(--h), 20%, 15%, 0.4);
+  
+  --badge-sd-bg: hsla(210, 80%, 40%, 0.2); --badge-sd-text: #60a5fa;
+  --badge-cf-bg: hsla(140, 80%, 40%, 0.2); --badge-cf-text: #4ade80;
+  --badge-nai-bg: hsla(320, 80%, 40%, 0.2); --badge-nai-text: #f472b6;
+  --badge-uk-bg: hsla(280, 80%, 40%, 0.2); --badge-uk-text: #c084fc;
+  
+  --conn-shadow: rgba(255,255,255,0.08);
+}
+
+/* 基础样式重置与背景 */
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh}
-body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 15% 60%,rgba(58,158,95,.06) 0%,transparent 55%),radial-gradient(ellipse at 85% 15%,rgba(39,174,96,.05) 0%,transparent 55%);pointer-events:none;z-index:0}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;transition:background 0.3s, color 0.3s;}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 15% 60%,hsla(var(--h),var(--s),var(--l),.08) 0%,transparent 55%),radial-gradient(ellipse at 85% 15%,hsla(var(--h),var(--s),var(--l),.06) 0%,transparent 55%);pointer-events:none;z-index:0;transition:background 0.3s;}
+
+/* 滚动条美化 */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
 
 /* HEADER */
-.header{position:relative;z-index:10;padding:18px 28px;background:var(--surface);border-bottom:1.5px solid var(--border);box-shadow:0 2px 14px rgba(40,100,60,.07);display:flex;align-items:center;gap:14px}
+.header{position:relative;z-index:10;padding:18px 28px;background:var(--surface);border-bottom:1.5px solid var(--border);box-shadow:0 2px 14px rgba(0,0,0,.03);display:flex;align-items:center;gap:14px;transition:background 0.3s, border-color 0.3s;}
 .hicon{width:42px;height:42px;background:linear-gradient(135deg,var(--primary),var(--primary-light));border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
 .header h1{font-size:20px;font-weight:800;color:var(--primary-dark)}
 .header p{font-size:13px;color:var(--text-muted);margin-top:1px}
+
+/* SETTINGS (主题与模式菜单) */
+.settings-wrap { position: relative; margin-left: auto; }
+.settings-btn { width: 38px; height: 38px; background: var(--surface2); border: 1.5px solid var(--border); border-radius: 10px; cursor: pointer; color: var(--text-muted); display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+.settings-btn:hover { background: var(--border-light); color: var(--primary); }
+.settings-menu { position: absolute; top: calc(100% + 12px); right: 0; background: var(--surface); border: 1.5px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-lg); padding: 18px; width: 260px; display: none; flex-direction: column; z-index: 100; animation: fade-in 0.2s ease-out; }
+.settings-menu.on { display: flex; }
+@keyframes fade-in { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+.sm-title { font-size: 11.5px; font-weight: 800; color: var(--text-muted); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+.theme-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
+.t-swatch { width: 100%; aspect-ratio: 1; border-radius: 50%; border: 2.5px solid transparent; background: hsl(var(--sh), var(--ss), var(--sl)); cursor: pointer; transition: transform 0.2s, border-color 0.2s; position: relative; }
+.t-swatch:hover { transform: scale(1.15); z-index: 2; }
+.t-swatch.act { border-color: var(--text); box-shadow: 0 0 0 2px var(--surface), 0 0 0 4px var(--text); z-index: 3; }
+.mode-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.m-btn { padding: 8px 6px; background: var(--surface2); border: 1.5px solid var(--border); border-radius: 8px; font-size: 12px; font-weight: 700; color: var(--text); cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 5px; }
+.m-btn:hover { border-color: var(--primary-light); }
+.m-btn.act { background: var(--primary); border-color: var(--primary); color: var(--c-on-p); }
+
 .main{position:relative;z-index:1;max-width:1400px;margin:0 auto;padding:28px 24px}
 
 /* MODE TOGGLE */
 .mode-row{display:flex;align-items:center;gap:10px;margin-bottom:14px}
 .mode-lbl{font-size:13px;font-weight:700;color:var(--text-muted)}
 .mode-btn{padding:6px 16px;border-radius:20px;border:1.5px solid var(--border);background:var(--surface);font-size:12.5px;font-weight:700;color:var(--text-muted);cursor:pointer;font-family:var(--sans);transition:all .2s}
-.mode-btn.act{background:var(--primary);border-color:var(--primary);color:#fff}
+.mode-btn.act{background:var(--primary);border-color:var(--primary);color:var(--c-on-p)}
 .mode-hint{font-size:12px;color:var(--text-muted);margin-left:4px}
 
 /* UPLOAD */
 .upload-wrap{position:relative;border:2.5px dashed var(--border);border-radius:var(--radius);background:var(--surface);overflow:hidden;cursor:pointer;transition:all .25s}
-.upload-wrap::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(58,158,95,.04),rgba(39,174,96,.04));opacity:0;transition:opacity .25s}
+.upload-wrap::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,hsla(var(--h),var(--s),var(--l),.06),hsla(var(--h),var(--s),var(--l),.02));opacity:0;transition:opacity .25s}
 .upload-wrap:hover,.upload-wrap.over{border-color:var(--primary);box-shadow:var(--shadow)}
 .upload-wrap:hover::before,.upload-wrap.over::before{opacity:1}
 .upload-inner{padding:52px 24px;text-align:center;pointer-events:none}
-.uicon{font-size:54px;display:block;margin-bottom:14px;filter:drop-shadow(0 4px 8px rgba(58,158,95,.25))}
+.uicon{font-size:54px;display:block;margin-bottom:14px;filter:drop-shadow(0 4px 8px hsla(var(--h),var(--s),var(--l),.25))}
 .upload-wrap h2{font-size:19px;font-weight:700;margin-bottom:7px}
 .upload-wrap p{color:var(--text-muted);font-size:14px}
 .upload-wrap input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
@@ -67,11 +231,11 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .imeta h3{font-size:15px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .imeta p{font-size:12px;color:var(--text-muted);margin-top:2px}
 .badge{padding:5px 14px;border-radius:20px;font-size:12px;font-weight:800;letter-spacing:.4px;flex-shrink:0}
-.badge.sd{background:#e3f2fd;color:#1055b0}
-.badge.cf{background:#e8f5e9;color:#1f7e40}
-.badge.nai{background:#fdf2f8;color:#86198f}
-.badge.uk{background:#f3e5f5;color:#6a1b9a}
-.dl-btn{padding:6px 14px;background:var(--primary);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--sans);display:flex;align-items:center;gap:5px;flex-shrink:0;transition:background .2s}
+.badge.sd{background:var(--badge-sd-bg);color:var(--badge-sd-text)}
+.badge.cf{background:var(--badge-cf-bg);color:var(--badge-cf-text)}
+.badge.nai{background:var(--badge-nai-bg);color:var(--badge-nai-text)}
+.badge.uk{background:var(--badge-uk-bg);color:var(--badge-uk-text)}
+.dl-btn{padding:6px 14px;background:var(--primary);color:var(--c-on-p);border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--sans);display:flex;align-items:center;gap:5px;flex-shrink:0;transition:background .2s}
 .dl-btn:hover{background:var(--primary-dark)}
 
 /* SD WEBUI */
@@ -80,8 +244,8 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .prompt-box{padding:16px 20px;border-bottom:1px solid var(--border-light)}
 .plabel{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:8px}
 .ptext{font-family:var(--mono);font-size:12.5px;line-height:1.7;background:var(--bg);padding:12px 14px;border-radius:9px;border:1px solid var(--border-light);white-space:pre-wrap;word-break:break-word;position:relative}
-.ptext.neg{background:#fff5f6;border-color:#fbd5da;color:#6b1a23}
-.pcopy{position:absolute;top:8px;right:8px;padding:3px 10px;background:var(--primary);color:#fff;border:none;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;font-family:var(--sans);transition:background .2s}
+.ptext.neg{background:var(--neg-bg);border-color:var(--neg-border);color:var(--neg-text)}
+.pcopy{position:absolute;top:8px;right:8px;padding:3px 10px;background:var(--primary);color:var(--c-on-p);border:none;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;font-family:var(--sans);transition:background .2s}
 .pcopy:hover{background:var(--primary-dark)}
 
 .pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
@@ -90,54 +254,54 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .pkey{font-size:11.5px;font-weight:700;color:var(--text-muted);min-width:95px;flex-shrink:0}
 .pval{font-family:var(--mono);font-size:12px;color:var(--text);flex:1;word-break:break-all}
 .cbtn{flex-shrink:0;width:26px;height:26px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;transition:all .18s;color:var(--text-muted)}
-.cbtn:hover{background:var(--primary);border-color:var(--primary);color:#fff;transform:scale(1.08)}
-.cbtn.ok{background:var(--accent);border-color:var(--accent);color:#fff}
+.cbtn:hover{background:var(--primary);border-color:var(--primary);color:var(--c-on-p);transform:scale(1.08)}
+.cbtn.ok{background:var(--accent);border-color:var(--accent);color:var(--c-on-p)}
 
 /* NAI */
-.nai-wrap{background:linear-gradient(135deg,#fdf4ff,#fce7f3);border-radius:var(--radius);border:1.5px solid #e879f9;overflow:hidden;box-shadow:var(--shadow)}
-.nai-wrap .sec-hd{background:linear-gradient(135deg,#a21caf,#db2777);border-bottom-color:#be185d;color:#fff}
-.nai-wrap .ptext{background:#fdf4ff;border-color:#f0abfc}
-.nai-wrap .ptext.neg{background:#fff1f2;border-color:#fda4af}
+.nai-wrap{background:linear-gradient(135deg,var(--nai-bg-1),var(--nai-bg-2));border-radius:var(--radius);border:1.5px solid var(--nai-border);overflow:hidden;box-shadow:var(--shadow)}
+.nai-wrap .sec-hd{background:linear-gradient(135deg,var(--nai-hd-1),var(--nai-hd-2));border-bottom-color:var(--nai-hd-2);color:var(--nai-text-c)}
+.nai-wrap .ptext{background:var(--nai-text-bg);border-color:var(--nai-text-border)}
+.nai-wrap .ptext.neg{background:var(--neg-bg);border-color:var(--neg-border);color:var(--neg-text)}
 
 /* COMFYUI CANVAS */
 .cf-card{background:var(--surface);border-radius:var(--radius);border:1.5px solid var(--border);overflow:hidden;box-shadow:var(--shadow)}
 .toolbar{padding:9px 16px;background:var(--surface2);border-bottom:1.5px solid var(--border);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .tlbl{font-size:11.5px;color:var(--text-muted);font-weight:700}
 .tbtn{padding:5px 12px;background:var(--surface);border:1.5px solid var(--border);border-radius:7px;font-size:12px;font-family:var(--sans);font-weight:700;color:var(--text);cursor:pointer;transition:all .18s;display:flex;align-items:center;gap:4px;white-space:nowrap}
-.tbtn:hover{background:var(--primary-light);border-color:var(--primary-light);color:#fff}
-.tbtn.act{background:var(--primary);border-color:var(--primary);color:#fff}
+.tbtn:hover{background:var(--primary-light);border-color:var(--primary-light);color:var(--c-on-p)}
+.tbtn.act{background:var(--primary);border-color:var(--primary);color:var(--c-on-p)}
 .tsep{width:1px;height:20px;background:var(--border)}
 .tinfo{margin-left:auto;font-size:11.5px;color:var(--text-muted);font-family:var(--mono)}
 .node-count{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:3px 9px;font-size:11px;font-weight:700;color:var(--primary-dark)}
 
-.viewport{height:620px;overflow:hidden;position:relative;background-color:#eef7f1;background-image:radial-gradient(circle,rgba(58,158,95,.25) 1.2px,transparent 1.2px);background-size:22px 22px;cursor:grab;user-select:none}
+.viewport{height:620px;overflow:hidden;position:relative;background-color:var(--vp-bg);background-image:radial-gradient(circle,var(--vp-dot) 1.2px,transparent 1.2px);background-size:22px 22px;cursor:grab;user-select:none}
 .viewport:active{cursor:grabbing}
 .world{position:absolute;top:0;left:0;transform-origin:0 0;will-change:transform}
 .conn-svg{position:absolute;top:0;left:0;width:8000px;height:8000px;pointer-events:none;overflow:visible}
 
 /* NODES */
-.cfnode{position:absolute;min-width:215px;max-width:300px;background:#fff;border:2px solid #d4e8db;border-radius:11px;box-shadow:0 4px 18px rgba(40,100,60,.12);transition:box-shadow .2s,border-color .2s}
-.cfnode:hover{box-shadow:0 6px 28px rgba(40,100,60,.2);border-color:var(--primary)}
-.cfnode.sel{border-color:var(--primary);box-shadow:0 0 0 3px rgba(58,158,95,.18),0 6px 28px rgba(40,100,60,.2)}
+.cfnode{position:absolute;min-width:215px;max-width:300px;background:var(--surface);border:2px solid var(--border);border-radius:11px;box-shadow:0 4px 18px rgba(0,0,0,.12);transition:box-shadow .2s,border-color .2s}
+.cfnode:hover{box-shadow:0 6px 28px rgba(0,0,0,.2);border-color:var(--primary)}
+.cfnode.sel{border-color:var(--primary);box-shadow:0 0 0 3px hsla(var(--h),var(--s),var(--l),.25),0 6px 28px rgba(0,0,0,.2)}
 .nhead{padding:9px 13px;border-radius:9px 9px 0 0;cursor:move;display:flex;align-items:center;gap:7px}
 .ntitle{font-size:11.5px;font-weight:800;color:#fff;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:.2px;pointer-events:none}
-.nid{font-size:10px;font-family:var(--mono);color:rgba(255,255,255,.8);background:rgba(0,0,0,.2);padding:2px 6px;border-radius:4px;flex-shrink:0;pointer-events:none}
+.nid{font-size:10px;font-family:var(--mono);color:rgba(255,255,255,.9);background:rgba(0,0,0,.25);padding:2px 6px;border-radius:4px;flex-shrink:0;pointer-events:none}
 .nbody{padding:0}
 .slots-wrap{padding:5px 0 4px}
 .srow{display:flex;justify-content:space-between;align-items:center;min-height:24px}
 .sinput,.soutput{display:flex;align-items:center;gap:5px;padding:3px 0}
 .sinput{padding-left:6px}
 .soutput{padding-right:6px;justify-content:flex-end}
-.sdot{width:11px;height:11px;border-radius:50%;border:2.5px solid currentColor;background:#fff;flex-shrink:0;cursor:default}
+.sdot{width:11px;height:11px;border-radius:50%;border:2.5px solid currentColor;background:var(--surface);flex-shrink:0;cursor:default}
 .sinput .sdot{margin-left:-12px}
 .soutput .sdot{margin-right:-12px}
 .sname{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px}
-.nparams{padding:5px 10px 8px;border-top:1px solid #eef5f1;margin-top:3px}
+.nparams{padding:5px 10px 8px;border-top:1px solid var(--border-light);margin-top:3px}
 .npitem{display:flex;align-items:center;gap:5px;padding:2.5px 0}
 .npkey{font-size:10.5px;color:var(--text-muted);font-weight:700;min-width:68px;flex-shrink:0}
 .npval{font-family:var(--mono);font-size:10.5px;color:var(--text);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .ncbtn{flex-shrink:0;width:19px;height:19px;background:var(--surface2);border:1px solid var(--border);border-radius:4px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:10px;transition:all .15s;color:var(--text-muted)}
-.ncbtn:hover{background:var(--primary);border-color:var(--primary);color:#fff}
+.ncbtn:hover{background:var(--primary);border-color:var(--primary);color:var(--c-on-p)}
 
 /* Node colors */
 .nc-loader{background:linear-gradient(135deg,#6d28d9,#8b5cf6)}
@@ -153,24 +317,25 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .raw-wrap{margin-top:18px}
 .raw-tog{width:100%;padding:10px 18px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);cursor:pointer;font-size:13px;font-weight:700;color:var(--text-muted);display:flex;align-items:center;gap:8px;transition:all .2s;font-family:var(--sans)}
 .raw-tog:hover{border-color:var(--primary);color:var(--primary)}
-.raw-body{display:none;padding:16px;background:#0f1e14;border:1.5px solid var(--border);border-top:none;border-radius:0 0 var(--radius) var(--radius);font-family:var(--mono);font-size:11px;color:#7de0a8;white-space:pre-wrap;overflow:auto;max-height:280px;line-height:1.65}
+.raw-body{display:none;padding:16px;background:var(--raw-bg);border:1.5px solid var(--border);border-top:none;border-radius:0 0 var(--radius) var(--radius);font-family:var(--mono);font-size:11px;color:var(--raw-text);white-space:pre-wrap;overflow:auto;max-height:280px;line-height:1.65}
+.raw-body::-webkit-scrollbar-track { background: var(--raw-bg); }
 .raw-body.on{display:block}
 
 /* MISC */
-.error{padding:14px 20px;background:#fff5f6;border:1.5px solid #fbd5da;border-radius:var(--radius);color:#be123c;font-size:14px;display:flex;align-items:center;gap:10px}
+.error{padding:14px 20px;background:var(--neg-bg);border:1.5px solid var(--neg-border);border-radius:var(--radius);color:var(--neg-text);font-size:14px;display:flex;align-items:center;gap:10px}
 .loading{display:flex;align-items:center;justify-content:center;padding:52px;gap:14px;color:var(--text-muted);font-size:14px}
 .spin{width:26px;height:26px;border:3px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:spin .75s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.toast{position:fixed;bottom:26px;right:26px;background:#1a3d26;color:#fff;padding:10px 20px;border-radius:9px;font-size:13px;font-weight:700;z-index:9999;transform:translateY(80px);transition:transform .3s cubic-bezier(.34,1.56,.64,1);pointer-events:none;box-shadow:0 4px 20px rgba(0,0,0,.18)}
+.toast{position:fixed;bottom:26px;right:26px;background:var(--text);color:var(--surface);padding:10px 20px;border-radius:9px;font-size:13px;font-weight:700;z-index:9999;transform:translateY(80px);transition:transform .3s cubic-bezier(.34,1.56,.64,1);pointer-events:none;box-shadow:0 4px 20px rgba(0,0,0,.18)}
 .toast.on{transform:translateY(0)}
 
 /* ── COMPARISON MODE ───────────────────────────────────────────── */
 .cmp-header{display:flex;align-items:center;gap:12px;padding:14px 20px;background:var(--surface);border-radius:var(--radius);border:1.5px solid var(--border);margin-bottom:18px;box-shadow:var(--shadow);flex-wrap:wrap}
 .cmp-header h3{font-size:15px;font-weight:800;color:var(--primary-dark);flex:1}
 .cmp-subtext{font-size:12px;color:var(--text-muted)}
-.cmp-clear{padding:5px 14px;background:#fff5f6;border:1.5px solid #fbd5da;border-radius:7px;font-size:12px;font-weight:700;color:#be123c;cursor:pointer;font-family:var(--sans);transition:all .2s}
-.cmp-clear:hover{background:#fbd5da}
-.cmp-dl{padding:5px 14px;background:var(--primary);border:none;border-radius:7px;font-size:12px;font-weight:700;color:#fff;cursor:pointer;font-family:var(--sans);transition:background .2s}
+.cmp-clear{padding:5px 14px;background:var(--neg-bg);border:1.5px solid var(--neg-border);border-radius:7px;font-size:12px;font-weight:700;color:var(--neg-text);cursor:pointer;font-family:var(--sans);transition:all .2s}
+.cmp-clear:hover{background:var(--neg-border);color:var(--text)}
+.cmp-dl{padding:5px 14px;background:var(--primary);border:none;border-radius:7px;font-size:12px;font-weight:700;color:var(--c-on-p);cursor:pointer;font-family:var(--sans);transition:background .2s}
 .cmp-dl:hover{background:var(--primary-dark)}
 
 .cmp-wrap{background:var(--surface);border-radius:var(--radius);border:1.5px solid var(--border);overflow:hidden;box-shadow:var(--shadow)}
@@ -180,14 +345,14 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .cmp-table th:first-child{min-width:130px;position:sticky;left:0;z-index:2;background:var(--surface2)}
 .cmp-table td{padding:9px 14px;border-bottom:1px solid var(--border-light);border-right:1px solid var(--border-light);vertical-align:middle}
 .cmp-table td:first-child{font-size:11.5px;font-weight:700;color:var(--text-muted);background:var(--surface2);position:sticky;left:0;z-index:1;white-space:nowrap}
-.cmp-table tr:hover td{background:#f6fdf8}
+.cmp-table tr:hover td{background:var(--row-hover)}
 .cmp-table tr:hover td:first-child{background:var(--surface2)}
 .cmp-val{font-family:var(--mono);font-size:11.5px;color:var(--text);word-break:break-word;max-width:240px}
 .cmp-empty{color:var(--text-muted);font-style:italic;font-size:11px}
 
 /* DIFF highlight */
-.diff-row td{background:#fffbeb !important}
-.diff-row td:first-child{background:#fef3c7 !important}
+.diff-row td{background:var(--diff-row) !important}
+.diff-row td:first-child{background:var(--diff-row-first) !important}
 .diff-cell{background:var(--diff-bg) !important;border-left:3px solid var(--diff-border) !important}
 .diff-cell .cmp-val{color:var(--diff-text);font-weight:700}
 .diff-badge{display:inline-block;background:var(--diff-border);color:#fff;border-radius:4px;font-size:9px;font-weight:800;padding:1px 5px;margin-left:5px;vertical-align:middle;letter-spacing:.5px}
@@ -197,17 +362,28 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .cmp-thumb{width:56px;height:56px;object-fit:cover;border-radius:8px;border:2px solid var(--border)}
 .cmp-fname{font-size:10.5px;font-weight:700;color:var(--text-muted);text-align:center;max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .cmp-ftype{font-size:9.5px;color:#fff;padding:2px 7px;border-radius:10px;font-weight:800;letter-spacing:.3px}
-.cmp-ftype.sd{background:#1055b0}
-.cmp-ftype.nai{background:#86198f}
-.cmp-ftype.cf{background:#1f7e40}
-.cmp-ftype.uk{background:#6a1b9a}
+.cmp-ftype.sd{background:#2563eb}
+.cmp-ftype.nai{background:#9333ea}
+.cmp-ftype.cf{background:#16a34a}
+.cmp-ftype.uk{background:#7e22ce}
 .cmp-add-hint{padding:20px;text-align:center;color:var(--text-muted);font-size:13px;border-top:1.5px dashed var(--border-light)}
 
 /* Prompts in comparison */
 .cmp-prompt{font-family:var(--mono);font-size:10.5px;line-height:1.55;max-height:80px;overflow:hidden;position:relative;word-break:break-word;color:var(--text)}
 .cmp-prompt.diff{color:var(--diff-text);font-weight:600}
+.cmp-section-note{margin-left:auto;font-size:11px;color:var(--text-muted);font-weight:700}
+.cmp-val-wrap{display:flex;flex-direction:column;align-items:flex-start;gap:6px;max-width:240px}
+.cmp-val{font-family:var(--mono);font-size:11.5px;color:var(--text);word-break:break-word;max-width:240px;white-space:pre-wrap;line-height:1.65}
+.cmp-val-wrap.is-collapsible .cmp-val{max-height:5.2em;overflow:hidden;position:relative}
+.cmp-val-wrap.is-collapsible .cmp-val::after{content:'';position:absolute;left:0;right:0;bottom:0;height:2.1em;background:linear-gradient(to bottom,rgba(255,255,255,0),var(--surface))}
+.cmp-val-wrap.expanded .cmp-val{max-height:none}
+.cmp-val-wrap.expanded .cmp-val::after{display:none}
+.cmp-expand{padding:3px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:999px;color:var(--text-muted);font-size:11px;font-weight:800;cursor:pointer;font-family:var(--sans);transition:all .18s}
+.cmp-expand:hover{background:var(--primary);border-color:var(--primary);color:var(--c-on-p)}
+.cmp-diff-part{display:inline;border-radius:4px;padding:0 2px;background:var(--diff-bg);border:1px solid var(--diff-border);color:var(--diff-text);font-weight:800}
+.cmp-empty-box{padding:16px 20px;color:var(--text-muted);font-size:12.5px;background:var(--surface);border-radius:0 0 var(--radius) var(--radius)}
 
-@media(max-width:768px){.main{padding:16px 14px}.pgrid{grid-template-columns:1fr}.viewport{height:480px}.header h1{font-size:17px}}
+@media(max-width:768px){.main{padding:16px 14px}.pgrid{grid-template-columns:1fr}.viewport{height:480px}.header h1{font-size:17px}.cmp-val-wrap,.cmp-val{max-width:180px}}
 </style>
 </head>
 <body>
@@ -217,6 +393,33 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
   <div>
     <h1>AI 图片工作流解析器</h1>
     <p>解析 ComfyUI · SD WebUI · NovelAI 生成图片的参数与工作流</p>
+  </div>
+  
+  <!-- 设置菜单按钮及弹窗 -->
+  <div class="settings-wrap">
+    <button class="settings-btn" id="settingsBtn" title="主题与模式设置">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+    </button>
+    <div class="settings-menu" id="settingsMenu">
+      <div class="sm-title">主题颜色 Theme</div>
+      <div class="theme-grid">
+        <button class="t-swatch" data-theme="green"  style="--sh:142;--ss:46%;--sl:42%" title="淡绿"></button>
+        <button class="t-swatch" data-theme="blue"   style="--sh:212;--ss:65%;--sl:48%" title="淡蓝"></button>
+        <button class="t-swatch" data-theme="purple" style="--sh:265;--ss:55%;--sl:52%" title="淡紫"></button>
+        <button class="t-swatch" data-theme="red"    style="--sh:350;--ss:65%;--sl:48%" title="淡红"></button>
+        <button class="t-swatch" data-theme="pink"   style="--sh:330;--ss:70%;--sl:55%" title="淡粉"></button>
+        <button class="t-swatch" data-theme="yellow" style="--sh:42; --ss:90%;--sl:45%" title="淡黄"></button>
+        <button class="t-swatch" data-theme="cyan"   style="--sh:185;--ss:65%;--sl:40%" title="淡青"></button>
+        <button class="t-swatch" data-theme="orange" style="--sh:25; --ss:85%;--sl:50%" title="淡橙"></button>
+      </div>
+      <div class="sm-title" style="margin-top:4px">显示模式 Mode</div>
+      <div class="mode-grid">
+        <button class="m-btn" data-mode="day">☀️ 白天</button>
+        <button class="m-btn" data-mode="dusk">🌅 黄昏</button>
+        <button class="m-btn" data-mode="night">🌙 夜间</button>
+        <button class="m-btn" data-mode="black">⚫ 纯黑</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -245,6 +448,53 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 <div class="toast" id="toast">✓ 已复制到剪贴板</div>
 
 <script>
+// ─── Global State ─────────────────────────────────────────────────────────────
+const CS={scale:1,ox:0,oy:0,panning:false,dragNode:null,nodes:[],links:{},lineStyle:'bezier',vp:null,world:null,svg:null};
+
+// ─── Theme & Mode Logic ───────────────────────────────────────────────────────
+function initThemeMode() {
+  const sm = document.getElementById('settingsMenu');
+  const sb = document.getElementById('settingsBtn');
+  
+  sb.onclick = (e) => { e.stopPropagation(); sm.classList.toggle('on'); };
+  document.addEventListener('click', (e) => {
+    if(!sm.contains(e.target) && e.target !== sb) sm.classList.remove('on');
+  });
+
+  function apply(theme, mode) {
+    document.documentElement.setAttribute('data-theme', theme);
+    document.documentElement.setAttribute('data-mode', mode);
+    localStorage.setItem('awp_theme', theme);
+    localStorage.setItem('awp_mode', mode);
+    
+    document.querySelectorAll('.t-swatch').forEach(el => el.classList.toggle('act', el.dataset.theme === theme));
+    document.querySelectorAll('.m-btn').forEach(el => el.classList.toggle('act', el.dataset.mode === mode));
+    
+    // Trigger Canvas redraw if ComfyUI is visible
+    if(CS && CS.nodes && CS.nodes.length > 0) { setTimeout(drawConns, 50); }
+  }
+
+  document.querySelectorAll('.t-swatch').forEach(btn => {
+    btn.onclick = () => apply(btn.dataset.theme, document.documentElement.getAttribute('data-mode') || 'day');
+  });
+  document.querySelectorAll('.m-btn').forEach(btn => {
+    btn.onclick = () => apply(document.documentElement.getAttribute('data-theme') || 'green', btn.dataset.mode);
+  });
+
+  // Auto detect or load from localStorage
+  let savedT = localStorage.getItem('awp_theme') || 'green';
+  let savedM = localStorage.getItem('awp_mode');
+  
+  if(!savedM) {
+    const hr = new Date().getHours();
+    if(hr >= 6 && hr < 17) savedM = 'day';
+    else if(hr >= 17 && hr < 20) savedM = 'dusk';
+    else savedM = 'night';
+  }
+  apply(savedT, savedM);
+}
+initThemeMode();
+
 // ─── Utilities ───────────────────────────────────────────────────────────────
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 function showToast(m='✓ 已复制'){const t=document.getElementById('toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2000)}
@@ -265,7 +515,7 @@ function downloadJSON(obj,filename){
 
 // ─── Mode Management ─────────────────────────────────────────────────────────
 let currentMode='single';
-let compareQueue=[]; // [{file, meta, type, parsed, imgURL}]
+let compareQueue=[]; 
 
 function setMode(m){
   currentMode=m;
@@ -347,7 +597,6 @@ async function readPNGMeta(file){
 function detectType(meta){
   if(!meta) return 'unknown';
   if(meta.Software==='NovelAI') return 'novelai';
-  // NAI without Software tag: Description + Comment with NAI-style fields
   if(meta.Description && meta.Comment){
     const c=safeJSON(meta.Comment);
     if(c && (c.uc!==undefined||c.scale!==undefined||c.sampler!==undefined)) return 'novelai';
@@ -379,7 +628,6 @@ function parseNAI(meta){
       params.push({k:label,v:String(c[ck])});
     }
   }
-  // Add any remaining unknown keys
   const known=new Set(Object.keys(paramMap).concat(['uc','prompt']));
   for(const [k,v] of Object.entries(c)){
     if(!known.has(k)&&v!==null&&v!==undefined&&typeof v!=='object'){
@@ -391,7 +639,6 @@ function parseNAI(meta){
   return {pos,neg,params};
 }
 
-// ─── NAI Renderer ────────────────────────────────────────────────────────────
 function renderNAI(parsed,el){
   let h=`<div class="nai-wrap">`;
   h+=`<div class="sec-hd">🎨 NovelAI 生成参数</div>`;
@@ -451,6 +698,20 @@ function parseSDParams(raw){
     }
   }
   return r;
+}
+
+function renderSD(parsed,el){
+  let h=`<div class="card">`;
+  h+=`<div class="sec-hd">🎨 Stable Diffusion WebUI 参数</div>`;
+  if(parsed.pos){const sv=JSON.stringify(parsed.pos);h+=`<div class="prompt-box"><div class="plabel">正向提示词 (Positive Prompt)</div><div class="ptext"><button class="pcopy" onclick="copy(${sv},this)">复制</button>${esc(parsed.pos)}</div></div>`;}
+  if(parsed.neg){const sv=JSON.stringify(parsed.neg);h+=`<div class="prompt-box"><div class="plabel">负向提示词 (Negative Prompt)</div><div class="ptext neg"><button class="pcopy" onclick="copy(${sv},this)">复制</button>${esc(parsed.neg)}</div></div>`;}
+  if(parsed.params.length){
+    h+=`<div class="sec-hd">⚙️ 生成参数 (${parsed.params.length} 项)</div><div class="pgrid">`;
+    for(const {k,v} of parsed.params){h+=`<div class="pitem"><span class="pkey">${esc(k)}</span><span class="pval" title="${esc(v)}">${esc(v)}</span><button class="cbtn" onclick="copy(${JSON.stringify(v)},this)">⎘</button></div>`;}
+    h+=`</div>`;
+  }
+  h+=`</div>`;
+  el.innerHTML=h;
 }
 
 // ─── ComfyUI Parser ───────────────────────────────────────────────────────────
@@ -528,23 +789,7 @@ function autoLayout(nodes,links){
   for(const n of nodes){const c=cols[n.id]||0;const row=rowCnt[c]||0;rowCnt[c]=row+1;n.pos=[c*310+40,row*220+40];}
 }
 
-// ─── SD WebUI Renderer ────────────────────────────────────────────────────────
-function renderSD(parsed,el){
-  let h=`<div class="card">`;
-  h+=`<div class="sec-hd">🎨 Stable Diffusion WebUI 参数</div>`;
-  if(parsed.pos){const sv=JSON.stringify(parsed.pos);h+=`<div class="prompt-box"><div class="plabel">正向提示词 (Positive Prompt)</div><div class="ptext"><button class="pcopy" onclick="copy(${sv},this)">复制</button>${esc(parsed.pos)}</div></div>`;}
-  if(parsed.neg){const sv=JSON.stringify(parsed.neg);h+=`<div class="prompt-box"><div class="plabel">负向提示词 (Negative Prompt)</div><div class="ptext neg"><button class="pcopy" onclick="copy(${sv},this)">复制</button>${esc(parsed.neg)}</div></div>`;}
-  if(parsed.params.length){
-    h+=`<div class="sec-hd">⚙️ 生成参数 (${parsed.params.length} 项)</div><div class="pgrid">`;
-    for(const {k,v} of parsed.params){h+=`<div class="pitem"><span class="pkey">${esc(k)}</span><span class="pval" title="${esc(v)}">${esc(v)}</span><button class="cbtn" onclick="copy(${JSON.stringify(v)},this)">⎘</button></div>`;}
-    h+=`</div>`;
-  }
-  h+=`</div>`;
-  el.innerHTML=h;
-}
-
 // ─── ComfyUI Canvas ───────────────────────────────────────────────────────────
-const CS={scale:1,ox:0,oy:0,panning:false,dragNode:null,nodes:[],links:{},lineStyle:'bezier',vp:null,world:null,svg:null};
 function renderCF(parsed,el){
   CS.nodes=parsed.nodes;CS.links=parsed.links;CS.scale=1;CS.ox=0;CS.oy=0;
   const nc=parsed.nodes.length,lc=Object.keys(parsed.links).length;
@@ -594,10 +839,12 @@ function drawConns(){
   const types=new Set(Object.values(CS.links).map(l=>l.type||'default'));
   for(const t of types){const c=connColor(t);const m=document.createElementNS('http://www.w3.org/2000/svg','marker');m.setAttribute('id','arr-'+t);m.setAttribute('markerWidth','8');m.setAttribute('markerHeight','7');m.setAttribute('refX','7');m.setAttribute('refY','3.5');m.setAttribute('orient','auto');const p=document.createElementNS('http://www.w3.org/2000/svg','path');p.setAttribute('d','M0,0 L0,7 L8,3.5 z');p.setAttribute('fill',c);m.appendChild(p);defs.appendChild(m);}
   svg.appendChild(defs);
+  
+  const connShad = getComputedStyle(document.body).getPropertyValue('--conn-shadow').trim() || 'rgba(0,0,0,.12)';
   for(const lk of Object.values(CS.links)){
     const s=slotPos(lk.srcNode,lk.srcSlot,'out');const d=slotPos(lk.dstNode,lk.dstSlot,'in');if(!s||!d) continue;
     const c=connColor(lk.type);const g=document.createElementNS('http://www.w3.org/2000/svg','g');
-    const ps=document.createElementNS('http://www.w3.org/2000/svg','path');ps.setAttribute('fill','none');ps.setAttribute('stroke','rgba(0,0,0,.12)');ps.setAttribute('stroke-width','4');ps.setAttribute('d',pathD(s,d));
+    const ps=document.createElementNS('http://www.w3.org/2000/svg','path');ps.setAttribute('fill','none');ps.setAttribute('stroke',connShad);ps.setAttribute('stroke-width','4');ps.setAttribute('d',pathD(s,d));
     const pl=document.createElementNS('http://www.w3.org/2000/svg','path');pl.setAttribute('fill','none');pl.setAttribute('stroke',c);pl.setAttribute('stroke-width','2.2');pl.setAttribute('stroke-opacity','0.85');pl.setAttribute('d',pathD(s,d));pl.setAttribute('marker-end','url(#arr-'+(lk.type||'default')+')');
     g.appendChild(ps);g.appendChild(pl);svg.appendChild(g);
   }
@@ -657,7 +904,6 @@ function extractFlatParams(type, parsed, meta){
     if(parsed.neg) flat['__neg__']=parsed.neg;
     for(const {k,v} of parsed.params) flat[k]=v;
   } else if(type==='comfyui'){
-    // Flatten key nodes' params
     for(const n of (parsed.nodes||[])){
       for(const {k,v} of (n.params||[])){
         const fk=`${n.title||n.type}::${k}`;flat[fk]=v;
@@ -678,31 +924,26 @@ function renderComparison(){
 
   if(!compareQueue.length){res.classList.remove('on');return;}
 
-  // Check type consistency
   const types=new Set(compareQueue.map(e=>e.type));
   const mixedWarning=types.size>1?`<div class="error" style="margin-bottom:14px">⚠️ 检测到不同格式图片（${[...types].join(', ')}），对比结果可能不准确。建议上传同类型图片。</div>`:'';
 
-  // Build flat params for each file
   const allFlat=compareQueue.map(e=>extractFlatParams(e.type,e.parsed,e.meta));
-
-  // Collect all keys (preserve order: pos, neg, then other)
   const keyOrder=[];const keySeen=new Set();
   for(const flat of allFlat){
     for(const k of Object.keys(flat)){if(!keySeen.has(k)){keySeen.add(k);keyOrder.push(k);}}
   }
 
-  // Find differing keys
   const diffKeys=new Set();
   for(const k of keyOrder){
-    const vals=allFlat.map(f=>f[k]??null);
-    const uniq=new Set(vals.filter(v=>v!==null));
+    const vals=allFlat.map(f=>normalizeCmpValue(f[k]));
+    const uniq=new Set(vals.map(v=>v===null?'__NULL__':v));
     if(uniq.size>1) diffKeys.add(k);
   }
 
   const typeLabel={sdwebui:'SD WebUI',comfyui:'ComfyUI',novelai:'NovelAI',unknown:'Unknown'};
   const typeCls={sdwebui:'sd',comfyui:'cf',novelai:'nai',unknown:'uk'};
+  const diffRenderMap=buildDiffRenderMap(diffKeys, allFlat);
 
-  // Header
   const hdr=document.createElement('div');
   hdr.className='cmp-header';
   hdr.innerHTML=`
@@ -716,57 +957,46 @@ function renderComparison(){
 
   if(mixedWarning){const w=document.createElement('div');w.innerHTML=mixedWarning;rc.appendChild(w.firstElementChild);}
 
-  // Table
-  const wrap=document.createElement('div');wrap.className='cmp-wrap';
-  const scroll=document.createElement('div');scroll.className='cmp-scroll';
-
-  let th=`<table class="cmp-table"><thead><tr><th><div class="cmp-th-inner"><span style="font-size:11px;color:var(--text-muted)">参数</span></div></th>`;
-  for(const entry of compareQueue){
-    th+=`<th><div class="cmp-th-inner">
-      <img src="${entry.imgURL}" class="cmp-thumb" alt="">
-      <span class="cmp-fname" title="${esc(entry.file.name)}">${esc(entry.file.name)}</span>
-      <span class="cmp-ftype ${typeCls[entry.type]||'uk'}">${typeLabel[entry.type]||'Unknown'}</span>
-    </div></th>`;
+  const diffKeyList=keyOrder.filter(k=>diffKeys.has(k));
+  if(diffKeyList.length){
+    appendCompareSection(
+      rc,
+      '🔎 差异项速览',
+      `仅展示 ${diffKeyList.length} 个存在差异的参数`,
+      diffKeyList,
+      allFlat,
+      diffKeys,
+      diffRenderMap,
+      typeLabel,
+      typeCls
+    );
+  } else {
+    const empty=document.createElement('div');
+    empty.className='cmp-wrap';
+    empty.style.marginBottom='16px';
+    empty.innerHTML=`<div class="sec-hd">🔎 差异项速览<span class="cmp-section-note">当前图片参数一致</span></div><div class="cmp-empty-box">未检测到差异项。</div>`;
+    rc.appendChild(empty);
   }
-  th+=`</tr></thead><tbody>`;
 
-  let rows='';
-  for(const k of keyOrder){
-    const vals=allFlat.map(f=>f[k]??null);
-    const isDiff=diffKeys.has(k);
-    const rowCls=isDiff?'diff-row':'';
-    const displayKey=k==='__pos__'?'正向提示词':k==='__neg__'?'负向提示词':esc(k);
-    rows+=`<tr class="${rowCls}">`;
-    rows+=`<td>${displayKey}${isDiff?'<span class="diff-badge">差异</span>':''}</td>`;
-    for(let i=0;i<compareQueue.length;i++){
-      const v=vals[i];
-      const cellDiff=isDiff&&v!==null;
-      const othersNonNull=vals.filter((_,j)=>j!==i&&vals[j]!==null);
-      const uniqueFromOthers=cellDiff&&othersNonNull.length>0;
-      const cellCls=uniqueFromOthers?'diff-cell':'';
-      if(v===null){
-        rows+=`<td class="${cellCls}"><span class="cmp-empty">—</span></td>`;
-      } else {
-        const display=v.length>200?v.slice(0,200)+'…':v;
-        rows+=`<td class="${cellCls}"><div class="cmp-val${cellDiff?' diff':''}">${esc(display)}</div></td>`;
-      }
-    }
-    rows+=`</tr>`;
-  }
-  rows+=`</tbody></table>`;
+  appendCompareSection(
+    rc,
+    '📋 全部参数',
+    `完整展示 ${keyOrder.length} 个参数`,
+    keyOrder,
+    allFlat,
+    diffKeys,
+    diffRenderMap,
+    typeLabel,
+    typeCls
+  );
 
-  scroll.innerHTML=th+rows;
-  wrap.appendChild(scroll);
-
-  if(compareQueue.length<6){
+  const mainWrap=rc.lastElementChild;
+  if(mainWrap&&compareQueue.length<6){
     const hint=document.createElement('div');hint.className='cmp-add-hint';
     hint.innerHTML=`📎 可继续上传图片加入对比（当前 ${compareQueue.length}/6 张）`;
-    wrap.appendChild(hint);
+    mainWrap.appendChild(hint);
   }
 
-  rc.appendChild(wrap);
-
-  // Per-image JSON download section
   const dlWrap=document.createElement('div');dlWrap.style.cssText='margin-top:16px;display:flex;gap:10px;flex-wrap:wrap';
   for(let i=0;i<compareQueue.length;i++){
     const entry=compareQueue[i];
@@ -795,13 +1025,163 @@ function downloadAllJSON(){
   downloadJSON(obj,'compare_metadata.json');
 }
 
+function normalizeCmpValue(v){
+  return v===null||v===undefined?null:String(v);
+}
+
+function tokenizeDiffText(value){
+  return String(value).match(/(\r\n|\n|\r|\s+|[，,。.;:：!！?？、|\/\\()\[\]{}<>《》【】"'“”‘’`~@#$%^&*+=-]+|[^ \t\r\n，,。.;:：!！?？、|\/\\()\[\]{}<>《》【】"'“”‘’`~@#$%^&*+=-]+)/g)||[String(value)];
+}
+
+function lcsSequence(a,b){
+  const n=a.length,m=b.length;
+  const dp=Array.from({length:n+1},()=>Array(m+1).fill(0));
+  for(let i=n-1;i>=0;i--){
+    for(let j=m-1;j>=0;j--){
+      dp[i][j]=a[i]===b[j]?dp[i+1][j+1]+1:Math.max(dp[i+1][j],dp[i][j+1]);
+    }
+  }
+  const seq=[];
+  let i=0,j=0;
+  while(i<n&&j<m){
+    if(a[i]===b[j]){seq.push(a[i]);i++;j++;}
+    else if(dp[i+1][j]>=dp[i][j+1]) i++;
+    else j++;
+  }
+  return seq;
+}
+
+function lcsIndexSet(a,b){
+  const n=a.length,m=b.length;
+  if(!n||!m) return new Set();
+  const dp=Array.from({length:n+1},()=>Array(m+1).fill(0));
+  for(let i=n-1;i>=0;i--){
+    for(let j=m-1;j>=0;j--){
+      dp[i][j]=a[i]===b[j]?dp[i+1][j+1]+1:Math.max(dp[i+1][j],dp[i][j+1]);
+    }
+  }
+  const idx=new Set();
+  let i=0,j=0;
+  while(i<n&&j<m){
+    if(a[i]===b[j]){idx.add(j);i++;j++;}
+    else if(dp[i+1][j]>=dp[i][j+1]) i++;
+    else j++;
+  }
+  return idx;
+}
+
+function buildGroupCommonTokens(values){
+  if(values.some(v=>v===null)) return [];
+  const tokenGroups=values.filter(v=>v!==null).map(v=>tokenizeDiffText(v));
+  if(!tokenGroups.length) return [];
+  let common=tokenGroups[0];
+  for(let i=1;i<tokenGroups.length;i++){
+    common=lcsSequence(common,tokenGroups[i]);
+    if(!common.length) break;
+  }
+  return common;
+}
+
+function renderCmpDiffHTML(value, commonTokens){
+  const tokens=tokenizeDiffText(value);
+  const commonIdx=commonTokens.length?lcsIndexSet(commonTokens,tokens):new Set();
+  let html='',buf='',isDiffSeg=null;
+  const flush=()=>{
+    if(!buf) return;
+    html+=isDiffSeg?`<mark class="cmp-diff-part">${buf}</mark>`:buf;
+    buf='';
+  };
+  for(let i=0;i<tokens.length;i++){
+    const tokenHTML=esc(tokens[i]);
+    const isDiff=!commonTokens.length||!commonIdx.has(i);
+    if(isDiffSeg===null) isDiffSeg=isDiff;
+    if(isDiff!==isDiffSeg){flush();isDiffSeg=isDiff;}
+    buf+=tokenHTML;
+  }
+  flush();
+  return html||esc(value);
+}
+
+function buildDiffRenderMap(diffKeys, allFlat){
+  const map={};
+  for(const k of diffKeys){
+    const vals=allFlat.map(f=>normalizeCmpValue(f[k]));
+    const commonTokens=buildGroupCommonTokens(vals);
+    map[k]={htmls:vals.map(v=>v===null?'':renderCmpDiffHTML(v,commonTokens))};
+  }
+  return map;
+}
+
+function getCompareDisplayKey(k){
+  return k==='__pos__'?'正向提示词':k==='__neg__'?'负向提示词':esc(k);
+}
+
+function renderCmpValueBlock(rawValue, htmlValue){
+  const needsExpand=rawValue.length>160||rawValue.includes('\n');
+  return `<div class="cmp-val-wrap${needsExpand?' is-collapsible':''}">
+    <div class="cmp-val">${htmlValue}</div>
+    ${needsExpand?'<button class="cmp-expand" type="button" onclick="toggleCmpExpand(this)">展开</button>':''}
+  </div>`;
+}
+
+function renderCompareCell(rawValue, isDiff, diffHTML=''){
+  const value=normalizeCmpValue(rawValue);
+  const cellCls=isDiff?'diff-cell':'';
+  if(value===null){
+    return `<td class="${cellCls}"><span class="cmp-empty">${isDiff?'缺失':'—'}</span></td>`;
+  }
+  const htmlValue=isDiff&&diffHTML?diffHTML:esc(value);
+  return `<td class="${cellCls}">${renderCmpValueBlock(value,htmlValue)}</td>`;
+}
+
+function buildCompareTableHTML(keys, allFlat, diffKeys, diffRenderMap, typeLabel, typeCls){
+  let th=`<div class="cmp-scroll"><table class="cmp-table"><thead><tr><th><div class="cmp-th-inner"><span style="font-size:11px;color:var(--text-muted)">参数</span></div></th>`;
+  for(const entry of compareQueue){
+    th+=`<th><div class="cmp-th-inner">
+      <img src="${entry.imgURL}" class="cmp-thumb" alt="">
+      <span class="cmp-fname" title="${esc(entry.file.name)}">${esc(entry.file.name)}</span>
+      <span class="cmp-ftype ${typeCls[entry.type]||'uk'}">${typeLabel[entry.type]||'Unknown'}</span>
+    </div></th>`;
+  }
+  th+=`</tr></thead><tbody>`;
+
+  let rows='';
+  for(const k of keys){
+    const vals=allFlat.map(f=>f[k]??null);
+    const isDiff=diffKeys.has(k);
+    const renderInfo=diffRenderMap[k];
+    rows+=`<tr class="${isDiff?'diff-row':''}">`;
+    rows+=`<td>${getCompareDisplayKey(k)}${isDiff?'<span class="diff-badge">差异</span>':''}</td>`;
+    for(let i=0;i<compareQueue.length;i++){
+      rows+=renderCompareCell(vals[i], isDiff, renderInfo?renderInfo.htmls[i]:'');
+    }
+    rows+=`</tr>`;
+  }
+  rows+=`</tbody></table></div>`;
+  return th+rows;
+}
+
+function appendCompareSection(container, title, note, keys, allFlat, diffKeys, diffRenderMap, typeLabel, typeCls){
+  const section=document.createElement('div');
+  section.className='cmp-wrap';
+  section.style.marginBottom='16px';
+  section.innerHTML=`<div class="sec-hd">${title}<span class="cmp-section-note">${note}</span></div>${buildCompareTableHTML(keys, allFlat, diffKeys, diffRenderMap, typeLabel, typeCls)}`;
+  container.appendChild(section);
+}
+
+function toggleCmpExpand(btn){
+  const wrap=btn.closest('.cmp-val-wrap');
+  if(!wrap) return;
+  wrap.classList.toggle('expanded');
+  btn.textContent=wrap.classList.contains('expanded')?'收起':'展开';
+}
+
 // ─── Main Handler ─────────────────────────────────────────────────────────────
 async function handleFile(file){
   const res=document.getElementById('result');
   const rc=document.getElementById('rc');
 
   if(currentMode==='compare'){
-    // In compare mode: accumulate files
     if(compareQueue.length>=6){showToast('⚠️ 最多支持 6 张图片对比');return;}
     const meta=await readPNGMeta(file);
     if(!meta){showToast('⚠️ 无法读取元数据');return;}
@@ -817,7 +1197,6 @@ async function handleFile(file){
     return;
   }
 
-  // Single mode
   res.classList.add('on');
   rc.innerHTML=`<div class="loading"><div class="spin"></div> 正在读取图片元数据...</div>`;
   try{
@@ -832,7 +1211,7 @@ async function handleFile(file){
     const typeCls={sdwebui:'sd',comfyui:'cf',novelai:'nai',unknown:'uk'};
 
     const bar=document.createElement('div');bar.className='infobar';
-    bar.innerHTML=`<img src="${imgURL}" class="prev-img" alt=""><div class="imeta"><h3>${esc(file.name)}</h3><p>${(file.size/1024).toFixed(1)} KB · PNG · ${typeLabel[type]||'Unknown'}</p></div><span class="badge ${typeCls[type]||'uk'}">${typeLabel[type]||'Unknown'}</span><button class="dl-btn" onclick='downloadJSON(${JSON.stringify(meta)}, ${JSON.stringify(file.name.replace(/\\.[^.]+$/,"")+".json")})'>⬇ 下载 JSON</button>`;
+    bar.innerHTML=`<img src="${imgURL}" class="prev-img" alt=""><div class="imeta"><h3>${esc(file.name)}</h3><p>${(file.size/1024).toFixed(1)} KB · PNG · ${typeLabel[type]||'Unknown'}</p></div><span class="badge ${typeCls[type]||'uk'}">${typeLabel[type]||'Unknown'}</span><button class="dl-btn" onclick='downloadJSON(${JSON.stringify(meta)}, ${JSON.stringify(file.name.replace(/\.[^.]+$/,"")+".json")})'>⬇ 下载 JSON</button>`;
 
     const main=document.createElement('div');
     rc.innerHTML='';rc.appendChild(bar);rc.appendChild(main);
