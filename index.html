@@ -723,7 +723,7 @@ function makeSummaryCard(entry){
       </div>
       <div class="summary-actions">
         <span class="badge ${getTypeClass(s.type)}">${esc(s.source)}</span>
-        <button class="dl-btn summary-export-btn" type="button">📸 保存摘要截图</button>
+        <button class="dl-btn summary-export-btn" type="button" data-action="summary-export">📸 保存摘要截图</button>
       </div>
     </div>
     <div class="summary-body">
@@ -755,11 +755,7 @@ function makeSummaryCard(entry){
     </div>`;
   const exportBtn=el.querySelector('.summary-export-btn');
   if(exportBtn){
-    exportBtn.addEventListener('click', async (ev)=>{
-      ev.preventDefault();
-      ev.stopPropagation();
-      await exportSummaryCardPNG();
-    });
+    exportBtn.onclick=handleSummaryExportClick;
   }
   const openBtn=el.querySelector('.summary-open-btn');
   if(openBtn){
@@ -800,6 +796,28 @@ function openImageModal(src, caption=''){
   cap.textContent=caption || '';
   modal.classList.add('on');
   document.body.style.overflow='hidden';
+}
+
+let summaryExportBusy=false;
+async function handleSummaryExportClick(ev){
+  ev?.preventDefault?.();
+  ev?.stopPropagation?.();
+  const btn=ev?.currentTarget || ev?.target?.closest?.('.summary-export-btn');
+  if(summaryExportBusy) return;
+  summaryExportBusy=true;
+  if(btn) btn.disabled=true;
+  showToast('🖼️ 正在生成摘要截图…');
+  try{
+    await exportSummaryCardPNG();
+  }catch(err){
+    console.error(err);
+    showToast('⚠️ 摘要截图导出失败');
+  }finally{
+    setTimeout(()=>{
+      summaryExportBusy=false;
+      if(btn) btn.disabled=false;
+    }, 180);
+  }
 }
 function closeImageModal(ev){
   if(ev){
@@ -858,15 +876,57 @@ function drawWrappedText(ctx,text,x,y,maxWidth,lineHeight,maxLines){
   finalLines.forEach((ln,i)=>ctx.fillText(ln,x,y+i*lineHeight));
   return {lines:finalLines,height:finalLines.length*lineHeight};
 }
+function triggerDownloadLink(href, filename){
+  const a=document.createElement('a');
+  a.href=href;
+  a.download=filename || 'download';
+  a.rel='noopener';
+  a.style.display='none';
+  document.body.appendChild(a);
+  let fired=false;
+  try{
+    a.click();
+    fired=true;
+  }catch(_){}
+  if(!fired){
+    try{
+      a.dispatchEvent(new MouseEvent('click', {view:window, bubbles:true, cancelable:true}));
+      fired=true;
+    }catch(_){}
+  }
+  a.remove();
+  return fired;
+}
 function downloadBlob(blob, filename){
   const url=URL.createObjectURL(blob);
-  const a=document.createElement('a');
-  a.href=url;
-  a.download=filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
+  const ok=triggerDownloadLink(url, filename);
   setTimeout(()=>URL.revokeObjectURL(url), 1200);
+  return ok;
+}
+async function saveCanvasToFile(canvas, filename){
+  try{
+    const dataUrl=canvas.toDataURL('image/png');
+    if(dataUrl && dataUrl !== 'data:,'){
+      const ok=triggerDownloadLink(dataUrl, filename);
+      if(ok) return true;
+    }
+  }catch(err){
+    console.warn('toDataURL download failed', err);
+  }
+  if(canvas.toBlob){
+    return await new Promise((resolve, reject)=>{
+      canvas.toBlob(blob=>{
+        if(!blob){
+          reject(new Error('canvas toBlob failed'));
+          return;
+        }
+        const ok=downloadBlob(blob, filename);
+        if(ok) resolve(true);
+        else reject(new Error('blob download blocked'));
+      }, 'image/png');
+    });
+  }
+  throw new Error('no downloadable canvas path');
 }
 function loadCanvasImage(src){
   return new Promise(resolve=>{
@@ -889,19 +949,81 @@ async function exportSummaryCardPNG(){
   const ink='#2b241f';
   const softInk='rgba(43,36,31,0.62)';
   const primary=css.getPropertyValue('--primary').trim() || '#16a34a';
-  const muted=css.getPropertyValue('--text-muted').trim() || '#6b7280';
   const negInk=css.getPropertyValue('--neg-text').trim() || '#a33a3a';
 
-  const W=1400, H=980, scale=2;
-  const canvas=document.createElement('canvas');
-  canvas.width=W*scale;
-  canvas.height=H*scale;
-  const ctx=canvas.getContext('2d');
-  if(!ctx){showToast('⚠️ 当前浏览器不支持截图导出');return;}
-  ctx.scale(scale,scale);
+  function colorWithAlpha(color, alpha){
+    try{
+      const probe=document.createElement('canvas').getContext('2d');
+      if(!probe) return color;
+      probe.fillStyle='#000000';
+      probe.fillStyle=color;
+      const resolved=String(probe.fillStyle || color).trim();
+      if(/^#([0-9a-f]{3,8})$/i.test(resolved)){
+        let hex=resolved.slice(1);
+        if(hex.length===3 || hex.length===4) hex=hex.split('').map(ch=>ch+ch).join('');
+        if(hex.length===6 || hex.length===8){
+          const r=parseInt(hex.slice(0,2),16);
+          const g=parseInt(hex.slice(2,4),16);
+          const b=parseInt(hex.slice(4,6),16);
+          const baseA=hex.length===8 ? parseInt(hex.slice(6,8),16)/255 : 1;
+          const outA=Math.max(0, Math.min(1, baseA * alpha));
+          return `rgba(${r},${g},${b},${outA})`;
+        }
+      }
+      const m=resolved.match(/^rgba?\(([^)]+)\)$/i);
+      if(m){
+        const parts=m[1].split(',').map(v=>v.trim());
+        const r=parseFloat(parts[0]) || 0;
+        const g=parseFloat(parts[1]) || 0;
+        const b=parseFloat(parts[2]) || 0;
+        const baseA=parts.length>3 ? (parseFloat(parts[3]) || 0) : 1;
+        const outA=Math.max(0, Math.min(1, baseA * alpha));
+        return `rgba(${r},${g},${b},${outA})`;
+      }
+    }catch(err){
+      console.warn('colorWithAlpha fallback', err);
+    }
+    return color;
+  }
 
   function rand(seed){ return (Math.sin(seed*999.13)+1)/2; }
-  function sketchRoundRect(x,y,w,h,r,seed=1){
+
+  function wrapLinesForCard(text, maxWidth, font, maxLines){
+    const raw=String(text||'').replace(/\r/g,'');
+    const measureCanvas=document.createElement('canvas');
+    const mctx=measureCanvas.getContext('2d');
+    if(!mctx) return ['—'];
+    mctx.font=font;
+    if(!raw.trim()) return ['—'];
+    const paragraphs=raw.split('\n');
+    const lines=[];
+    let truncated=false;
+    for(const para of paragraphs){
+      let line='';
+      for(const ch of para){
+        const test=line+ch;
+        if(mctx.measureText(test).width>maxWidth && line){
+          lines.push(line);
+          line=ch;
+          if(maxLines && lines.length>=maxLines){ truncated=true; break; }
+        } else {
+          line=test;
+        }
+      }
+      if(truncated) break;
+      lines.push(line || ' ');
+      if(maxLines && lines.length>=maxLines && (para !== paragraphs[paragraphs.length-1])){ truncated=true; break; }
+      if(maxLines && lines.length>maxLines){ truncated=true; break; }
+    }
+    let finalLines=lines.filter((_,idx)=>!maxLines || idx<maxLines);
+    if((maxLines && lines.length>maxLines) || truncated){
+      const last=finalLines[finalLines.length-1] || '';
+      finalLines[finalLines.length-1]=(last.length>1?last.slice(0,-1):'')+'…';
+    }
+    return finalLines.length ? finalLines : ['—'];
+  }
+
+  function sketchRoundRect(ctx,x,y,w,h,r,seed=1){
     const rr=Math.min(r,w/2,h/2);
     for(let i=0;i<2;i++){
       const n=i*0.9;
@@ -914,7 +1036,6 @@ async function exportSummaryCardPNG(){
       ctx.closePath();
       ctx.stroke();
     }
-    // tiny wobble marks
     for(let k=0;k<10;k++){
       const px=x+20+rand(seed+k)*(w-40);
       const py=y+10+rand(seed+k+50)*(h-20);
@@ -924,10 +1045,51 @@ async function exportSummaryCardPNG(){
       ctx.stroke();
     }
   }
+
+  const outerW=1400;
+  const cardX=52, cardY=40;
+  const cardW=outerW-104;
+  const imgX=54, imgY=188, imgBox=314;
+  const rightX=imgX+imgBox+28, topY=imgY;
+  const fieldW=418, fieldH=94, gap=14;
+  const fieldsBottom=topY + fieldH*4 + gap*3;
+  const imageBottom=imgY + imgBox;
+  const promptX=imgX;
+  const promptW=cardW-108;
+  const promptY=Math.max(imageBottom, fieldsBottom) + 40;
+  const promptTextFont='600 18px Nunito, sans-serif';
+  const promptTextWidth=promptW-40;
+  const promptLineHeight=24;
+  const posLines=wrapLinesForCard(summaryShortText(s.prompt || '—', 1800), promptTextWidth, promptTextFont, 10);
+  const negLines=wrapLinesForCard(summaryShortText(s.negative || '—', 1400), promptTextWidth, promptTextFont, 8);
+  const promptBoxBase=88;
+  const prompt1H=Math.max(128, promptBoxBase + posLines.length*promptLineHeight);
+  const prompt2H=Math.max(112, promptBoxBase + negLines.length*promptLineHeight);
+  const boxGap=18;
+  const footerReserve=86;
+  const cardH=promptY + prompt1H + boxGap + prompt2H + footerReserve;
+  const outerH=cardH + 80;
+  const scale=2;
+
+  const canvas=document.createElement('canvas');
+  canvas.width=outerW*scale;
+  canvas.height=outerH*scale;
+  const ctx=canvas.getContext('2d');
+  if(!ctx){showToast('⚠️ 当前浏览器不支持截图导出');return;}
+  ctx.scale(scale,scale);
+
   function drawWrappedTextSketch(text,x,y,maxWidth,lineHeight,maxLines,font,fillStyle){
     ctx.font=font;
     ctx.fillStyle=fillStyle;
     return drawWrappedText(ctx, text, x, y, maxWidth, lineHeight, maxLines);
+  }
+  function drawLines(lines, x, y, lineHeight, font, fillStyle){
+    ctx.save();
+    ctx.font=font;
+    ctx.fillStyle=fillStyle;
+    lines.forEach((ln, i)=>ctx.fillText(ln, x, y + i*lineHeight));
+    ctx.restore();
+    return {height: lines.length*lineHeight, lines};
   }
   function cardField(x,y,w,h,label,value,mono=false,seed=1){
     ctx.save();
@@ -936,7 +1098,7 @@ async function exportSummaryCardPNG(){
     ctx.lineWidth=1.7;
     roundedRect(ctx,x,y,w,h,18);
     ctx.fill();
-    sketchRoundRect(x,y,w,h,18,seed);
+    sketchRoundRect(ctx,x,y,w,h,18,seed);
     ctx.fillStyle=softInk;
     ctx.font='800 15px Nunito, sans-serif';
     ctx.fillText(label,x+18,y+28);
@@ -944,16 +1106,14 @@ async function exportSummaryCardPNG(){
     ctx.restore();
   }
 
-  // paper background
   ctx.fillStyle=bg;
-  ctx.fillRect(0,0,W,H);
-  const bgG=ctx.createRadialGradient(200,120,0,200,120,480);
-  bgG.addColorStop(0, primary+'18');
+  ctx.fillRect(0,0,outerW,outerH);
+  const bgG=ctx.createRadialGradient(200,120,0,200,120,520);
+  bgG.addColorStop(0, colorWithAlpha(primary, 0.10));
   bgG.addColorStop(1, bg);
   ctx.fillStyle=bgG;
-  ctx.fillRect(0,0,W,H);
+  ctx.fillRect(0,0,outerW,outerH);
 
-  const cardX=52, cardY=40, cardW=W-104, cardH=H-80;
   ctx.save();
   ctx.translate(cardX, cardY);
   ctx.rotate(-0.008);
@@ -962,10 +1122,9 @@ async function exportSummaryCardPNG(){
   ctx.lineWidth=2.1;
   roundedRect(ctx,0,0,cardW,cardH,28);
   ctx.fill();
-  sketchRoundRect(0,0,cardW,cardH,28,8);
+  sketchRoundRect(ctx,0,0,cardW,cardH,28,8);
 
-  // paper grain
-  for(let i=0;i<1800;i++){
+  for(let i=0;i<Math.max(1800, Math.floor(cardH*1.8));i++){
     const px=rand(i+1)*cardW;
     const py=rand(i+101)*cardH;
     const a=0.03 + rand(i+400)*0.03;
@@ -973,7 +1132,6 @@ async function exportSummaryCardPNG(){
     ctx.fillRect(px,py,1,1);
   }
 
-  // tapes
   ctx.save();
   ctx.globalAlpha=0.65;
   ctx.fillStyle='rgba(255,241,181,0.72)';
@@ -981,7 +1139,6 @@ async function exportSummaryCardPNG(){
   ctx.fillRect(cardW-210,18,170,36);
   ctx.restore();
 
-  // doodle accents
   ctx.strokeStyle=primary;
   ctx.lineWidth=3;
   ctx.beginPath();
@@ -1001,7 +1158,6 @@ async function exportSummaryCardPNG(){
   ctx.font='700 18px Nunito, sans-serif';
   ctx.fillText(`${s.source || 'Unknown'} · 手绘分享卡`, 54, 154);
 
-  // badge
   ctx.save();
   ctx.translate(cardW-200,58);
   ctx.rotate(0.03);
@@ -1009,7 +1165,7 @@ async function exportSummaryCardPNG(){
   roundedRect(ctx,0,0,132,42,20);
   ctx.fill();
   ctx.strokeStyle='rgba(43,36,31,0.25)';
-  sketchRoundRect(0,0,132,42,20,26);
+  sketchRoundRect(ctx,0,0,132,42,20,26);
   ctx.fillStyle='#fff';
   ctx.textAlign='center';
   ctx.font='800 17px Nunito, sans-serif';
@@ -1017,13 +1173,12 @@ async function exportSummaryCardPNG(){
   ctx.restore();
   ctx.textAlign='left';
 
-  const imgX=54, imgY=188, imgBox=314;
   ctx.fillStyle='rgba(255,255,255,0.52)';
   ctx.strokeStyle='rgba(43,36,31,0.42)';
   ctx.lineWidth=1.9;
   roundedRect(ctx,imgX,imgY,imgBox,imgBox,24);
   ctx.fill();
-  sketchRoundRect(imgX,imgY,imgBox,imgBox,24,46);
+  sketchRoundRect(ctx,imgX,imgY,imgBox,imgBox,24,46);
 
   const img=await loadCanvasImage(s.previewSrc);
   if(img){
@@ -1048,8 +1203,6 @@ async function exportSummaryCardPNG(){
   ctx.lineTo(imgX+imgBox-30,imgY+imgBox+20);
   ctx.stroke();
 
-  const rightX=imgX+imgBox+28, topY=imgY;
-  const fieldW=418, fieldH=94, gap=14;
   const fields=[
     ['模型', s.model || '—', false],
     ['模型版本 / Hash', s.modelVersion || '—', true],
@@ -1065,27 +1218,24 @@ async function exportSummaryCardPNG(){
     cardField(rightX + col*(fieldW+gap), topY + row*(fieldH+gap), fieldW, fieldH, f[0], f[1], f[2], 60+i);
   });
 
-  const promptX=imgX, promptY=imgY+imgBox+42, promptW=cardW-108, promptH=cardH-promptY-94;
-  const boxGap=16;
-  const boxH=(promptH-boxGap)/2;
   const prompts=[
-    {label:'正向提示词', value:s.prompt || '—', tone:'normal'},
-    {label:'反向提示词', value:s.negative || '—', tone:'neg'}
+    {label:'正向提示词', value:s.prompt || '—', tone:'normal', lines:posLines, height:prompt1H},
+    {label:'反向提示词', value:s.negative || '—', tone:'neg', lines:negLines, height:prompt2H}
   ];
   prompts.forEach((blk, idx)=>{
-    const x=promptX, y=promptY + idx*(boxH+boxGap);
+    const x=promptX, y=promptY + (idx===0 ? 0 : (prompt1H + boxGap));
+    const h=blk.height;
     ctx.fillStyle=blk.tone==='neg' ? 'rgba(222,145,145,0.12)' : 'rgba(255,255,255,0.46)';
     ctx.strokeStyle='rgba(43,36,31,0.34)';
     ctx.lineWidth=1.8;
-    roundedRect(ctx,x,y,promptW,boxH,24);
+    roundedRect(ctx,x,y,promptW,h,24);
     ctx.fill();
-    sketchRoundRect(x,y,promptW,boxH,24,110+idx*12);
+    sketchRoundRect(ctx,x,y,promptW,h,24,110+idx*12);
 
     ctx.fillStyle=blk.tone==='neg' ? negInk : primary;
     ctx.font='900 17px Nunito, sans-serif';
     ctx.fillText(blk.label, x+20, y+30);
 
-    // underline doodle
     ctx.strokeStyle=blk.tone==='neg' ? negInk : primary;
     ctx.lineWidth=2.4;
     ctx.beginPath();
@@ -1093,7 +1243,7 @@ async function exportSummaryCardPNG(){
     ctx.quadraticCurveTo(x+120, y+44, x+180, y+39);
     ctx.stroke();
 
-    drawWrappedTextSketch(summaryShortText(blk.value, 1000), x+20, y+62, promptW-40, 24, 6, '600 18px Nunito, sans-serif', ink);
+    drawLines(blk.lines, x+20, y+62, promptLineHeight, promptTextFont, ink);
   });
 
   ctx.fillStyle=softInk;
@@ -1109,42 +1259,25 @@ async function exportSummaryCardPNG(){
 
   try{
     const outName=(String(s.fileName||'summary').replace(/\.[^.]+$/,'')||'summary')+'_summary_card.png';
-    if(canvas.toBlob){
-      canvas.toBlob(blob=>{
-        if(!blob){
-          try{
-            const a=document.createElement('a');
-            a.href=canvas.toDataURL('image/png');
-            a.download=outName;
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
-            showToast('✓ 摘要截图已导出');
-          }catch(err){
-            console.error(err);
-            showToast('⚠️ 摘要截图导出失败');
-          }
-          return;
-        }
-        downloadBlob(blob, outName);
-        showToast('✓ 摘要截图已导出');
-      }, 'image/png');
-    } else {
-      const a=document.createElement('a');
-      a.href=canvas.toDataURL('image/png');
-      a.download=outName;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      showToast('✓ 摘要截图已导出');
-    }
+    await saveCanvasToFile(canvas, outName);
+    showToast('✓ 摘要截图已导出');
+    return true;
   }catch(err){
     console.error(err);
     showToast('⚠️ 摘要截图导出失败');
+    return false;
   }
 }
+
 window.exportSummaryCardPNG = exportSummaryCardPNG;
 window.openCurrentSummaryImage = openCurrentSummaryImage;
+
+document.addEventListener('click', (ev)=>{
+  const exportBtn=ev.target.closest('.summary-export-btn,[data-action="summary-export"]');
+  if(exportBtn){
+    handleSummaryExportClick(ev);
+  }
+});
 
 
 // ─── Theme & Mode Logic ───────────────────────────────────────────────────────
@@ -1246,15 +1379,119 @@ initFavorites();
 
 // ─── Utilities ───────────────────────────────────────────────────────────────
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
-function showToast(m='✓ 已复制'){const t=document.getElementById('toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2000)}
-function copy(text,btn){
-  navigator.clipboard.writeText(text).then(()=>{
-    showToast();
-    if(btn){btn.classList.add('ok');const prev=btn.textContent;btn.textContent='✓';setTimeout(()=>{btn.classList.remove('ok');btn.textContent=prev},1500)}
-  }).catch(()=>{
-    const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);showToast();
-  })
+function toBase64Unicode(text){
+  const value = String(text ?? '');
+  try { return btoa(unescape(encodeURIComponent(value))); }
+  catch(e){ try { return btoa(value); } catch(_) { return ''; } }
 }
+function fromBase64Unicode(text){
+  const value = String(text ?? '');
+  try { return decodeURIComponent(escape(atob(value))); }
+  catch(e){ try { return atob(value); } catch(_) { return value; } }
+}
+function copyBtnHTML(cls,text,label,title=''){
+  const encoded = esc(toBase64Unicode(text));
+  const titleAttr = title ? ` title="${esc(title)}"` : '';
+  return `<button type="button" class="${cls}" data-copy-btn="1" data-copy="${encoded}"${titleAttr}>${label}</button>`;
+}
+function showToast(m='✓ 已复制'){const t=document.getElementById('toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2000)}
+function markCopyButtonSuccess(btn){
+  if(!btn) return;
+  btn.classList.add('ok');
+  const prev = btn.dataset.prevText || btn.textContent;
+  btn.dataset.prevText = prev;
+  btn.textContent = '✓';
+  clearTimeout(btn._copyTimer);
+  btn._copyTimer = setTimeout(()=>{
+    btn.classList.remove('ok');
+    btn.textContent = prev;
+  },1500);
+}
+function legacyCopyText(text){
+  const value = String(text ?? '');
+  const ta = document.createElement('textarea');
+  ta.value = value;
+  ta.setAttribute('readonly','');
+  ta.setAttribute('aria-hidden','true');
+  ta.style.position = 'fixed';
+  ta.style.top = '0';
+  ta.style.left = '0';
+  ta.style.width = '1px';
+  ta.style.height = '1px';
+  ta.style.padding = '0';
+  ta.style.border = '0';
+  ta.style.outline = '0';
+  ta.style.boxShadow = 'none';
+  ta.style.background = 'transparent';
+  ta.style.opacity = '0';
+  ta.style.pointerEvents = 'none';
+  ta.style.zIndex = '-1';
+  document.body.appendChild(ta);
+
+  const selection = document.getSelection ? document.getSelection() : null;
+  const originalRanges = [];
+  if(selection){
+    try {
+      for(let i=0;i<selection.rangeCount;i++) originalRanges.push(selection.getRangeAt(i).cloneRange());
+    } catch(e) {}
+  }
+
+  let ok = false;
+  try {
+    ta.focus({preventScroll:true});
+  } catch(e) {
+    ta.focus();
+  }
+  ta.select();
+  ta.setSelectionRange(0, value.length);
+
+  try { ok = document.execCommand('copy'); } catch(e) { ok = false; }
+
+  if(!ok && navigator.clipboard && typeof navigator.clipboard.writeText === 'function' && window.isSecureContext){
+    // do nothing here; async API is handled by caller
+  }
+
+  document.body.removeChild(ta);
+  if(selection){
+    try {
+      selection.removeAllRanges();
+      for(const range of originalRanges) selection.addRange(range);
+    } catch(e) {}
+  }
+  return ok;
+}
+async function copyText(text,btn){
+  const value = String(text ?? '');
+  try {
+    if(window.isSecureContext && navigator.clipboard && typeof navigator.clipboard.writeText === 'function'){
+      await navigator.clipboard.writeText(value);
+    }else{
+      const ok = legacyCopyText(value);
+      if(!ok) throw new Error('legacy copy failed');
+    }
+    showToast('✓ 已复制到剪贴板');
+    markCopyButtonSuccess(btn);
+  }catch(err){
+    try {
+      const ok = legacyCopyText(value);
+      if(!ok) throw err || new Error('copy failed');
+      showToast('✓ 已复制到剪贴板');
+      markCopyButtonSuccess(btn);
+    } catch(finalErr) {
+      console.error('Copy failed:', finalErr);
+      showToast('✕ 复制失败，请检查浏览器权限');
+    }
+  }
+}
+window.copy = copyText;
+document.addEventListener('click',(e)=>{
+  const btn = e.target.closest('[data-copy-btn="1"]');
+  if(!btn) return;
+  e.preventDefault();
+  e.stopPropagation();
+  const value = fromBase64Unicode(btn.getAttribute('data-copy') || '');
+  copyText(value, btn);
+});
 function safeJSON(s){try{return JSON.parse(s)}catch{return null}}
 function downloadJSON(obj,filename){
   const blob=new Blob([JSON.stringify(obj,null,2)],{type:'application/json'});
@@ -1637,10 +1874,10 @@ function parseMidjourney(meta){
 function renderMJ(parsed,el){
   let h=`<div class="card">`;
   h+=`<div class="sec-hd">🪄 Midjourney 元数据</div>`;
-  if(parsed.pos){const sv=JSON.stringify(parsed.pos);h+=`<div class="prompt-box"><div class="plabel">提示词 (Prompt)</div><div class="ptext"><button class="pcopy" onclick="copy(${sv},this)">复制</button>${esc(parsed.pos)}</div></div>`;}
+  if(parsed.pos){h+=`<div class="prompt-box"><div class="plabel">提示词 (Prompt)</div><div class="ptext">${copyBtnHTML('pcopy', parsed.pos, '复制')}${esc(parsed.pos)}</div></div>`;}
   if(parsed.params.length){
     h+=`<div class="sec-hd">⚙️ 参数 (${parsed.params.length} 项)</div><div class="pgrid">`;
-    for(const {k,v} of parsed.params){h+=`<div class="pitem"><span class="pkey">${esc(k)}</span><span class="pval" title="${esc(v)}">${esc(v)}</span><button class="cbtn" onclick="copy(${JSON.stringify(v)},this)">⎘</button></div>`;}
+    for(const {k,v} of parsed.params){h+=`<div class="pitem"><span class="pkey">${esc(k)}</span><span class="pval" title="${esc(v)}">${esc(v)}</span>${copyBtnHTML('cbtn', v, '⎘')}</div>`;}
     h+=`</div>`;
   }
   h+=`</div>`;
@@ -1652,16 +1889,16 @@ function renderNAI(parsed,el){
   h+=`<div class="sec-hd">🎨 NovelAI 生成参数</div>`;
   if(parsed.pos){
     const sv=JSON.stringify(parsed.pos);
-    h+=`<div class="prompt-box"><div class="plabel">正向提示词 (Positive Prompt)</div><div class="ptext"><button class="pcopy" onclick="copy(${sv},this)">复制</button>${esc(parsed.pos)}</div></div>`;
+    h+=`<div class="prompt-box"><div class="plabel">正向提示词 (Positive Prompt)</div><div class="ptext">${copyBtnHTML('pcopy', parsed.pos, '复制')}${esc(parsed.pos)}</div></div>`;
   }
   if(parsed.neg){
     const sv=JSON.stringify(parsed.neg);
-    h+=`<div class="prompt-box"><div class="plabel">不希望出现的内容 (Undesired Content)</div><div class="ptext neg"><button class="pcopy" onclick="copy(${sv},this)">复制</button>${esc(parsed.neg)}</div></div>`;
+    h+=`<div class="prompt-box"><div class="plabel">不希望出现的内容 (Undesired Content)</div><div class="ptext neg">${copyBtnHTML('pcopy', parsed.neg, '复制')}${esc(parsed.neg)}</div></div>`;
   }
   if(parsed.params.length){
     h+=`<div class="sec-hd">⚙️ 生成参数 (${parsed.params.length} 项)</div><div class="pgrid">`;
     for(const {k,v} of parsed.params){
-      h+=`<div class="pitem"><span class="pkey">${esc(k)}</span><span class="pval" title="${esc(v)}">${esc(v)}</span><button class="cbtn" onclick="copy(${JSON.stringify(v)},this)">⎘</button></div>`;
+      h+=`<div class="pitem"><span class="pkey">${esc(k)}</span><span class="pval" title="${esc(v)}">${esc(v)}</span>${copyBtnHTML('cbtn', v, '⎘')}</div>`;
     }
     h+=`</div>`;
   }
@@ -1744,16 +1981,16 @@ function parseSDParams(raw, meta={}){
 function renderSD(parsed,el){
   let h=`<div class="card">`;
   h+=`<div class="sec-hd">🎨 Stable Diffusion WebUI 参数</div>`;
-  if(parsed.pos){const sv=JSON.stringify(parsed.pos);h+=`<div class="prompt-box"><div class="plabel">正向提示词 (Positive Prompt)</div><div class="ptext"><button class="pcopy" onclick="copy(${sv},this)">复制</button>${esc(parsed.pos)}</div></div>`;}
-  if(parsed.neg){const sv=JSON.stringify(parsed.neg);h+=`<div class="prompt-box"><div class="plabel">负向提示词 (Negative Prompt)</div><div class="ptext neg"><button class="pcopy" onclick="copy(${sv},this)">复制</button>${esc(parsed.neg)}</div></div>`;}
+  if(parsed.pos){const sv=JSON.stringify(parsed.pos);h+=`<div class="prompt-box"><div class="plabel">正向提示词 (Positive Prompt)</div><div class="ptext">${copyBtnHTML('pcopy', parsed.pos, '复制')}${esc(parsed.pos)}</div></div>`;}
+  if(parsed.neg){h+=`<div class="prompt-box"><div class="plabel">负向提示词 (Negative Prompt)</div><div class="ptext neg">${copyBtnHTML('pcopy', parsed.neg, '复制')}${esc(parsed.neg)}</div></div>`;}
   if(parsed.params.length){
     h+=`<div class="sec-hd">⚙️ 生成参数 (${parsed.params.length} 项)</div><div class="pgrid">`;
-    for(const {k,v} of parsed.params){h+=`<div class="pitem"><span class="pkey">${esc(k)}</span><span class="pval" title="${esc(v)}">${esc(v)}</span><button class="cbtn" onclick="copy(${JSON.stringify(v)},this)">⎘</button></div>`;}
+    for(const {k,v} of parsed.params){h+=`<div class="pitem"><span class="pkey">${esc(k)}</span><span class="pval" title="${esc(v)}">${esc(v)}</span>${copyBtnHTML('cbtn', v, '⎘')}</div>`;}
     h+=`</div>`;
   }
   if(parsed.pluginParams && parsed.pluginParams.length){
     h+=`<div class="sec-hd">🧩 插件 / 附加元数据 (${parsed.pluginParams.length} 项)</div><div class="pgrid">`;
-    for(const {k,v} of parsed.pluginParams){h+=`<div class="pitem"><span class="pkey">${esc(k)}</span><span class="pval" title="${esc(v)}">${esc(v)}</span><button class="cbtn" onclick="copy(${JSON.stringify(v)},this)">⎘</button></div>`;}
+    for(const {k,v} of parsed.pluginParams){h+=`<div class="pitem"><span class="pkey">${esc(k)}</span><span class="pval" title="${esc(v)}">${esc(v)}</span>${copyBtnHTML('cbtn', v, '⎘')}</div>`;}
     h+=`</div>`;
   }
   h+=`</div>`;
@@ -1867,7 +2104,7 @@ function buildNodeEl(node){
   }
   if(node.params&&node.params.length){
     h+=`<div class="nparams">`;
-    for(const {k,v} of node.params){const disp=String(v).length>32?String(v).slice(0,32)+'…':String(v);h+=`<div class="npitem"><span class="npkey">${esc(k)}</span><span class="npval" title="${esc(String(v))}">${esc(disp)}</span><button class="ncbtn" onclick="copy(${JSON.stringify(String(v))},this)" title="${esc(String(v))}">⎘</button></div>`;}
+    for(const {k,v} of node.params){const disp=String(v).length>32?String(v).slice(0,32)+'…':String(v);h+=`<div class="npitem"><span class="npkey">${esc(k)}</span><span class="npval" title="${esc(String(v))}">${esc(disp)}</span>${copyBtnHTML('ncbtn', String(v), '⎘', String(v))}</div>`;}
     h+=`</div>`;
   }
   h+=`</div>`;el.innerHTML=h;return el;
@@ -2554,7 +2791,7 @@ function renderSingleEntry(entry){
     else main.innerHTML=`<div class="error">⚠️ ComfyUI 工作流数据解析失败，格式可能不受支持。</div>`;
   } else {
     let h=`<div class="card"><div class="sec-hd">🔍 发现的元数据字段 (${Object.keys(meta).length})</div><div class="pgrid">`;
-    for(const [k,v] of Object.entries(meta)){h+=`<div class="pitem"><span class="pkey">${esc(k)}</span><span class="pval">${esc(String(v).slice(0,120))}</span><button class="cbtn" onclick="copy(${JSON.stringify(v)},this)">⎘</button></div>`;}
+    for(const [k,v] of Object.entries(meta)){h+=`<div class="pitem"><span class="pkey">${esc(k)}</span><span class="pval">${esc(String(v).slice(0,120))}</span>${copyBtnHTML('cbtn', v, '⎘')}</div>`;}
     h+=`</div></div>`;
     main.innerHTML=h;
   }
