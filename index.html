@@ -179,8 +179,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
 
 /* HEADER */
-.header{position:relative;z-index:10;padding:18px 28px;background:var(--surface);border-bottom:1.5px solid var(--border);box-shadow:0 2px 14px rgba(0,0,0,.03);display:flex;align-items:center;gap:14px;transition:background 0.3s, border-color 0.3s;}
-.hicon{width:52px;height:52px;display:flex;align-items:center;justify-content:center;flex-shrink:0;border-radius:14px;background:linear-gradient(135deg,hsla(var(--h),var(--s),calc(var(--l) + 12%),.22),hsla(var(--h),var(--s),var(--l),.10));border:1.5px solid hsla(var(--h),var(--s),var(--l),.24);box-shadow:0 10px 24px hsla(var(--h),40%,20%,.10)}
+.header{position:relative;z-index:10;padding:18px 28px;background:var(--surface);border-bottom:1.5px solid var(--border);box-shadow:0 2px 14px rgba(0,0,0,.03);display:flex;align-items:center;gap:12px;transition:background 0.3s, border-color 0.3s;}
 .brand-copy{min-width:0}
 .brand-topline{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .brand-logo{width:70px;height:36px;display:block;flex-shrink:0}
@@ -193,7 +192,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .footer-link{display:inline-flex;align-items:center;gap:8px;color:var(--primary-dark);font-weight:800;text-decoration:none;padding:8px 12px;border-radius:10px;border:1.5px solid var(--border);background:var(--surface2);transition:all .2s}
 .footer-link:hover{border-color:var(--primary);background:hsla(var(--h),var(--s),var(--l),.08)}
 .footer-meta{font-size:12px;color:var(--text-muted)}
-@media(max-width:768px){.site-footer{padding:0 14px}.site-footer-inner{align-items:flex-start}.brand-logo{width:62px;height:32px}.hicon{width:48px;height:48px}}
+@media(max-width:768px){.site-footer{padding:0 14px}.site-footer-inner{align-items:flex-start}.brand-logo{width:62px;height:32px}}
 .header h1{font-size:20px;font-weight:800;color:var(--primary-dark)}
 .header p{font-size:13px;color:var(--text-muted);margin-top:1px}
 
@@ -221,6 +220,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .fav-op { padding: 6px 9px; background: var(--surface); border: 1px solid var(--border); border-radius: 7px; font-size: 11px; font-weight: 800; color: var(--text); cursor: pointer; font-family: var(--sans); }
 .fav-op:hover { border-color: var(--primary); color: var(--primary-dark); }
 .fav-empty { padding: 16px 12px; border: 1.5px dashed var(--border); border-radius: 10px; text-align: center; color: var(--text-muted); font-size: 12px; }
+.fav-storage{margin-top:10px;padding:12px 12px 11px;background:linear-gradient(180deg,hsla(var(--h),var(--s),var(--l),.08),transparent),var(--surface2);border:1.5px solid var(--border);border-radius:12px}.fav-storage-meta{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;flex-wrap:wrap}.fav-storage-used{font-size:14px;font-weight:800;color:var(--text)}.fav-storage-percent{font-size:12px;font-weight:800;color:var(--primary-dark)}.fav-storage-bar{position:relative;height:10px;border-radius:999px;background:var(--surface);border:1px solid var(--border);overflow:hidden;margin:10px 0 8px}.fav-storage-fill{height:100%;width:0%;border-radius:999px;background:linear-gradient(90deg,var(--primary),var(--primary-light));box-shadow:0 0 16px hsla(var(--h),var(--s),var(--l),.28);transition:width .24s ease}.fav-storage-hint{font-size:11px;line-height:1.55;color:var(--text-muted)}
 .fav-filters{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.fav-field{display:flex;flex-direction:column;gap:5px}.fav-field label{font-size:10.5px;font-weight:800;color:var(--text-muted);text-transform:uppercase;letter-spacing:.3px}.fav-input,.fav-select{width:100%;padding:8px 10px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:12px;font-family:var(--sans)}.fav-input:focus,.fav-select:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px hsla(var(--h),var(--s),var(--l),.16)}.fav-filter-meta{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:11px;color:var(--text-muted)}.fav-reset{padding:4px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:999px;font-size:11px;font-weight:800;color:var(--text-muted);cursor:pointer;font-family:var(--sans)}.fav-reset:hover{background:var(--primary);border-color:var(--primary);color:var(--c-on-p)}.fav-thumb-col{display:flex;flex-direction:column;gap:6px;align-items:center;flex-shrink:0}.fav-thumb{width:48px;height:48px;object-fit:cover;border-radius:10px;border:1.5px solid var(--border);background:var(--surface)}.fav-thumb-stack{display:flex;align-items:center}.fav-thumb-stack .fav-thumb{margin-right:-12px;box-shadow:0 0 0 2px var(--surface2)}.fav-thumb-more{min-width:26px;height:26px;padding:0 7px;border-radius:999px;background:var(--surface);border:1px solid var(--border);font-size:10px;font-weight:800;color:var(--text-muted);display:flex;align-items:center;justify-content:center}.toolbar-search{display:flex;align-items:center;gap:8px;min-width:min(100%,320px)}.node-search-input{min-width:180px;flex:1;padding:6px 10px;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:12px;font-family:var(--sans)}.node-search-input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px hsla(var(--h),var(--s),var(--l),.16)}.node-search-count{font-size:11px;font-weight:800;color:var(--text-muted);white-space:nowrap}.cfnode.match{border-color:var(--primary)!important;box-shadow:0 0 0 3px hsla(var(--h),var(--s),var(--l),.24),0 8px 32px hsla(var(--h),40%,20%,.24)!important}.cfnode.dim{opacity:.38;filter:saturate(.72)}
 @keyframes fade-in { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 .sm-title { font-size: 11.5px; font-weight: 800; color: var(--text-muted); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
@@ -232,6 +232,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .m-btn { padding: 8px 6px; background: var(--surface2); border: 1.5px solid var(--border); border-radius: 8px; font-size: 12px; font-weight: 700; color: var(--text); cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 5px; }
 .m-btn:hover { border-color: var(--primary-light); }
 .m-btn.act { background: var(--primary); border-color: var(--primary); color: var(--c-on-p); }
+.settings-lang{display:flex;flex-direction:column;gap:8px;margin-top:8px}.settings-hint{font-size:11px;line-height:1.55;color:var(--text-muted)}
 
 .main{position:relative;z-index:1;max-width:1400px;margin:0 auto;padding:28px 24px}
 
@@ -484,20 +485,6 @@ repeating-linear-gradient(45deg,var(--surface2),var(--surface2) 10px,transparent
 <body>
 
 <div class="header">
-  <div class="hicon" aria-hidden="true">
-    <svg class="brand-icon" width="34" height="34" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="flowlyIconGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#84d8ff" />
-          <stop offset="100%" stop-color="#5b8dff" />
-        </linearGradient>
-      </defs>
-      <g stroke="hsl(var(--h), 30%, 16%)" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round">
-        <path d="M18,40 Q10,40 10,31 Q10,21 21,21 Q23,13 33,13 Q43,13 46,21 Q55,21 55,31 Q55,40 47,40 Z" fill="url(#flowlyIconGrad)" />
-        <polygon points="33,18 36,26 45,26 38,31 40,40 33,35 26,40 28,31 21,26 30,26" fill="white" />
-      </g>
-    </svg>
-  </div>
   <div class="brand-copy">
     <div class="brand-topline">
       <svg class="brand-logo" viewBox="0 0 240 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -518,9 +505,9 @@ repeating-linear-gradient(45deg,var(--surface2),var(--surface2) 10px,transparent
       </svg>
       <h1>FlowLY</h1>
     </div>
-    <p>AI 图片工作流解析器 · 解析 Midjourney、ComfyUI、SD WebUI 与 NovelAI 图片参数和工作流</p>
+    <p id="brandDesc">AI 图片工作流解析器 · 解析 Midjourney、ComfyUI、SD WebUI 与 NovelAI 图片参数和工作流</p>
   </div>
-  
+
   <div class="header-actions">
     <div class="fav-wrap">
     <button class="fav-btn" id="favBtn" title="收藏元数据" type="button" aria-haspopup="true" aria-expanded="false">
@@ -528,26 +515,37 @@ repeating-linear-gradient(45deg,var(--surface2),var(--surface2) 10px,transparent
     </button>
     <div class="fav-menu" id="favMenu">
       <div>
-        <div class="sm-title">收藏夹 Favorites</div>
+        <div class="sm-title" id="favSectionTitle">收藏夹 Favorites</div>
         <div class="fav-actions">
-          <button class="fav-act" type="button" onclick="saveCurrentFavorite()">⭐ 收藏当前结果</button>
-          <button class="fav-act" type="button" onclick="exportFavorites()">⬇ 导出收藏</button>
-          <button class="fav-act" type="button" onclick="triggerImportFavorites()">⬆ 导入收藏</button>
+          <button class="fav-act" id="favSaveBtn" type="button" onclick="saveCurrentFavorite()">⭐ 收藏当前结果</button>
+          <button class="fav-act" id="favExportBtn" type="button" onclick="exportFavorites()">⬇ 导出收藏</button>
+          <button class="fav-act" id="favImportBtn" type="button" onclick="triggerImportFavorites()">⬆ 导入收藏</button>
         </div>
       </div>
       <div>
-        <div class="sm-title">收藏搜索 / 筛选</div>
+        <div class="sm-title" id="favStorageTitle">本地存储占用</div>
+        <div class="fav-storage" id="favStorageCard">
+          <div class="fav-storage-meta">
+            <div class="fav-storage-used" id="favStorageUsed">0 KB</div>
+            <div class="fav-storage-percent" id="favStoragePercent">0%</div>
+          </div>
+          <div class="fav-storage-bar" aria-hidden="true"><div class="fav-storage-fill" id="favStorageFill"></div></div>
+          <div class="fav-storage-hint" id="favStorageHint">以 5 MB 为保守基准估算；常见 localStorage 上限通常约为 5–10 MB。</div>
+        </div>
+      </div>
+      <div>
+        <div class="sm-title" id="favFilterTitle">收藏搜索 / 筛选</div>
         <div class="fav-filters">
-          <div class="fav-field"><label for="favFilterModel">模型</label><input class="fav-input" id="favFilterModel" type="text" placeholder="如 checkpoint / model"></div>
-          <div class="fav-field"><label for="favFilterResolution">分辨率</label><input class="fav-input" id="favFilterResolution" type="text" placeholder="如 1024x1024"></div>
-          <div class="fav-field" style="grid-column:1/-1"><label for="favFilterPrompt">提示词</label><input class="fav-input" id="favFilterPrompt" type="text" placeholder="按正向提示词关键词筛选"></div>
-          <div class="fav-field"><label for="favFilterSource">来源</label><select class="fav-select" id="favFilterSource"><option value="">全部来源</option><option value="sdwebui">SD WebUI</option><option value="comfyui">ComfyUI</option><option value="novelai">NovelAI</option><option value="midjourney">Midjourney</option><option value="unknown">未知</option></select></div>
-          <div class="fav-field"><label for="favFilterKeyword">全文关键词</label><input class="fav-input" id="favFilterKeyword" type="text" placeholder="文件名 / 参数 / 值"></div>
-          <div class="fav-filter-meta"><span id="favFilterStats">0 / 0 条</span><button class="fav-reset" type="button" onclick="resetFavoriteFilters()">重置筛选</button></div>
+          <div class="fav-field"><label for="favFilterModel" id="favFilterModelLabel">模型</label><input class="fav-input" id="favFilterModel" type="text" placeholder="如 checkpoint / model"></div>
+          <div class="fav-field"><label for="favFilterResolution" id="favFilterResolutionLabel">分辨率</label><input class="fav-input" id="favFilterResolution" type="text" placeholder="如 1024x1024"></div>
+          <div class="fav-field" style="grid-column:1/-1"><label for="favFilterPrompt" id="favFilterPromptLabel">提示词</label><input class="fav-input" id="favFilterPrompt" type="text" placeholder="按正向提示词关键词筛选"></div>
+          <div class="fav-field"><label for="favFilterSource" id="favFilterSourceLabel">来源</label><select class="fav-select" id="favFilterSource"><option value="">全部来源</option><option value="sdwebui">SD WebUI</option><option value="comfyui">ComfyUI</option><option value="novelai">NovelAI</option><option value="midjourney">Midjourney</option><option value="unknown">未知</option></select></div>
+          <div class="fav-field"><label for="favFilterKeyword" id="favFilterKeywordLabel">全文关键词</label><input class="fav-input" id="favFilterKeyword" type="text" placeholder="文件名 / 参数 / 值"></div>
+          <div class="fav-filter-meta"><span id="favFilterStats">0 / 0 条</span><button class="fav-reset" id="favResetBtn" type="button" onclick="resetFavoriteFilters()">重置筛选</button></div>
         </div>
       </div>
       <div>
-        <div class="sm-title">本地收藏列表</div>
+        <div class="sm-title" id="favListTitle">本地收藏列表</div>
         <div class="fav-list" id="favList"></div>
       </div>
     </div>
@@ -560,7 +558,7 @@ repeating-linear-gradient(45deg,var(--surface2),var(--surface2) 10px,transparent
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
     </button>
     <div class="settings-menu" id="settingsMenu">
-      <div class="sm-title">主题颜色 Theme</div>
+      <div class="sm-title" id="settingsThemeTitle">主题颜色 Theme</div>
       <div class="theme-grid">
         <button class="t-swatch" data-theme="green"  style="--sh:142;--ss:46%;--sl:42%" title="淡绿"></button>
         <button class="t-swatch" data-theme="blue"   style="--sh:212;--ss:65%;--sl:48%" title="淡蓝"></button>
@@ -571,12 +569,24 @@ repeating-linear-gradient(45deg,var(--surface2),var(--surface2) 10px,transparent
         <button class="t-swatch" data-theme="cyan"   style="--sh:185;--ss:65%;--sl:40%" title="淡青"></button>
         <button class="t-swatch" data-theme="orange" style="--sh:25; --ss:85%;--sl:50%" title="淡橙"></button>
       </div>
-      <div class="sm-title" style="margin-top:4px">显示模式 Mode</div>
+      <div class="sm-title" id="settingsModeTitle" style="margin-top:4px">显示模式 Mode</div>
       <div class="mode-grid">
         <button class="m-btn" data-mode="day">☀️ 白天</button>
         <button class="m-btn" data-mode="dusk">🌅 黄昏</button>
         <button class="m-btn" data-mode="night">🌙 夜间</button>
         <button class="m-btn" data-mode="black">⚫ 纯黑</button>
+      </div>
+      <div class="sm-title" id="settingsLangTitle" style="margin-top:14px">语言 Language</div>
+      <div class="settings-lang">
+        <select class="fav-select" id="langSelect" aria-label="Language">
+          <option value="auto">Auto (Browser)</option>
+          <option value="zh_CN">简体中文</option>
+          <option value="zh_TW">繁體中文（TW）</option>
+          <option value="en_US">English (US)</option>
+          <option value="ja_JP">日本語</option>
+          <option value="ko_KR">한국어</option>
+        </select>
+        <div class="settings-hint" id="langHint">未受支持的浏览器语言将自动显示为 English (US)。</div>
       </div>
     </div>
   </div>
@@ -586,7 +596,7 @@ repeating-linear-gradient(45deg,var(--surface2),var(--surface2) 10px,transparent
 <div class="main">
   <!-- Mode Row -->
   <div class="mode-row">
-    <span class="mode-lbl">模式</span>
+    <span class="mode-lbl" id="modeLabel">模式</span>
     <button class="mode-btn act" id="modeSingle" onclick="setMode('single')">🔍 单张解析</button>
     <button class="mode-btn" id="modeCompare" onclick="setMode('compare')">⚖️ 多图对比</button>
     <span class="mode-hint" id="modeHint">上传一张 AI 图片解析元数据</span>
@@ -609,7 +619,7 @@ repeating-linear-gradient(45deg,var(--surface2),var(--surface2) 10px,transparent
 
 <div class="img-modal" id="imgModal" onclick="closeImageModal(event)">
   <div class="img-modal-dialog">
-    <button class="img-modal-close" type="button" aria-label="关闭" onclick="closeImageModal(event)">×</button>
+    <button class="img-modal-close" id="imgModalClose" type="button" aria-label="关闭" onclick="closeImageModal(event)">×</button>
     <img class="img-modal-img" id="imgModalImg" alt="预览图">
     <div class="img-modal-cap" id="imgModalCap"></div>
   </div>
@@ -633,11 +643,11 @@ repeating-linear-gradient(45deg,var(--surface2),var(--surface2) 10px,transparent
         </svg>
         <span>FlowLY</span>
       </div>
-      <div class="footer-meta">AI 图片工作流解析器</div>
+      <div class="footer-meta" id="footerMeta">AI 图片工作流解析器</div>
     </div>
     <a class="footer-link" href="https://github.com/eastmoe" target="_blank" rel="noopener noreferrer">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.649.5.5 5.649.5 12A11.5 11.5 0 0 0 8.36 22.11c.58.108.79-.252.79-.56v-2.17c-3.13.68-3.79-1.34-3.79-1.34-.51-1.3-1.24-1.64-1.24-1.64-1.01-.69.08-.68.08-.68 1.11.08 1.7 1.14 1.7 1.14.99 1.69 2.59 1.2 3.22.92.1-.72.39-1.2.7-1.48-2.5-.28-5.13-1.25-5.13-5.57 0-1.23.44-2.23 1.15-3.02-.11-.28-.5-1.42.11-2.95 0 0 .94-.3 3.08 1.15a10.64 10.64 0 0 1 5.6 0c2.13-1.45 3.07-1.15 3.07-1.15.62 1.53.23 2.67.12 2.95.71.79 1.14 1.79 1.14 3.02 0 4.33-2.64 5.28-5.15 5.56.4.34.76 1.01.76 2.05v3.03c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12C23.5 5.649 18.351.5 12 .5Z"/></svg>
-      GitHub · eastmoe
+      <span id="footerGithubText">GitHub · eastmoe</span>
     </a>
   </div>
 </footer>
@@ -647,6 +657,8 @@ repeating-linear-gradient(45deg,var(--surface2),var(--surface2) 10px,transparent
 const CS={scale:1,ox:0,oy:0,panning:false,dragNode:null,nodes:[],links:{},lineStyle:'bezier',vp:null,world:null,svg:null};
 const FAVORITE_KEY='awp_favorites_v1';
 const FAVORITE_THUMB_SIZE=64;
+const LOCALSTORAGE_SAFE_BASELINE=5*1024*1024;
+const LOCALSTORAGE_TYPICAL_MAX=10*1024*1024;
 let currentViewData=null;
 let currentSummaryData=null;
 let currentSummaryEntry=null;
@@ -765,7 +777,7 @@ function buildSummaryData(entry){
   const source=getTypeLabel(type);
 
   return {
-    fileName: entry?.file?.name || '收藏元数据',
+    fileName: entry?.file?.name || t('favorite_metadata'),
     type, source,
     model: model || '',
     modelVersion: modelVersion || '',
@@ -789,37 +801,37 @@ function makeSummaryCard(entry){
   el.innerHTML=`
     <div class="summary-head">
       <div>
-        <div class="summary-eyebrow">FlowLY 摘要卡 · ${esc(s.source)}</div>
+        <div class="summary-eyebrow">${esc(t('summary_eyebrow'))} · ${esc(s.source)}</div>
         <div class="summary-title">${esc(s.fileName)}</div>
-        <div class="summary-sub">适合快速浏览通用参数，也可一键导出为 FlowLY 分享截图</div>
+        <div class="summary-sub">${esc(t('summary_sub'))}</div>
       </div>
       <div class="summary-actions">
         <span class="badge ${getTypeClass(s.type)}">${esc(s.source)}</span>
-        <button class="dl-btn summary-export-btn" type="button" data-action="summary-export">📸 保存摘要截图</button>
+        <button class="dl-btn summary-export-btn" type="button" data-action="summary-export">${esc(t('summary_export'))}</button>
       </div>
     </div>
     <div class="summary-body">
-      <button class="summary-thumb-btn summary-open-btn" type="button" aria-label="放大预览图片">
+      <button class="summary-thumb-btn summary-open-btn" type="button" aria-label="${esc(t('summary_open_preview'))}">
         <img class="summary-thumb-img" src="${esc(s.previewSrc)}" alt="${esc(s.fileName)}">
       </button>
       <div class="summary-main">
         <div class="summary-grid">
-          <div class="summary-kv"><div class="summary-k">模型</div><div class="summary-v">${s.model?esc(s.model):'<span class="summary-empty">—</span>'}</div></div>
-          <div class="summary-kv"><div class="summary-k">模型版本 / Hash</div><div class="summary-v mono">${s.modelVersion?esc(s.modelVersion):'<span class="summary-empty">—</span>'}</div></div>
-          <div class="summary-kv"><div class="summary-k">分辨率</div><div class="summary-v mono" data-summary-field="resolution">${s.resolution?esc(s.resolution):'—'}</div></div>
-          <div class="summary-kv"><div class="summary-k">步数</div><div class="summary-v mono">${s.steps?esc(s.steps):'<span class="summary-empty">—</span>'}</div></div>
-          <div class="summary-kv"><div class="summary-k">采样器</div><div class="summary-v">${s.sampler?esc(s.sampler):'<span class="summary-empty">—</span>'}</div></div>
-          <div class="summary-kv"><div class="summary-k">CFG / Scale</div><div class="summary-v mono">${s.cfg?esc(s.cfg):'<span class="summary-empty">—</span>'}</div></div>
-          <div class="summary-kv"><div class="summary-k">Seed</div><div class="summary-v mono">${s.seed?esc(s.seed):'<span class="summary-empty">—</span>'}</div></div>
-          <div class="summary-kv"><div class="summary-k">来源</div><div class="summary-v">${esc(s.source)}</div></div>
+          <div class="summary-kv"><div class="summary-k">${esc(t('summary_model'))}</div><div class="summary-v">${s.model?esc(s.model):'<span class="summary-empty">—</span>'}</div></div>
+          <div class="summary-kv"><div class="summary-k">${esc(t('summary_model_version'))}</div><div class="summary-v mono">${s.modelVersion?esc(s.modelVersion):'<span class="summary-empty">—</span>'}</div></div>
+          <div class="summary-kv"><div class="summary-k">${esc(t('summary_resolution'))}</div><div class="summary-v mono" data-summary-field="resolution">${s.resolution?esc(s.resolution):'—'}</div></div>
+          <div class="summary-kv"><div class="summary-k">${esc(t('summary_steps'))}</div><div class="summary-v mono">${s.steps?esc(s.steps):'<span class="summary-empty">—</span>'}</div></div>
+          <div class="summary-kv"><div class="summary-k">${esc(t('summary_sampler'))}</div><div class="summary-v">${s.sampler?esc(s.sampler):'<span class="summary-empty">—</span>'}</div></div>
+          <div class="summary-kv"><div class="summary-k">${esc(t('summary_cfg'))}</div><div class="summary-v mono">${s.cfg?esc(s.cfg):'<span class="summary-empty">—</span>'}</div></div>
+          <div class="summary-kv"><div class="summary-k">${esc(t('summary_seed'))}</div><div class="summary-v mono">${s.seed?esc(s.seed):'<span class="summary-empty">—</span>'}</div></div>
+          <div class="summary-kv"><div class="summary-k">${esc(t('summary_source'))}</div><div class="summary-v">${esc(s.source)}</div></div>
         </div>
         <div class="summary-prompts">
           <div class="summary-prompt">
-            <div class="summary-k">正向提示词</div>
+            <div class="summary-k">${esc(t('summary_prompt'))}</div>
             <div class="summary-prompt-text">${s.prompt?esc(s.prompt):'<span class="summary-empty">—</span>'}</div>
           </div>
           <div class="summary-prompt neg">
-            <div class="summary-k">反向提示词</div>
+            <div class="summary-k">${esc(t('summary_negative'))}</div>
             <div class="summary-prompt-text">${s.negative?esc(s.negative):'<span class="summary-empty">—</span>'}</div>
           </div>
         </div>
@@ -856,8 +868,8 @@ function hydrateSummaryResolutionFromImage(card, entry){
 function openCurrentSummaryImage(){
   const entry=currentSummaryEntry || currentViewData?.entries?.[0];
   const src=getPreviewImageSrc(entry);
-  if(!src){showToast('⚠️ 当前没有可预览的图片');return;}
-  openImageModal(src, entry?.file?.name || '预览图');
+  if(!src){showToast(t('toast_no_preview'));return;}
+  openImageModal(src, entry?.file?.name || t('preview_image'));
 }
 function openImageModal(src, caption=''){
   const modal=document.getElementById('imgModal');
@@ -878,12 +890,12 @@ async function handleSummaryExportClick(ev){
   if(summaryExportBusy) return;
   summaryExportBusy=true;
   if(btn) btn.disabled=true;
-  showToast('🖼️ 正在生成摘要截图…');
+  showToast(t('toast_generating_summary'));
   try{
     await exportSummaryCardPNG();
   }catch(err){
     console.error(err);
-    showToast('⚠️ 摘要截图导出失败');
+    showToast(t('toast_summary_export_failed'));
   }finally{
     setTimeout(()=>{
       summaryExportBusy=false;
@@ -1013,7 +1025,7 @@ function loadCanvasImage(src){
 }
 async function exportSummaryCardPNG(){
   const entry=currentSummaryEntry || currentViewData?.entries?.[0];
-  if(!entry){showToast('⚠️ 当前没有可导出的摘要');return;}
+  if(!entry){showToast(t('toast_no_summary_export'));return;}
   const s=currentSummaryData || buildSummaryData(entry);
   const css=getComputedStyle(document.body);
   const bg=css.getPropertyValue('--bg').trim() || '#f6f7f8';
@@ -1147,7 +1159,7 @@ async function exportSummaryCardPNG(){
   canvas.width=outerW*scale;
   canvas.height=outerH*scale;
   const ctx=canvas.getContext('2d');
-  if(!ctx){showToast('⚠️ 当前浏览器不支持截图导出');return;}
+  if(!ctx){showToast(t('toast_browser_no_canvas'));return;}
   ctx.scale(scale,scale);
 
   function drawWrappedTextSketch(text,x,y,maxWidth,lineHeight,maxLines,font,fillStyle){
@@ -1268,13 +1280,13 @@ async function exportSummaryCardPNG(){
 
   ctx.fillStyle=primary;
   ctx.font='900 18px Nunito, sans-serif';
-  ctx.fillText('FlowLY Summary Card', 54, 78);
+  ctx.fillText(t('summary_export_title'), 54, 78);
   ctx.fillStyle=ink;
   ctx.font='900 34px Nunito, sans-serif';
   drawWrappedText(ctx, summaryShortText(s.fileName, 72), 54, 124, cardW-320, 36, 1);
   ctx.fillStyle=softInk;
   ctx.font='700 18px Nunito, sans-serif';
-  ctx.fillText(`${s.source || 'Unknown'} · FlowLY 分享卡`, 54, 154);
+  ctx.fillText(`${s.source || t('unknown')} · ${t('summary_share_card')}`, 54, 154);
 
   ctx.save();
   ctx.translate(cardW-200,58);
@@ -1312,7 +1324,7 @@ async function exportSummaryCardPNG(){
   } else {
     ctx.fillStyle=softInk;
     ctx.font='700 18px Nunito, sans-serif';
-    ctx.fillText('无可用预览图', imgX+92, imgY+165);
+    ctx.fillText(t('summary_no_preview'), imgX+92, imgY+165);
   }
   ctx.strokeStyle='rgba(43,36,31,0.28)';
   ctx.lineWidth=1.5;
@@ -1322,14 +1334,14 @@ async function exportSummaryCardPNG(){
   ctx.stroke();
 
   const fields=[
-    ['模型', s.model || '—', false],
-    ['模型版本 / Hash', s.modelVersion || '—', true],
-    ['分辨率', s.resolution || '—', true],
-    ['步数', s.steps || '—', true],
-    ['采样器', s.sampler || '—', false],
-    ['CFG / Scale', s.cfg || '—', true],
-    ['Seed', s.seed || '—', true],
-    ['来源', s.source || '—', false]
+    [t('summary_model'), s.model || '—', false],
+    [t('summary_model_version'), s.modelVersion || '—', true],
+    [t('summary_resolution'), s.resolution || '—', true],
+    [t('summary_steps'), s.steps || '—', true],
+    [t('summary_sampler'), s.sampler || '—', false],
+    [t('summary_cfg'), s.cfg || '—', true],
+    [t('summary_seed'), s.seed || '—', true],
+    [t('summary_source'), s.source || '—', false]
   ];
   fields.forEach((f, i)=>{
     const col=i%2, row=Math.floor(i/2);
@@ -1337,8 +1349,8 @@ async function exportSummaryCardPNG(){
   });
 
   const prompts=[
-    {label:'正向提示词', value:s.prompt || '—', tone:'normal', lines:posLines, height:prompt1H},
-    {label:'反向提示词', value:s.negative || '—', tone:'neg', lines:negLines, height:prompt2H}
+    {label:t('summary_prompt'), value:s.prompt || '—', tone:'normal', lines:posLines, height:prompt1H},
+    {label:t('summary_negative'), value:s.negative || '—', tone:'neg', lines:negLines, height:prompt2H}
   ];
   prompts.forEach((blk, idx)=>{
     const x=promptX, y=promptY + (idx===0 ? 0 : (prompt1H + boxGap));
@@ -1366,7 +1378,7 @@ async function exportSummaryCardPNG(){
 
   ctx.fillStyle=softInk;
   ctx.font='700 15px "JetBrains Mono", monospace';
-  ctx.fillText(`Generated at ${new Date().toLocaleString()}`, 54, cardH-28);
+  ctx.fillText(t('summary_generated_at', {time:new Date().toLocaleString()}), 54, cardH-28);
   ctx.textAlign='left';
   drawFlowlyCanvasBadge(cardW-252, cardH-60, 1);
 
@@ -1375,11 +1387,11 @@ async function exportSummaryCardPNG(){
   try{
     const outName=(String(s.fileName||'summary').replace(/\.[^.]+$/,'')||'summary')+'_summary_card.png';
     await saveCanvasToFile(canvas, outName);
-    showToast('✓ 摘要截图已导出');
+    showToast(t('summary_export'));
     return true;
   }catch(err){
     console.error(err);
-    showToast('⚠️ 摘要截图导出失败');
+    showToast(t('toast_summary_export_failed'));
     return false;
   }
 }
@@ -1394,6 +1406,940 @@ document.addEventListener('click', (ev)=>{
   }
 });
 
+
+
+// ─── I18N ─────────────────────────────────────────────────────────────────────
+const LANG_KEY='awp_lang_pref';
+const I18N={
+  "en_US": {
+    "page_title": "FlowLY · AI Image Workflow Parser",
+    "brand_desc": "AI image workflow parser · Parse Midjourney, ComfyUI, SD WebUI, and NovelAI image parameters and workflows",
+    "fav_button_title": "Favorite metadata",
+    "fav_section_title": "Favorites",
+    "fav_save": "⭐ Save current result",
+    "fav_export": "⬇ Export favorites",
+    "fav_import": "⬆ Import favorites",
+    "fav_storage_title": "Local storage usage",
+    "fav_filter_title": "Favorite search / filters",
+    "filter_model": "Model",
+    "filter_model_ph": "e.g. checkpoint / model",
+    "filter_resolution": "Resolution",
+    "filter_resolution_ph": "e.g. 1024x1024",
+    "filter_prompt": "Prompt",
+    "filter_prompt_ph": "Filter by positive prompt keywords",
+    "filter_source": "Source",
+    "filter_source_all": "All sources",
+    "filter_source_unknown": "Unknown",
+    "filter_keyword": "Full-text keyword",
+    "filter_keyword_ph": "Filename / parameter / value",
+    "filter_reset": "Reset filters",
+    "fav_list_title": "Local favorites",
+    "settings_button_title": "Theme, mode, and language",
+    "settings_theme_title": "Theme color",
+    "settings_mode_title": "Display mode",
+    "settings_lang_title": "Language",
+    "settings_lang_hint_auto": "Auto-detect from browser. Unsupported browser languages default to English (US). Current: {lang}.",
+    "settings_lang_hint_manual": "Manual language selected: {lang}.",
+    "lang_auto": "Auto (Browser)",
+    "mode_day": "☀️ Day",
+    "mode_dusk": "🌅 Dusk",
+    "mode_night": "🌙 Night",
+    "mode_black": "⚫ Pure Black",
+    "mode_label": "Mode",
+    "mode_single": "Single image",
+    "mode_compare": "Multi-image compare",
+    "mode_hint_single": "Upload one AI image to parse its metadata",
+    "mode_hint_compare": "Upload multiple images of the same type to highlight parameter differences",
+    "upload_title_single": "Drag an image here, or click to upload",
+    "upload_sub_single": "Supports PNG / JPG / WEBP images from Midjourney / ComfyUI / SD WebUI / NovelAI",
+    "upload_title_compare": "Drag multiple images here, or click to upload",
+    "upload_sub_compare": "Upload same-type AI images for parameter comparison (PNG / JPG / WEBP, up to 6 files)",
+    "toast_copied": "✓ Copied to clipboard",
+    "toast_copy_failed": "✕ Copy failed. Check browser permissions.",
+    "toast_json_downloaded": "✓ JSON downloaded",
+    "modal_close": "Close",
+    "preview_image": "Preview image",
+    "footer_meta": "AI Image Workflow Parser",
+    "footer_github_text": "GitHub · eastmoe",
+    "summary_eyebrow": "FlowLY Summary Card",
+    "summary_sub": "Designed for quick review of common parameters and one-click export as a FlowLY share image",
+    "summary_export": "📸 Save summary image",
+    "summary_open_preview": "Open preview image",
+    "summary_model": "Model",
+    "summary_model_version": "Model Version / Hash",
+    "summary_resolution": "Resolution",
+    "summary_steps": "Steps",
+    "summary_sampler": "Sampler",
+    "summary_cfg": "CFG / Scale",
+    "summary_seed": "Seed",
+    "summary_source": "Source",
+    "summary_prompt": "Positive Prompt",
+    "summary_negative": "Negative Prompt",
+    "toast_no_preview": "⚠️ No preview image available",
+    "toast_generating_summary": "🖼️ Generating summary image…",
+    "toast_summary_export_failed": "⚠️ Failed to export summary image",
+    "toast_no_summary_export": "⚠️ No summary available to export",
+    "toast_browser_no_canvas": "⚠️ This browser does not support canvas export",
+    "summary_export_title": "FlowLY Summary Card",
+    "summary_share_card": "FlowLY share card",
+    "summary_no_preview": "No preview available",
+    "summary_generated_at": "Generated at {time}",
+    "favorite_metadata": "Favorite metadata",
+    "unknown": "Unknown",
+    "unknown_format": "Unknown format",
+    "single_favorite": "Single favorite · {name}",
+    "compare_favorite": "Comparison favorite · {count} images",
+    "unnamed_image": "Untitled image",
+    "fav_storage_used": "Favorites use about {size}",
+    "fav_storage_hint_dynamic": "Using 5 MB as a conservative baseline: about {p5}% used. If estimated against 10 MB, about {p10}%. Typical localStorage limits are usually 5–10 MB.",
+    "fav_empty_filtered": "No favorites match the current filters.",
+    "fav_empty_none": "No local favorites yet. Parse an image first, then click the star to save the current result.",
+    "fav_loaded": "✓ Favorite metadata loaded",
+    "fav_deleted": "🗑 Favorite deleted",
+    "fav_saved": "⭐ Saved locally",
+    "fav_save_failed": "⚠️ Save failed. localStorage may be full",
+    "fav_import_empty": "⚠️ No importable favorites found",
+    "fav_import_done": "✓ Imported {count} favorites",
+    "fav_import_failed": "⚠️ Failed to import favorites",
+    "fav_load": "Load",
+    "fav_delete": "Delete",
+    "fav_badge_compare": "Compare",
+    "fav_badge_single": "Single",
+    "fav_stat_items": "{shown} / {total} items",
+    "fav_meta_model": "Model: {value}",
+    "fav_meta_resolution": "Resolution: {value}",
+    "fav_meta_prompt": "Prompt: {value}",
+    "copy_action": "Copy",
+    "mj_metadata": "🪄 Midjourney Metadata",
+    "prompt_prompt": "Prompt",
+    "params_count": "⚙️ Parameters ({count})",
+    "nai_params": "🎨 NovelAI Generation Parameters",
+    "positive_prompt": "Positive Prompt",
+    "undesired_content": "Undesired Content",
+    "generation_params_count": "⚙️ Generation Parameters ({count})",
+    "sd_params": "🎨 Stable Diffusion WebUI Parameters",
+    "negative_prompt": "Negative Prompt",
+    "plugin_metadata_count": "🧩 Plugins / Extra Metadata ({count})",
+    "view": "View",
+    "reset": "🔄 Reset",
+    "fit": "⊞ Fit",
+    "connections": "Connections",
+    "curve": "Curve",
+    "straight": "Straight",
+    "step": "Step",
+    "node_search_placeholder": "Filter node params / values / node names",
+    "clear": "Clear",
+    "not_filtered": "Not filtered",
+    "matched_count": "Matches {matched} / {total}",
+    "nodes_connections": "{nodes} nodes · {links} links",
+    "zoom_pct": "Zoom {value}%",
+    "plugin_prefix": "Plugin::{key}",
+    "compare_positive_prompt": "Positive Prompt",
+    "compare_negative_prompt": "Negative Prompt",
+    "diff": "Difference",
+    "expand": "Expand",
+    "collapse": "Collapse",
+    "missing": "Missing",
+    "param": "Parameter",
+    "mixed_warning": "⚠️ Different image formats detected ({types}). Comparison may be inaccurate. Using the same image type is recommended.",
+    "compare_title": "⚖️ Multi-image parameter comparison",
+    "compare_subtext": "{count} images · {diff} differing parameters · {total} parameters total",
+    "download_all_json": "⬇ Download all JSON",
+    "clear_compare": "✕ Clear",
+    "diff_overview": "🔎 Difference overview",
+    "diff_overview_note": "Showing only the {count} parameters that differ",
+    "diff_none_note": "Current images have identical parameters",
+    "diff_none": "No differing parameters detected.",
+    "all_params": "📋 All parameters",
+    "all_params_note": "Showing all {count} parameters",
+    "continue_upload_hint": "📎 You can upload more images to continue comparing (currently {count}/6)",
+    "metadata_fields": "🔍 Discovered metadata fields ({count})",
+    "view_raw_json": "View raw metadata JSON",
+    "loading_reading": "Reading image metadata...",
+    "max_compare": "⚠️ Up to 6 images can be compared",
+    "cannot_read_metadata": "⚠️ Unable to read metadata",
+    "error_read_image": "⚠️ Unable to read metadata. Please upload an AI PNG / JPG / WEBP image that contains metadata.",
+    "error_no_ai_metadata": "⚠️ No AI metadata found in the image. It may have been removed, or the image may not be AI-generated.",
+    "error_parse": "⚠️ Parse error: {message}",
+    "comfy_parse_failed": "⚠️ Failed to parse ComfyUI workflow data. The format may not be supported.",
+    "save_json": "⬇ Download JSON",
+    "source_unknown": "Unknown",
+    "image_count": "{count} images",
+    "diff_param_count": "{count} differing parameters",
+    "param_total_count": "{count} parameters total"
+  },
+  "zh_CN": {
+    "page_title": "FlowLY · AI 图片工作流解析器",
+    "brand_desc": "AI 图片工作流解析器 · 解析 Midjourney、ComfyUI、SD WebUI 与 NovelAI 图片参数和工作流",
+    "fav_button_title": "收藏元数据",
+    "fav_section_title": "收藏夹",
+    "fav_save": "⭐ 收藏当前结果",
+    "fav_export": "⬇ 导出收藏",
+    "fav_import": "⬆ 导入收藏",
+    "fav_storage_title": "本地存储占用",
+    "fav_filter_title": "收藏搜索 / 筛选",
+    "filter_model": "模型",
+    "filter_model_ph": "如 checkpoint / model",
+    "filter_resolution": "分辨率",
+    "filter_resolution_ph": "如 1024x1024",
+    "filter_prompt": "提示词",
+    "filter_prompt_ph": "按正向提示词关键词筛选",
+    "filter_source": "来源",
+    "filter_source_all": "全部来源",
+    "filter_source_unknown": "未知",
+    "filter_keyword": "全文关键词",
+    "filter_keyword_ph": "文件名 / 参数 / 值",
+    "filter_reset": "重置筛选",
+    "fav_list_title": "本地收藏列表",
+    "settings_button_title": "主题、模式与语言设置",
+    "settings_theme_title": "主题颜色",
+    "settings_mode_title": "显示模式",
+    "settings_lang_title": "语言",
+    "settings_lang_hint_auto": "根据浏览器语言自动识别；未受支持的浏览器语言将回退为 English (US)。当前：{lang}。",
+    "settings_lang_hint_manual": "当前手动选择语言：{lang}。",
+    "lang_auto": "自动（跟随浏览器）",
+    "mode_day": "☀️ 白天",
+    "mode_dusk": "🌅 黄昏",
+    "mode_night": "🌙 夜间",
+    "mode_black": "⚫ 纯黑",
+    "mode_label": "模式",
+    "mode_single": "单张解析",
+    "mode_compare": "多图对比",
+    "mode_hint_single": "上传一张 AI 图片解析元数据",
+    "mode_hint_compare": "上传多张同类型图片，高亮显示不同参数",
+    "upload_title_single": "拖拽图片至此，或点击上传",
+    "upload_sub_single": "支持 Midjourney / ComfyUI / SD WebUI / NovelAI 的 PNG / JPG / WEBP 图片",
+    "upload_title_compare": "拖拽多张图片至此，或点击上传",
+    "upload_sub_compare": "上传同类型 AI 图片进行参数对比（支持 PNG / JPG / WEBP，最多 6 张）",
+    "toast_copied": "✓ 已复制到剪贴板",
+    "toast_copy_failed": "✕ 复制失败，请检查浏览器权限",
+    "toast_json_downloaded": "✓ JSON 已下载",
+    "modal_close": "关闭",
+    "preview_image": "预览图",
+    "footer_meta": "AI 图片工作流解析器",
+    "footer_github_text": "GitHub · eastmoe",
+    "summary_eyebrow": "FlowLY 摘要卡",
+    "summary_sub": "适合快速浏览通用参数，也可一键导出为 FlowLY 分享截图",
+    "summary_export": "📸 保存摘要截图",
+    "summary_open_preview": "放大预览图片",
+    "summary_model": "模型",
+    "summary_model_version": "模型版本 / Hash",
+    "summary_resolution": "分辨率",
+    "summary_steps": "步数",
+    "summary_sampler": "采样器",
+    "summary_cfg": "CFG / Scale",
+    "summary_seed": "Seed",
+    "summary_source": "来源",
+    "summary_prompt": "正向提示词",
+    "summary_negative": "反向提示词",
+    "toast_no_preview": "⚠️ 当前没有可预览的图片",
+    "toast_generating_summary": "🖼️ 正在生成摘要截图…",
+    "toast_summary_export_failed": "⚠️ 摘要截图导出失败",
+    "toast_no_summary_export": "⚠️ 当前没有可导出的摘要",
+    "toast_browser_no_canvas": "⚠️ 当前浏览器不支持截图导出",
+    "summary_export_title": "FlowLY 摘要卡",
+    "summary_share_card": "FlowLY 分享卡",
+    "summary_no_preview": "无可用预览图",
+    "summary_generated_at": "生成时间 {time}",
+    "favorite_metadata": "收藏元数据",
+    "unknown": "未知",
+    "unknown_format": "未知格式",
+    "single_favorite": "单图收藏 · {name}",
+    "compare_favorite": "对比收藏 · {count} 张",
+    "unnamed_image": "未命名图片",
+    "fav_storage_used": "收藏数据约 {size}",
+    "fav_storage_hint_dynamic": "以 5 MB 为保守基准，当前约占 {p5}%；若按 10 MB 估算，则约为 {p10}%。常见 localStorage 上限一般在 5–10 MB。",
+    "fav_empty_filtered": "没有符合当前筛选条件的收藏。",
+    "fav_empty_none": "还没有本地收藏。先解析图片，再点星标收藏当前结果。",
+    "fav_loaded": "✓ 已载入收藏元数据",
+    "fav_deleted": "🗑 已删除收藏",
+    "fav_saved": "⭐ 已收藏到本地",
+    "fav_save_failed": "⚠️ 收藏失败，可能超出 localStorage 容量",
+    "fav_import_empty": "⚠️ 未发现可导入的收藏数据",
+    "fav_import_done": "✓ 已导入 {count} 条收藏",
+    "fav_import_failed": "⚠️ 收藏导入失败",
+    "fav_load": "载入",
+    "fav_delete": "删除",
+    "fav_badge_compare": "对比",
+    "fav_badge_single": "单图",
+    "fav_stat_items": "{shown} / {total} 条",
+    "fav_meta_model": "模型：{value}",
+    "fav_meta_resolution": "分辨率：{value}",
+    "fav_meta_prompt": "提示词：{value}",
+    "copy_action": "复制",
+    "mj_metadata": "🪄 Midjourney 元数据",
+    "prompt_prompt": "提示词",
+    "params_count": "⚙️ 参数（{count} 项）",
+    "nai_params": "🎨 NovelAI 生成参数",
+    "positive_prompt": "正向提示词",
+    "undesired_content": "不希望出现的内容",
+    "generation_params_count": "⚙️ 生成参数（{count} 项）",
+    "sd_params": "🎨 Stable Diffusion WebUI 参数",
+    "negative_prompt": "负向提示词",
+    "plugin_metadata_count": "🧩 插件 / 附加元数据（{count} 项）",
+    "view": "视图",
+    "reset": "🔄 重置",
+    "fit": "⊞ 适应",
+    "connections": "连线",
+    "curve": "曲线",
+    "straight": "直线",
+    "step": "折线",
+    "node_search_placeholder": "筛选节点参数 / 参数值 / 节点名",
+    "clear": "清空",
+    "not_filtered": "未筛选",
+    "matched_count": "命中 {matched} / {total}",
+    "nodes_connections": "{nodes} 节点 · {links} 连接",
+    "zoom_pct": "缩放 {value}%",
+    "plugin_prefix": "插件::{key}",
+    "compare_positive_prompt": "正向提示词",
+    "compare_negative_prompt": "反向提示词",
+    "diff": "差异",
+    "expand": "展开",
+    "collapse": "收起",
+    "missing": "缺失",
+    "param": "参数",
+    "mixed_warning": "⚠️ 检测到不同格式图片（{types}），对比结果可能不准确。建议上传同类型图片。",
+    "compare_title": "⚖️ 多图参数对比",
+    "compare_subtext": "{count} 张图片 · {diff} 个差异参数 · {total} 个参数总计",
+    "download_all_json": "⬇ 下载全部 JSON",
+    "clear_compare": "✕ 清除",
+    "diff_overview": "🔎 差异项速览",
+    "diff_overview_note": "仅展示 {count} 个存在差异的参数",
+    "diff_none_note": "当前图片参数一致",
+    "diff_none": "未检测到差异项。",
+    "all_params": "📋 全部参数",
+    "all_params_note": "完整展示 {count} 个参数",
+    "continue_upload_hint": "📎 可继续上传图片加入对比（当前 {count}/6 张）",
+    "metadata_fields": "🔍 发现的元数据字段（{count}）",
+    "view_raw_json": "查看原始元数据 JSON",
+    "loading_reading": "正在读取图片元数据...",
+    "max_compare": "⚠️ 最多支持 6 张图片对比",
+    "cannot_read_metadata": "⚠️ 无法读取元数据",
+    "error_read_image": "⚠️ 无法读取元数据，请上传带有元数据的 PNG / JPG / WEBP 格式 AI 图片。",
+    "error_no_ai_metadata": "⚠️ 图片中未发现 AI 元数据，可能已被清除或不是 AI 生成图片。",
+    "error_parse": "⚠️ 解析出错: {message}",
+    "comfy_parse_failed": "⚠️ ComfyUI 工作流数据解析失败，格式可能不受支持。",
+    "save_json": "⬇ 下载 JSON",
+    "source_unknown": "未知",
+    "image_count": "{count} 张图片",
+    "diff_param_count": "{count} 个差异参数",
+    "param_total_count": "{count} 个参数总计"
+  },
+  "zh_TW": {
+    "page_title": "FlowLY · AI 圖片工作流解析器",
+    "brand_desc": "AI 圖片工作流解析器 · 解析 Midjourney、ComfyUI、SD WebUI 與 NovelAI 圖片參數和工作流",
+    "fav_button_title": "收藏中繼資料",
+    "fav_section_title": "收藏夾",
+    "fav_save": "⭐ 收藏目前結果",
+    "fav_export": "⬇ 匯出收藏",
+    "fav_import": "⬆ 匯入收藏",
+    "fav_storage_title": "本機儲存空間占用",
+    "fav_filter_title": "收藏搜尋 / 篩選",
+    "filter_model": "模型",
+    "filter_model_ph": "如 checkpoint / model",
+    "filter_resolution": "解析度",
+    "filter_resolution_ph": "如 1024x1024",
+    "filter_prompt": "提示詞",
+    "filter_prompt_ph": "依正向提示詞關鍵字篩選",
+    "filter_source": "來源",
+    "filter_source_all": "全部來源",
+    "filter_source_unknown": "未知",
+    "filter_keyword": "全文關鍵字",
+    "filter_keyword_ph": "檔名 / 參數 / 值",
+    "filter_reset": "重設篩選",
+    "fav_list_title": "本機收藏列表",
+    "settings_button_title": "主題、模式與語言設定",
+    "settings_theme_title": "主題顏色",
+    "settings_mode_title": "顯示模式",
+    "settings_lang_title": "語言",
+    "settings_lang_hint_auto": "依瀏覽器語言自動辨識；不支援的瀏覽器語言會回退為 English (US)。目前：{lang}。",
+    "settings_lang_hint_manual": "目前手動選擇語言：{lang}。",
+    "lang_auto": "自動（跟隨瀏覽器）",
+    "mode_day": "☀️ 白天",
+    "mode_dusk": "🌅 黃昏",
+    "mode_night": "🌙 夜間",
+    "mode_black": "⚫ 純黑",
+    "mode_label": "模式",
+    "mode_single": "單張解析",
+    "mode_compare": "多圖比較",
+    "mode_hint_single": "上傳一張 AI 圖片解析其中繼資料",
+    "mode_hint_compare": "上傳多張同類型圖片，醒目標示不同參數",
+    "upload_title_single": "拖曳圖片到此，或點擊上傳",
+    "upload_sub_single": "支援 Midjourney / ComfyUI / SD WebUI / NovelAI 的 PNG / JPG / WEBP 圖片",
+    "upload_title_compare": "拖曳多張圖片到此，或點擊上傳",
+    "upload_sub_compare": "上傳同類型 AI 圖片進行參數比較（支援 PNG / JPG / WEBP，最多 6 張）",
+    "toast_copied": "✓ 已複製到剪貼簿",
+    "toast_copy_failed": "✕ 複製失敗，請檢查瀏覽器權限",
+    "toast_json_downloaded": "✓ JSON 已下載",
+    "modal_close": "關閉",
+    "preview_image": "預覽圖",
+    "footer_meta": "AI 圖片工作流解析器",
+    "footer_github_text": "GitHub · eastmoe",
+    "summary_eyebrow": "FlowLY 摘要卡",
+    "summary_sub": "適合快速瀏覽常用參數，也可一鍵匯出為 FlowLY 分享截圖",
+    "summary_export": "📸 儲存摘要截圖",
+    "summary_open_preview": "放大預覽圖片",
+    "summary_model": "模型",
+    "summary_model_version": "模型版本 / Hash",
+    "summary_resolution": "解析度",
+    "summary_steps": "步數",
+    "summary_sampler": "採樣器",
+    "summary_cfg": "CFG / Scale",
+    "summary_seed": "Seed",
+    "summary_source": "來源",
+    "summary_prompt": "正向提示詞",
+    "summary_negative": "反向提示詞",
+    "toast_no_preview": "⚠️ 目前沒有可預覽的圖片",
+    "toast_generating_summary": "🖼️ 正在產生摘要截圖…",
+    "toast_summary_export_failed": "⚠️ 摘要截圖匯出失敗",
+    "toast_no_summary_export": "⚠️ 目前沒有可匯出的摘要",
+    "toast_browser_no_canvas": "⚠️ 目前瀏覽器不支援截圖匯出",
+    "summary_export_title": "FlowLY 摘要卡",
+    "summary_share_card": "FlowLY 分享卡",
+    "summary_no_preview": "沒有可用預覽圖",
+    "summary_generated_at": "產生時間 {time}",
+    "favorite_metadata": "收藏中繼資料",
+    "unknown": "未知",
+    "unknown_format": "未知格式",
+    "single_favorite": "單圖收藏 · {name}",
+    "compare_favorite": "比較收藏 · {count} 張",
+    "unnamed_image": "未命名圖片",
+    "fav_storage_used": "收藏資料約 {size}",
+    "fav_storage_hint_dynamic": "以 5 MB 為保守基準，目前約占 {p5}%；若按 10 MB 估算，約為 {p10}%。常見 localStorage 上限通常為 5–10 MB。",
+    "fav_empty_filtered": "沒有符合目前篩選條件的收藏。",
+    "fav_empty_none": "目前還沒有本機收藏。請先解析圖片，再點星號收藏目前結果。",
+    "fav_loaded": "✓ 已載入收藏中繼資料",
+    "fav_deleted": "🗑 已刪除收藏",
+    "fav_saved": "⭐ 已收藏到本機",
+    "fav_save_failed": "⚠️ 收藏失敗，可能超出 localStorage 容量",
+    "fav_import_empty": "⚠️ 找不到可匯入的收藏資料",
+    "fav_import_done": "✓ 已匯入 {count} 筆收藏",
+    "fav_import_failed": "⚠️ 收藏匯入失敗",
+    "fav_load": "載入",
+    "fav_delete": "刪除",
+    "fav_badge_compare": "比較",
+    "fav_badge_single": "單圖",
+    "fav_stat_items": "{shown} / {total} 筆",
+    "fav_meta_model": "模型：{value}",
+    "fav_meta_resolution": "解析度：{value}",
+    "fav_meta_prompt": "提示詞：{value}",
+    "copy_action": "複製",
+    "mj_metadata": "🪄 Midjourney 中繼資料",
+    "prompt_prompt": "提示詞",
+    "params_count": "⚙️ 參數（{count} 項）",
+    "nai_params": "🎨 NovelAI 生成參數",
+    "positive_prompt": "正向提示詞",
+    "undesired_content": "不希望出現的內容",
+    "generation_params_count": "⚙️ 生成參數（{count} 項）",
+    "sd_params": "🎨 Stable Diffusion WebUI 參數",
+    "negative_prompt": "負向提示詞",
+    "plugin_metadata_count": "🧩 外掛 / 附加中繼資料（{count} 項）",
+    "view": "視圖",
+    "reset": "🔄 重設",
+    "fit": "⊞ 適應",
+    "connections": "連線",
+    "curve": "曲線",
+    "straight": "直線",
+    "step": "折線",
+    "node_search_placeholder": "篩選節點參數 / 參數值 / 節點名稱",
+    "clear": "清空",
+    "not_filtered": "未篩選",
+    "matched_count": "命中 {matched} / {total}",
+    "nodes_connections": "{nodes} 節點 · {links} 連線",
+    "zoom_pct": "縮放 {value}%",
+    "plugin_prefix": "外掛::{key}",
+    "compare_positive_prompt": "正向提示詞",
+    "compare_negative_prompt": "反向提示詞",
+    "diff": "差異",
+    "expand": "展開",
+    "collapse": "收起",
+    "missing": "缺失",
+    "param": "參數",
+    "mixed_warning": "⚠️ 偵測到不同格式圖片（{types}），比較結果可能不準確。建議上傳同類型圖片。",
+    "compare_title": "⚖️ 多圖參數比較",
+    "compare_subtext": "{count} 張圖片 · {diff} 個差異參數 · {total} 個參數總計",
+    "download_all_json": "⬇ 下載全部 JSON",
+    "clear_compare": "✕ 清除",
+    "diff_overview": "🔎 差異速覽",
+    "diff_overview_note": "僅顯示 {count} 個存在差異的參數",
+    "diff_none_note": "目前圖片參數一致",
+    "diff_none": "未偵測到差異項。",
+    "all_params": "📋 全部參數",
+    "all_params_note": "完整顯示 {count} 個參數",
+    "continue_upload_hint": "📎 可繼續上傳圖片加入比較（目前 {count}/6 張）",
+    "metadata_fields": "🔍 發現的中繼資料欄位（{count}）",
+    "view_raw_json": "查看原始中繼資料 JSON",
+    "loading_reading": "正在讀取圖片中繼資料...",
+    "max_compare": "⚠️ 最多支援 6 張圖片比較",
+    "cannot_read_metadata": "⚠️ 無法讀取中繼資料",
+    "error_read_image": "⚠️ 無法讀取中繼資料，請上傳帶有中繼資料的 PNG / JPG / WEBP 格式 AI 圖片。",
+    "error_no_ai_metadata": "⚠️ 圖片中未發現 AI 中繼資料，可能已被清除或不是 AI 生成圖片。",
+    "error_parse": "⚠️ 解析出錯：{message}",
+    "comfy_parse_failed": "⚠️ ComfyUI 工作流資料解析失敗，格式可能不受支援。",
+    "save_json": "⬇ 下載 JSON",
+    "source_unknown": "未知",
+    "image_count": "{count} 張圖片",
+    "diff_param_count": "{count} 個差異參數",
+    "param_total_count": "{count} 個參數總計"
+  },
+  "ja_JP": {
+    "page_title": "FlowLY · AI画像ワークフローパーサー",
+    "brand_desc": "AI画像ワークフローパーサー · Midjourney、ComfyUI、SD WebUI、NovelAI の画像パラメータとワークフローを解析",
+    "fav_button_title": "メタデータをお気に入り",
+    "fav_section_title": "お気に入り",
+    "fav_save": "⭐ 現在の結果を保存",
+    "fav_export": "⬇ お気に入りをエクスポート",
+    "fav_import": "⬆ お気に入りをインポート",
+    "fav_storage_title": "ローカルストレージ使用量",
+    "fav_filter_title": "お気に入り検索 / フィルター",
+    "filter_model": "モデル",
+    "filter_model_ph": "例: checkpoint / model",
+    "filter_resolution": "解像度",
+    "filter_resolution_ph": "例: 1024x1024",
+    "filter_prompt": "プロンプト",
+    "filter_prompt_ph": "ポジティブプロンプトのキーワードで絞り込み",
+    "filter_source": "ソース",
+    "filter_source_all": "すべてのソース",
+    "filter_source_unknown": "不明",
+    "filter_keyword": "全文キーワード",
+    "filter_keyword_ph": "ファイル名 / パラメータ / 値",
+    "filter_reset": "フィルターをリセット",
+    "fav_list_title": "ローカルお気に入り一覧",
+    "settings_button_title": "テーマ・モード・言語設定",
+    "settings_theme_title": "テーマカラー",
+    "settings_mode_title": "表示モード",
+    "settings_lang_title": "言語",
+    "settings_lang_hint_auto": "ブラウザ言語を自動判定します。未対応のブラウザ言語は English (US) にフォールバックします。現在: {lang}。",
+    "settings_lang_hint_manual": "手動で選択された言語: {lang}。",
+    "lang_auto": "自動（ブラウザ）",
+    "mode_day": "☀️ 昼",
+    "mode_dusk": "🌅 夕暮れ",
+    "mode_night": "🌙 夜",
+    "mode_black": "⚫ 純黒",
+    "mode_label": "モード",
+    "mode_single": "単一画像解析",
+    "mode_compare": "複数画像比較",
+    "mode_hint_single": "AI画像を1枚アップロードしてメタデータを解析",
+    "mode_hint_compare": "同じ種類の画像を複数アップロードして差分を強調表示",
+    "upload_title_single": "ここに画像をドラッグするか、クリックしてアップロード",
+    "upload_sub_single": "Midjourney / ComfyUI / SD WebUI / NovelAI の PNG / JPG / WEBP に対応",
+    "upload_title_compare": "ここに複数画像をドラッグするか、クリックしてアップロード",
+    "upload_sub_compare": "同種のAI画像を比較（PNG / JPG / WEBP、最大6枚）",
+    "toast_copied": "✓ クリップボードにコピーしました",
+    "toast_copy_failed": "✕ コピーに失敗しました。ブラウザ権限を確認してください。",
+    "toast_json_downloaded": "✓ JSON をダウンロードしました",
+    "modal_close": "閉じる",
+    "preview_image": "プレビュー画像",
+    "footer_meta": "AI画像ワークフローパーサー",
+    "footer_github_text": "GitHub · eastmoe",
+    "summary_eyebrow": "FlowLY 要約カード",
+    "summary_sub": "主要パラメータの素早い確認向けで、FlowLY共有画像としてワンクリックで書き出せます",
+    "summary_export": "📸 要約画像を保存",
+    "summary_open_preview": "プレビュー画像を拡大",
+    "summary_model": "モデル",
+    "summary_model_version": "モデルバージョン / Hash",
+    "summary_resolution": "解像度",
+    "summary_steps": "ステップ",
+    "summary_sampler": "サンプラー",
+    "summary_cfg": "CFG / Scale",
+    "summary_seed": "Seed",
+    "summary_source": "ソース",
+    "summary_prompt": "ポジティブプロンプト",
+    "summary_negative": "ネガティブプロンプト",
+    "toast_no_preview": "⚠️ プレビュー可能な画像がありません",
+    "toast_generating_summary": "🖼️ 要約画像を生成しています…",
+    "toast_summary_export_failed": "⚠️ 要約画像の書き出しに失敗しました",
+    "toast_no_summary_export": "⚠️ 書き出せる要約がありません",
+    "toast_browser_no_canvas": "⚠️ このブラウザは画像書き出しに対応していません",
+    "summary_export_title": "FlowLY 要約カード",
+    "summary_share_card": "FlowLY 共有カード",
+    "summary_no_preview": "利用可能なプレビューなし",
+    "summary_generated_at": "生成時刻 {time}",
+    "favorite_metadata": "お気に入りメタデータ",
+    "unknown": "不明",
+    "unknown_format": "不明な形式",
+    "single_favorite": "単一お気に入り · {name}",
+    "compare_favorite": "比較お気に入り · {count} 枚",
+    "unnamed_image": "無題の画像",
+    "fav_storage_used": "お気に入りデータは約 {size}",
+    "fav_storage_hint_dynamic": "保守的な基準として 5 MB を使用すると約 {p5}% 使用中です。10 MB 基準では約 {p10}% です。localStorage の一般的な上限は 5〜10 MB です。",
+    "fav_empty_filtered": "現在のフィルターに一致するお気に入りはありません。",
+    "fav_empty_none": "ローカルお気に入りはまだありません。先に画像を解析し、星ボタンで現在の結果を保存してください。",
+    "fav_loaded": "✓ お気に入りメタデータを読み込みました",
+    "fav_deleted": "🗑 お気に入りを削除しました",
+    "fav_saved": "⭐ ローカルに保存しました",
+    "fav_save_failed": "⚠️ 保存に失敗しました。localStorage が一杯の可能性があります",
+    "fav_import_empty": "⚠️ インポート可能なお気に入りが見つかりません",
+    "fav_import_done": "✓ {count} 件のお気に入りをインポートしました",
+    "fav_import_failed": "⚠️ お気に入りのインポートに失敗しました",
+    "fav_load": "読み込む",
+    "fav_delete": "削除",
+    "fav_badge_compare": "比較",
+    "fav_badge_single": "単一",
+    "fav_stat_items": "{shown} / {total} 件",
+    "fav_meta_model": "モデル: {value}",
+    "fav_meta_resolution": "解像度: {value}",
+    "fav_meta_prompt": "プロンプト: {value}",
+    "copy_action": "コピー",
+    "mj_metadata": "🪄 Midjourney メタデータ",
+    "prompt_prompt": "プロンプト",
+    "params_count": "⚙️ パラメータ（{count}件）",
+    "nai_params": "🎨 NovelAI 生成パラメータ",
+    "positive_prompt": "ポジティブプロンプト",
+    "undesired_content": "不要な内容",
+    "generation_params_count": "⚙️ 生成パラメータ（{count}件）",
+    "sd_params": "🎨 Stable Diffusion WebUI パラメータ",
+    "negative_prompt": "ネガティブプロンプト",
+    "plugin_metadata_count": "🧩 プラグイン / 追加メタデータ（{count}件）",
+    "view": "表示",
+    "reset": "🔄 リセット",
+    "fit": "⊞ フィット",
+    "connections": "接続線",
+    "curve": "曲線",
+    "straight": "直線",
+    "step": "折れ線",
+    "node_search_placeholder": "ノード名 / パラメータ / 値で絞り込み",
+    "clear": "クリア",
+    "not_filtered": "未フィルター",
+    "matched_count": "一致 {matched} / {total}",
+    "nodes_connections": "{nodes} ノード · {links} 接続",
+    "zoom_pct": "ズーム {value}%",
+    "plugin_prefix": "プラグイン::{key}",
+    "compare_positive_prompt": "ポジティブプロンプト",
+    "compare_negative_prompt": "ネガティブプロンプト",
+    "diff": "差分",
+    "expand": "展開",
+    "collapse": "折りたたむ",
+    "missing": "欠落",
+    "param": "パラメータ",
+    "mixed_warning": "⚠️ 異なる画像形式（{types}）が検出されました。比較結果が不正確になる可能性があります。同じ種類の画像を使用することを推奨します。",
+    "compare_title": "⚖️ 複数画像パラメータ比較",
+    "compare_subtext": "{count} 枚の画像 · {diff} 個の差分パラメータ · 合計 {total} パラメータ",
+    "download_all_json": "⬇ すべての JSON をダウンロード",
+    "clear_compare": "✕ クリア",
+    "diff_overview": "🔎 差分サマリー",
+    "diff_overview_note": "差分のある {count} 個のパラメータのみ表示",
+    "diff_none_note": "現在の画像は同じパラメータです",
+    "diff_none": "差分は検出されませんでした。",
+    "all_params": "📋 全パラメータ",
+    "all_params_note": "全 {count} 個のパラメータを表示",
+    "continue_upload_hint": "📎 さらに画像をアップロードして比較を続けられます（現在 {count}/6 枚）",
+    "metadata_fields": "🔍 検出されたメタデータ項目（{count}）",
+    "view_raw_json": "生のメタデータ JSON を表示",
+    "loading_reading": "画像メタデータを読み込み中...",
+    "max_compare": "⚠️ 比較できるのは最大 6 枚までです",
+    "cannot_read_metadata": "⚠️ メタデータを読み取れません",
+    "error_read_image": "⚠️ メタデータを読み取れません。メタデータを含む AI 画像（PNG / JPG / WEBP）をアップロードしてください。",
+    "error_no_ai_metadata": "⚠️ 画像に AI メタデータが見つかりません。削除されているか、AI 生成画像ではない可能性があります。",
+    "error_parse": "⚠️ 解析エラー: {message}",
+    "comfy_parse_failed": "⚠️ ComfyUI ワークフローデータの解析に失敗しました。形式が未対応の可能性があります。",
+    "save_json": "⬇ JSON をダウンロード",
+    "source_unknown": "不明",
+    "image_count": "{count} 枚の画像",
+    "diff_param_count": "{count} 個の差分パラメータ",
+    "param_total_count": "合計 {count} パラメータ"
+  },
+  "ko_KR": {
+    "page_title": "FlowLY · AI 이미지 워크플로 파서",
+    "brand_desc": "AI 이미지 워크플로 파서 · Midjourney, ComfyUI, SD WebUI, NovelAI 이미지 파라미터와 워크플로를 분석합니다",
+    "fav_button_title": "메타데이터 즐겨찾기",
+    "fav_section_title": "즐겨찾기",
+    "fav_save": "⭐ 현재 결과 저장",
+    "fav_export": "⬇ 즐겨찾기 내보내기",
+    "fav_import": "⬆ 즐겨찾기 가져오기",
+    "fav_storage_title": "로컬 저장소 사용량",
+    "fav_filter_title": "즐겨찾기 검색 / 필터",
+    "filter_model": "모델",
+    "filter_model_ph": "예: checkpoint / model",
+    "filter_resolution": "해상도",
+    "filter_resolution_ph": "예: 1024x1024",
+    "filter_prompt": "프롬프트",
+    "filter_prompt_ph": "긍정 프롬프트 키워드로 필터링",
+    "filter_source": "출처",
+    "filter_source_all": "모든 출처",
+    "filter_source_unknown": "알 수 없음",
+    "filter_keyword": "전체 텍스트 키워드",
+    "filter_keyword_ph": "파일명 / 파라미터 / 값",
+    "filter_reset": "필터 초기화",
+    "fav_list_title": "로컬 즐겨찾기 목록",
+    "settings_button_title": "테마, 모드 및 언어 설정",
+    "settings_theme_title": "테마 색상",
+    "settings_mode_title": "표시 모드",
+    "settings_lang_title": "언어",
+    "settings_lang_hint_auto": "브라우저 언어를 자동 감지합니다. 지원되지 않는 브라우저 언어는 English (US)로 표시됩니다. 현재: {lang}.",
+    "settings_lang_hint_manual": "수동으로 선택한 언어: {lang}.",
+    "lang_auto": "자동 (브라우저)",
+    "mode_day": "☀️ 낮",
+    "mode_dusk": "🌅 황혼",
+    "mode_night": "🌙 밤",
+    "mode_black": "⚫ 순수 검정",
+    "mode_label": "모드",
+    "mode_single": "단일 이미지 분석",
+    "mode_compare": "다중 이미지 비교",
+    "mode_hint_single": "AI 이미지 1장을 업로드하여 메타데이터를 분석합니다",
+    "mode_hint_compare": "같은 유형의 이미지를 여러 장 업로드하여 다른 파라미터를 강조합니다",
+    "upload_title_single": "여기로 이미지를 드래그하거나 클릭하여 업로드",
+    "upload_sub_single": "Midjourney / ComfyUI / SD WebUI / NovelAI의 PNG / JPG / WEBP 지원",
+    "upload_title_compare": "여기로 여러 이미지를 드래그하거나 클릭하여 업로드",
+    "upload_sub_compare": "같은 유형의 AI 이미지를 비교합니다 (PNG / JPG / WEBP, 최대 6장)",
+    "toast_copied": "✓ 클립보드에 복사되었습니다",
+    "toast_copy_failed": "✕ 복사에 실패했습니다. 브라우저 권한을 확인하세요.",
+    "toast_json_downloaded": "✓ JSON을 다운로드했습니다",
+    "modal_close": "닫기",
+    "preview_image": "미리보기 이미지",
+    "footer_meta": "AI 이미지 워크플로 파서",
+    "footer_github_text": "GitHub · eastmoe",
+    "summary_eyebrow": "FlowLY 요약 카드",
+    "summary_sub": "주요 파라미터를 빠르게 확인하고 FlowLY 공유 이미지로 한 번에 내보낼 수 있습니다",
+    "summary_export": "📸 요약 이미지 저장",
+    "summary_open_preview": "미리보기 이미지 확대",
+    "summary_model": "모델",
+    "summary_model_version": "모델 버전 / Hash",
+    "summary_resolution": "해상도",
+    "summary_steps": "스텝",
+    "summary_sampler": "샘플러",
+    "summary_cfg": "CFG / Scale",
+    "summary_seed": "Seed",
+    "summary_source": "출처",
+    "summary_prompt": "긍정 프롬프트",
+    "summary_negative": "부정 프롬프트",
+    "toast_no_preview": "⚠️ 미리볼 수 있는 이미지가 없습니다",
+    "toast_generating_summary": "🖼️ 요약 이미지를 생성하는 중…",
+    "toast_summary_export_failed": "⚠️ 요약 이미지 내보내기에 실패했습니다",
+    "toast_no_summary_export": "⚠️ 내보낼 수 있는 요약이 없습니다",
+    "toast_browser_no_canvas": "⚠️ 이 브라우저는 이미지 내보내기를 지원하지 않습니다",
+    "summary_export_title": "FlowLY 요약 카드",
+    "summary_share_card": "FlowLY 공유 카드",
+    "summary_no_preview": "사용 가능한 미리보기 없음",
+    "summary_generated_at": "생성 시각 {time}",
+    "favorite_metadata": "즐겨찾기 메타데이터",
+    "unknown": "알 수 없음",
+    "unknown_format": "알 수 없는 형식",
+    "single_favorite": "단일 즐겨찾기 · {name}",
+    "compare_favorite": "비교 즐겨찾기 · {count}장",
+    "unnamed_image": "이름 없는 이미지",
+    "fav_storage_used": "즐겨찾기 데이터 약 {size}",
+    "fav_storage_hint_dynamic": "보수적인 기준인 5 MB로 보면 약 {p5}% 사용 중입니다. 10 MB 기준으로는 약 {p10}%입니다. localStorage의 일반적인 한도는 보통 5–10 MB입니다.",
+    "fav_empty_filtered": "현재 필터에 맞는 즐겨찾기가 없습니다.",
+    "fav_empty_none": "아직 로컬 즐겨찾기가 없습니다. 먼저 이미지를 분석한 뒤 별표 버튼으로 현재 결과를 저장하세요.",
+    "fav_loaded": "✓ 즐겨찾기 메타데이터를 불러왔습니다",
+    "fav_deleted": "🗑 즐겨찾기를 삭제했습니다",
+    "fav_saved": "⭐ 로컬에 저장했습니다",
+    "fav_save_failed": "⚠️ 저장에 실패했습니다. localStorage 용량이 부족할 수 있습니다",
+    "fav_import_empty": "⚠️ 가져올 수 있는 즐겨찾기를 찾지 못했습니다",
+    "fav_import_done": "✓ 즐겨찾기 {count}개를 가져왔습니다",
+    "fav_import_failed": "⚠️ 즐겨찾기 가져오기에 실패했습니다",
+    "fav_load": "불러오기",
+    "fav_delete": "삭제",
+    "fav_badge_compare": "비교",
+    "fav_badge_single": "단일",
+    "fav_stat_items": "{shown} / {total}개",
+    "fav_meta_model": "모델: {value}",
+    "fav_meta_resolution": "해상도: {value}",
+    "fav_meta_prompt": "프롬프트: {value}",
+    "copy_action": "복사",
+    "mj_metadata": "🪄 Midjourney 메타데이터",
+    "prompt_prompt": "프롬프트",
+    "params_count": "⚙️ 파라미터 ({count}개)",
+    "nai_params": "🎨 NovelAI 생성 파라미터",
+    "positive_prompt": "긍정 프롬프트",
+    "undesired_content": "원하지 않는 내용",
+    "generation_params_count": "⚙️ 생성 파라미터 ({count}개)",
+    "sd_params": "🎨 Stable Diffusion WebUI 파라미터",
+    "negative_prompt": "부정 프롬프트",
+    "plugin_metadata_count": "🧩 플러그인 / 추가 메타데이터 ({count}개)",
+    "view": "보기",
+    "reset": "🔄 초기화",
+    "fit": "⊞ 맞춤",
+    "connections": "연결선",
+    "curve": "곡선",
+    "straight": "직선",
+    "step": "꺾은선",
+    "node_search_placeholder": "노드 이름 / 파라미터 / 값으로 필터링",
+    "clear": "지우기",
+    "not_filtered": "필터 없음",
+    "matched_count": "일치 {matched} / {total}",
+    "nodes_connections": "{nodes}개 노드 · {links}개 연결",
+    "zoom_pct": "확대 {value}%",
+    "plugin_prefix": "플러그인::{key}",
+    "compare_positive_prompt": "긍정 프롬프트",
+    "compare_negative_prompt": "부정 프롬프트",
+    "diff": "차이",
+    "expand": "펼치기",
+    "collapse": "접기",
+    "missing": "없음",
+    "param": "파라미터",
+    "mixed_warning": "⚠️ 서로 다른 이미지 형식이 감지되었습니다 ({types}). 비교 결과가 부정확할 수 있습니다. 같은 유형의 이미지를 권장합니다.",
+    "compare_title": "⚖️ 다중 이미지 파라미터 비교",
+    "compare_subtext": "이미지 {count}장 · 차이 파라미터 {diff}개 · 전체 파라미터 {total}개",
+    "download_all_json": "⬇ 모든 JSON 다운로드",
+    "clear_compare": "✕ 지우기",
+    "diff_overview": "🔎 차이 요약",
+    "diff_overview_note": "차이가 있는 {count}개 파라미터만 표시",
+    "diff_none_note": "현재 이미지의 파라미터가 동일합니다",
+    "diff_none": "차이 항목이 감지되지 않았습니다.",
+    "all_params": "📋 전체 파라미터",
+    "all_params_note": "전체 {count}개 파라미터 표시",
+    "continue_upload_hint": "📎 이미지를 더 업로드하여 비교를 계속할 수 있습니다 (현재 {count}/6장)",
+    "metadata_fields": "🔍 발견된 메타데이터 필드 ({count})",
+    "view_raw_json": "원본 메타데이터 JSON 보기",
+    "loading_reading": "이미지 메타데이터를 읽는 중...",
+    "max_compare": "⚠️ 최대 6장까지 비교할 수 있습니다",
+    "cannot_read_metadata": "⚠️ 메타데이터를 읽을 수 없습니다",
+    "error_read_image": "⚠️ 메타데이터를 읽을 수 없습니다. 메타데이터가 포함된 AI PNG / JPG / WEBP 이미지를 업로드하세요.",
+    "error_no_ai_metadata": "⚠️ 이미지에서 AI 메타데이터를 찾을 수 없습니다. 제거되었거나 AI 생성 이미지가 아닐 수 있습니다.",
+    "error_parse": "⚠️ 파싱 오류: {message}",
+    "comfy_parse_failed": "⚠️ ComfyUI 워크플로 데이터 파싱에 실패했습니다. 형식이 지원되지 않을 수 있습니다.",
+    "save_json": "⬇ JSON 다운로드",
+    "source_unknown": "알 수 없음",
+    "image_count": "이미지 {count}장",
+    "diff_param_count": "차이 파라미터 {count}개",
+    "param_total_count": "전체 파라미터 {count}개"
+  }
+};
+let currentLangPref='auto';
+let currentLang='zh_CN';
+
+function detectBrowserLanguage(){
+  const candidates=[...(navigator.languages||[]), navigator.language, navigator.userLanguage].filter(Boolean).map(v=>String(v).toLowerCase());
+  for(const raw of candidates){
+    if(raw.includes('zh-hant') || raw.includes('zh-tw') || raw.includes('zh-hk') || raw.includes('zh-mo')) return 'zh_TW';
+    if(raw.startsWith('zh')) return 'zh_CN';
+    if(raw.startsWith('ja')) return 'ja_JP';
+    if(raw.startsWith('ko')) return 'ko_KR';
+    if(raw.startsWith('en')) return 'en_US';
+  }
+  return 'en_US';
+}
+function resolveLanguage(pref){
+  if(pref && pref !== 'auto' && I18N[pref]) return pref;
+  return detectBrowserLanguage();
+}
+function getHtmlLang(code){
+  return {zh_CN:'zh-CN',zh_TW:'zh-TW',en_US:'en-US',ja_JP:'ja-JP',ko_KR:'ko-KR'}[code] || 'en-US';
+}
+function t(key, vars=null){
+  const langPack=I18N[currentLang] || I18N.en_US;
+  const fallback=I18N.en_US || {};
+  let value = (langPack && langPack[key] != null ? langPack[key] : (fallback[key] != null ? fallback[key] : key));
+  value = String(value);
+  if(vars){
+    for(const [k,v] of Object.entries(vars)) value = value.replaceAll(`{${k}}`, String(v));
+  }
+  return value;
+}
+function getLanguageDisplayName(code){
+  return {
+    zh_CN:'简体中文',
+    zh_TW:'繁體中文（TW）',
+    en_US:'English (US)',
+    ja_JP:'日本語',
+    ko_KR:'한국어'
+  }[code] || 'English (US)';
+}
+function updateThemeTitles(){
+  const map={green:'淡绿',blue:'淡蓝',purple:'淡紫',red:'淡红',pink:'淡粉',yellow:'淡黄',cyan:'淡青',orange:'淡橙'};
+  document.querySelectorAll('.t-swatch').forEach(el=>{ if(map[el.dataset.theme]) el.title = map[el.dataset.theme]; });
+}
+function updateModeTexts(){
+  const single=document.getElementById('modeSingle');
+  const compare=document.getElementById('modeCompare');
+  const hint=document.getElementById('modeHint');
+  const uploadTitle=document.getElementById('uploadTitle');
+  const uploadSub=document.getElementById('uploadSub');
+  const label=document.getElementById('modeLabel');
+  const mode=(compare && compare.classList.contains('act')) ? 'compare' : 'single';
+  if(label) label.textContent=t('mode_label');
+  if(single) single.textContent=`🔍 ${t('mode_single')}`;
+  if(compare) compare.textContent=`⚖️ ${t('mode_compare')}`;
+  document.querySelectorAll('.m-btn').forEach(btn=>{
+    const key = {day:'mode_day', dusk:'mode_dusk', night:'mode_night', black:'mode_black'}[btn.dataset.mode];
+    if(key) btn.textContent=t(key);
+  });
+  if(mode==='compare'){
+    if(uploadTitle) uploadTitle.textContent=t('upload_title_compare');
+    if(uploadSub) uploadSub.textContent=t('upload_sub_compare');
+    if(hint) hint.textContent=t('mode_hint_compare');
+  } else {
+    if(uploadTitle) uploadTitle.textContent=t('upload_title_single');
+    if(uploadSub) uploadSub.textContent=t('upload_sub_single');
+    if(hint) hint.textContent=t('mode_hint_single');
+  }
+}
+function applyStaticI18n(){
+  document.title=t('page_title');
+  document.documentElement.lang=getHtmlLang(currentLang);
+  const brandDesc=document.getElementById('brandDesc'); if(brandDesc) brandDesc.textContent=t('brand_desc');
+  const favBtn=document.getElementById('favBtn'); if(favBtn) favBtn.title=t('fav_button_title');
+  const settingsBtn=document.getElementById('settingsBtn'); if(settingsBtn) settingsBtn.title=t('settings_button_title');
+  const favSectionTitle=document.getElementById('favSectionTitle'); if(favSectionTitle) favSectionTitle.textContent=t('fav_section_title');
+  const favSaveBtn=document.getElementById('favSaveBtn'); if(favSaveBtn) favSaveBtn.textContent=t('fav_save');
+  const favExportBtn=document.getElementById('favExportBtn'); if(favExportBtn) favExportBtn.textContent=t('fav_export');
+  const favImportBtn=document.getElementById('favImportBtn'); if(favImportBtn) favImportBtn.textContent=t('fav_import');
+  const favStorageTitle=document.getElementById('favStorageTitle'); if(favStorageTitle) favStorageTitle.textContent=t('fav_storage_title');
+  const favFilterTitle=document.getElementById('favFilterTitle'); if(favFilterTitle) favFilterTitle.textContent=t('fav_filter_title');
+  const favListTitle=document.getElementById('favListTitle'); if(favListTitle) favListTitle.textContent=t('fav_list_title');
+  const settingsThemeTitle=document.getElementById('settingsThemeTitle'); if(settingsThemeTitle) settingsThemeTitle.textContent=t('settings_theme_title');
+  const settingsModeTitle=document.getElementById('settingsModeTitle'); if(settingsModeTitle) settingsModeTitle.textContent=t('settings_mode_title');
+  const settingsLangTitle=document.getElementById('settingsLangTitle'); if(settingsLangTitle) settingsLangTitle.textContent=t('settings_lang_title');
+  const filterModelLabel=document.getElementById('favFilterModelLabel'); if(filterModelLabel) filterModelLabel.textContent=t('filter_model');
+  const filterResLabel=document.getElementById('favFilterResolutionLabel'); if(filterResLabel) filterResLabel.textContent=t('filter_resolution');
+  const filterPromptLabel=document.getElementById('favFilterPromptLabel'); if(filterPromptLabel) filterPromptLabel.textContent=t('filter_prompt');
+  const filterSourceLabel=document.getElementById('favFilterSourceLabel'); if(filterSourceLabel) filterSourceLabel.textContent=t('filter_source');
+  const filterKeywordLabel=document.getElementById('favFilterKeywordLabel'); if(filterKeywordLabel) filterKeywordLabel.textContent=t('filter_keyword');
+  const filterModel=document.getElementById('favFilterModel'); if(filterModel) filterModel.placeholder=t('filter_model_ph');
+  const filterRes=document.getElementById('favFilterResolution'); if(filterRes) filterRes.placeholder=t('filter_resolution_ph');
+  const filterPrompt=document.getElementById('favFilterPrompt'); if(filterPrompt) filterPrompt.placeholder=t('filter_prompt_ph');
+  const filterKeyword=document.getElementById('favFilterKeyword'); if(filterKeyword) filterKeyword.placeholder=t('filter_keyword_ph');
+  const filterSource=document.getElementById('favFilterSource');
+  if(filterSource){
+    const opts=filterSource.querySelectorAll('option');
+    if(opts[0]) opts[0].textContent=t('filter_source_all');
+    if(opts[5]) opts[5].textContent=t('filter_source_unknown');
+  }
+  const favResetBtn=document.getElementById('favResetBtn'); if(favResetBtn) favResetBtn.textContent=t('filter_reset');
+  const toast=document.getElementById('toast'); if(toast && !toast.classList.contains('on')) toast.textContent=t('toast_copied');
+  const closeBtn=document.getElementById('imgModalClose'); if(closeBtn) closeBtn.setAttribute('aria-label', t('modal_close'));
+  const img=document.getElementById('imgModalImg'); if(img) img.alt=t('preview_image');
+  const footerMeta=document.getElementById('footerMeta'); if(footerMeta) footerMeta.textContent=t('footer_meta');
+  const footerGithubText=document.getElementById('footerGithubText'); if(footerGithubText) footerGithubText.textContent=t('footer_github_text');
+  const langSelect=document.getElementById('langSelect');
+  if(langSelect){
+    const opts=langSelect.querySelectorAll('option');
+    if(opts[0]) opts[0].textContent=t('lang_auto');
+  }
+  const langHint=document.getElementById('langHint');
+  if(langHint){
+    const effectiveName=getLanguageDisplayName(currentLang);
+    langHint.textContent=currentLangPref==='auto' ? t('settings_lang_hint_auto', {lang: effectiveName}) : t('settings_lang_hint_manual', {lang: effectiveName});
+  }
+  updateThemeTitles();
+  updateModeTexts();
+}
+function rerenderForLanguage(){
+  if(typeof renderFavoritesMenu === 'function') renderFavoritesMenu();
+  if(currentViewData && currentViewData.entries && currentViewData.entries.length){
+    if(currentViewData.mode==='compare') renderComparison();
+    else renderSingleEntry(currentViewData.entries[0]);
+  }
+}
+function applyLanguage(pref='auto', persist=true, rerender=true){
+  currentLangPref = pref || 'auto';
+  currentLang = resolveLanguage(currentLangPref);
+  if(persist) localStorage.setItem(LANG_KEY, currentLangPref);
+  const langSelect=document.getElementById('langSelect');
+  if(langSelect && langSelect.value !== currentLangPref) langSelect.value = currentLangPref;
+  applyStaticI18n();
+  if(rerender) rerenderForLanguage();
+}
+function initI18n(){
+  const langSelect=document.getElementById('langSelect');
+  if(langSelect){
+    langSelect.addEventListener('change', e=>applyLanguage(e.target.value || 'auto', true, true));
+  }
+  const saved=localStorage.getItem(LANG_KEY) || 'auto';
+  applyLanguage(saved, false, false);
+}
 
 // ─── Theme & Mode Logic ───────────────────────────────────────────────────────
 function initThemeMode() {
@@ -1489,6 +2435,7 @@ function initThemeMode() {
   }
   apply(savedT, savedM);
 }
+initI18n();
 initThemeMode();
 initFavorites();
 
@@ -1509,7 +2456,7 @@ function copyBtnHTML(cls,text,label,title=''){
   const titleAttr = title ? ` title="${esc(title)}"` : '';
   return `<button type="button" class="${cls}" data-copy-btn="1" data-copy="${encoded}"${titleAttr}>${label}</button>`;
 }
-function showToast(m='✓ 已复制'){const t=document.getElementById('toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2000)}
+function showToast(m=t('toast_copied')){const t=document.getElementById('toast');t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2000)}
 function markCopyButtonSuccess(btn){
   if(!btn) return;
   btn.classList.add('ok');
@@ -1584,17 +2531,17 @@ async function copyText(text,btn){
       const ok = legacyCopyText(value);
       if(!ok) throw new Error('legacy copy failed');
     }
-    showToast('✓ 已复制到剪贴板');
+    showToast(t('toast_copied'));
     markCopyButtonSuccess(btn);
   }catch(err){
     try {
       const ok = legacyCopyText(value);
       if(!ok) throw err || new Error('copy failed');
-      showToast('✓ 已复制到剪贴板');
+      showToast(t('toast_copied'));
       markCopyButtonSuccess(btn);
     } catch(finalErr) {
       console.error('Copy failed:', finalErr);
-      showToast('✕ 复制失败，请检查浏览器权限');
+      showToast(t('toast_copy_failed'));
     }
   }
 }
@@ -1611,7 +2558,7 @@ function safeJSON(s){try{return JSON.parse(s)}catch{return null}}
 function downloadJSON(obj,filename){
   const blob=new Blob([JSON.stringify(obj,null,2)],{type:'application/json'});
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=filename;a.click();URL.revokeObjectURL(a.href);
-  showToast('✓ JSON 已下载');
+  showToast(t('toast_json_downloaded'));
 }
 function dedupeParams(arr){
   const out=[];const seen=new Set();
@@ -1712,15 +2659,11 @@ function setMode(m){
   const fi=document.getElementById('fileInput');
   if(m==='compare'){
     fi.multiple=true;
-    document.getElementById('uploadTitle').textContent='拖拽多张图片至此，或点击上传';
-    document.getElementById('uploadSub').textContent='上传同类型 AI 图片进行参数对比（支持 PNG / JPG / WEBP，最多 6 张）';
-    document.getElementById('modeHint').textContent='上传多张同类型图片，高亮显示不同参数';
+    updateModeTexts();
     if(compareQueue.length) renderComparison();
   } else {
     fi.multiple=false;
-    document.getElementById('uploadTitle').textContent='拖拽图片至此，或点击上传';
-    document.getElementById('uploadSub').textContent='支持 Midjourney / ComfyUI / SD WebUI / NovelAI 的 PNG / JPG / WEBP 图片';
-    document.getElementById('modeHint').textContent='上传一张 AI 图片解析元数据';
+    updateModeTexts();
     compareQueue=[];
   }
 }
@@ -1988,10 +2931,10 @@ function parseMidjourney(meta){
 
 function renderMJ(parsed,el){
   let h=`<div class="card">`;
-  h+=`<div class="sec-hd">🪄 Midjourney 元数据</div>`;
-  if(parsed.pos){h+=`<div class="prompt-box"><div class="plabel">提示词 (Prompt)</div><div class="ptext">${copyBtnHTML('pcopy', parsed.pos, '复制')}${esc(parsed.pos)}</div></div>`;}
+  h+=`<div class="sec-hd">${esc(t('mj_metadata'))}</div>`;
+  if(parsed.pos){h+=`<div class="prompt-box"><div class="plabel">${esc(t('prompt_prompt'))}</div><div class="ptext">${copyBtnHTML('pcopy', parsed.pos, t('copy_action'))}${esc(parsed.pos)}</div></div>`;}
   if(parsed.params.length){
-    h+=`<div class="sec-hd">⚙️ 参数 (${parsed.params.length} 项)</div><div class="pgrid">`;
+    h+=`<div class="sec-hd">${esc(t('params_count', {count: parsed.params.length}))}</div><div class="pgrid">`;
     for(const {k,v} of parsed.params){h+=`<div class="pitem"><span class="pkey">${esc(k)}</span><span class="pval" title="${esc(v)}">${esc(v)}</span>${copyBtnHTML('cbtn', v, '⎘')}</div>`;}
     h+=`</div>`;
   }
@@ -2001,17 +2944,17 @@ function renderMJ(parsed,el){
 
 function renderNAI(parsed,el){
   let h=`<div class="nai-wrap">`;
-  h+=`<div class="sec-hd">🎨 NovelAI 生成参数</div>`;
+  h+=`<div class="sec-hd">${esc(t('nai_params'))}</div>`;
   if(parsed.pos){
     const sv=JSON.stringify(parsed.pos);
-    h+=`<div class="prompt-box"><div class="plabel">正向提示词 (Positive Prompt)</div><div class="ptext">${copyBtnHTML('pcopy', parsed.pos, '复制')}${esc(parsed.pos)}</div></div>`;
+    h+=`<div class="prompt-box"><div class="plabel">${esc(t('positive_prompt'))}</div><div class="ptext">${copyBtnHTML('pcopy', parsed.pos, t('copy_action'))}${esc(parsed.pos)}</div></div>`;
   }
   if(parsed.neg){
     const sv=JSON.stringify(parsed.neg);
-    h+=`<div class="prompt-box"><div class="plabel">不希望出现的内容 (Undesired Content)</div><div class="ptext neg">${copyBtnHTML('pcopy', parsed.neg, '复制')}${esc(parsed.neg)}</div></div>`;
+    h+=`<div class="prompt-box"><div class="plabel">${esc(t('undesired_content'))}</div><div class="ptext neg">${copyBtnHTML('pcopy', parsed.neg, t('copy_action'))}${esc(parsed.neg)}</div></div>`;
   }
   if(parsed.params.length){
-    h+=`<div class="sec-hd">⚙️ 生成参数 (${parsed.params.length} 项)</div><div class="pgrid">`;
+    h+=`<div class="sec-hd">${esc(t('generation_params_count', {count: parsed.params.length}))}</div><div class="pgrid">`;
     for(const {k,v} of parsed.params){
       h+=`<div class="pitem"><span class="pkey">${esc(k)}</span><span class="pval" title="${esc(v)}">${esc(v)}</span>${copyBtnHTML('cbtn', v, '⎘')}</div>`;
     }
@@ -2095,16 +3038,16 @@ function parseSDParams(raw, meta={}){
 
 function renderSD(parsed,el){
   let h=`<div class="card">`;
-  h+=`<div class="sec-hd">🎨 Stable Diffusion WebUI 参数</div>`;
-  if(parsed.pos){const sv=JSON.stringify(parsed.pos);h+=`<div class="prompt-box"><div class="plabel">正向提示词 (Positive Prompt)</div><div class="ptext">${copyBtnHTML('pcopy', parsed.pos, '复制')}${esc(parsed.pos)}</div></div>`;}
-  if(parsed.neg){h+=`<div class="prompt-box"><div class="plabel">负向提示词 (Negative Prompt)</div><div class="ptext neg">${copyBtnHTML('pcopy', parsed.neg, '复制')}${esc(parsed.neg)}</div></div>`;}
+  h+=`<div class="sec-hd">${esc(t('sd_params'))}</div>`;
+  if(parsed.pos){const sv=JSON.stringify(parsed.pos);h+=`<div class="prompt-box"><div class="plabel">${esc(t('positive_prompt'))}</div><div class="ptext">${copyBtnHTML('pcopy', parsed.pos, t('copy_action'))}${esc(parsed.pos)}</div></div>`;}
+  if(parsed.neg){h+=`<div class="prompt-box"><div class="plabel">${esc(t('negative_prompt'))}</div><div class="ptext neg">${copyBtnHTML('pcopy', parsed.neg, t('copy_action'))}${esc(parsed.neg)}</div></div>`;}
   if(parsed.params.length){
-    h+=`<div class="sec-hd">⚙️ 生成参数 (${parsed.params.length} 项)</div><div class="pgrid">`;
+    h+=`<div class="sec-hd">${esc(t('generation_params_count', {count: parsed.params.length}))}</div><div class="pgrid">`;
     for(const {k,v} of parsed.params){h+=`<div class="pitem"><span class="pkey">${esc(k)}</span><span class="pval" title="${esc(v)}">${esc(v)}</span>${copyBtnHTML('cbtn', v, '⎘')}</div>`;}
     h+=`</div>`;
   }
   if(parsed.pluginParams && parsed.pluginParams.length){
-    h+=`<div class="sec-hd">🧩 插件 / 附加元数据 (${parsed.pluginParams.length} 项)</div><div class="pgrid">`;
+    h+=`<div class="sec-hd">${esc(t('plugin_metadata_count', {count: parsed.pluginParams.length}))}</div><div class="pgrid">`;
     for(const {k,v} of parsed.pluginParams){h+=`<div class="pitem"><span class="pkey">${esc(k)}</span><span class="pval" title="${esc(v)}">${esc(v)}</span>${copyBtnHTML('cbtn', v, '⎘')}</div>`;}
     h+=`</div>`;
   }
@@ -2191,7 +3134,7 @@ function autoLayout(nodes,links){
 function renderCF(parsed,el){
   CS.nodes=parsed.nodes;CS.links=parsed.links;CS.scale=1;CS.ox=0;CS.oy=0;CS.nodeFilter='';
   const nc=parsed.nodes.length,lc=Object.keys(parsed.links).length;
-  el.innerHTML=`<div class="cf-card"><div class="toolbar"><span class="tlbl">视图</span><button class="tbtn" onclick="resetView()">🔄 重置</button><button class="tbtn" onclick="fitView()">⊞ 适应</button><div class="tsep"></div><span class="tlbl">连线</span><button class="tbtn act" id="btn-bezier" onclick="setLine('bezier')">曲线</button><button class="tbtn" id="btn-straight" onclick="setLine('straight')">直线</button><button class="tbtn" id="btn-step" onclick="setLine('step')">折线</button><div class="tsep"></div><div class="toolbar-search"><input class="node-search-input" id="nodeSearchInput" type="search" placeholder="筛选节点参数 / 参数值 / 节点名"><button class="tbtn" type="button" onclick="clearNodeFilter()">清空</button><span class="node-search-count" id="nodeFilterCount">未筛选</span></div><span class="node-count">${nc} 节点 · ${lc} 连接</span><span class="tinfo" id="zi">缩放 100%</span></div><div class="viewport" id="vp"><div class="world" id="world"><svg class="conn-svg" id="csvg"></svg></div></div></div>`;
+  el.innerHTML=`<div class="cf-card"><div class="toolbar"><span class="tlbl">${esc(t('view'))}</span><button class="tbtn" onclick="resetView()">${esc(t('reset'))}</button><button class="tbtn" onclick="fitView()">${esc(t('fit'))}</button><div class="tsep"></div><span class="tlbl">${esc(t('connections'))}</span><button class="tbtn act" id="btn-bezier" onclick="setLine('bezier')">${esc(t('curve'))}</button><button class="tbtn" id="btn-straight" onclick="setLine('straight')">${esc(t('straight'))}</button><button class="tbtn" id="btn-step" onclick="setLine('step')">${esc(t('step'))}</button><div class="tsep"></div><div class="toolbar-search"><input class="node-search-input" id="nodeSearchInput" type="search" placeholder="${esc(t('node_search_placeholder'))}"><button class="tbtn" type="button" onclick="clearNodeFilter()">${esc(t('clear'))}</button><span class="node-search-count" id="nodeFilterCount">${esc(t('not_filtered'))}</span></div><span class="node-count">${esc(t('nodes_connections', {nodes:nc, links:lc}))}</span><span class="tinfo" id="zi">${esc(t('zoom_pct', {value:100}))}</span></div><div class="viewport" id="vp"><div class="world" id="world"><svg class="conn-svg" id="csvg"></svg></div></div></div>`;
   CS.vp=document.getElementById('vp');CS.world=document.getElementById('world');CS.svg=document.getElementById('csvg');
   for(const n of CS.nodes){const ne=buildNodeEl(n);CS.world.appendChild(ne);ne.style.left=n.pos[0]+'px';ne.style.top=n.pos[1]+'px';}
   const nodeSearchInput=document.getElementById('nodeSearchInput');
@@ -2243,7 +3186,7 @@ function applyNodeFilter(query){
     if(q && hit) matched++;
   }
   const count=document.getElementById('nodeFilterCount');
-  if(count) count.textContent=q ? `命中 ${matched} / ${nodes.length}` : '未筛选';
+  if(count) count.textContent=q ? t('matched_count', {matched, total:nodes.length}) : t('not_filtered');
 }
 function clearNodeFilter(){
   const input=document.getElementById('nodeSearchInput');
@@ -2281,7 +3224,7 @@ function pathD(s,d){
   if(CS.lineStyle==='step'){const mx=(x1+x2)/2;return `M${x1} ${y1} L${mx} ${y1} L${mx} ${y2} L${x2} ${y2}`;}
   const dx=Math.max(Math.abs(x2-x1)*.45,60);return `M${x1} ${y1} C${x1+dx} ${y1},${x2-dx} ${y2},${x2} ${y2}`;
 }
-function updTrans(){if(!CS.world) return;CS.world.style.transform=`translate(${CS.ox}px,${CS.oy}px) scale(${CS.scale})`;const zi=document.getElementById('zi');if(zi) zi.textContent=`缩放 ${Math.round(CS.scale*100)}%`;}
+function updTrans(){if(!CS.world) return;CS.world.style.transform=`translate(${CS.ox}px,${CS.oy}px) scale(${CS.scale})`;const zi=document.getElementById('zi');if(zi) zi.textContent=t('zoom_pct', {value:Math.round(CS.scale*100)});}
 function resetView(){CS.scale=1;CS.ox=0;CS.oy=0;updTrans();drawConns();}
 function fitView(){
   if(!CS.nodes.length||!CS.vp) return;
@@ -2329,7 +3272,7 @@ function extractFlatParams(type, parsed, meta){
     if(parsed.pos) flat['__pos__']=parsed.pos;
     if(parsed.neg) flat['__neg__']=parsed.neg;
     for(const {k,v} of (parsed.params||[])) flat[k]=v;
-    for(const {k,v} of (parsed.pluginParams||[])) flat[`插件::${k}`]=v;
+    for(const {k,v} of (parsed.pluginParams||[])) flat[`${t('plugin_prefix', {key:k})}`]=v;
   } else if(type==='comfyui'){
     for(const n of (parsed.nodes||[])){
       for(const {k,v} of (n.params||[])){
@@ -2352,7 +3295,7 @@ function renderComparison(){
   if(!compareQueue.length){res.classList.remove('on');return;}
 
   const types=new Set(compareQueue.map(e=>e.type));
-  const mixedWarning=types.size>1?`<div class="error" style="margin-bottom:14px">⚠️ 检测到不同格式图片（${[...types].join(', ')}），对比结果可能不准确。建议上传同类型图片。</div>`:'';
+  const mixedWarning=types.size>1?`<div class="error" style="margin-bottom:14px">${esc(t('mixed_warning', {types:[...types].join(', ')}))}</div>`:'';
 
   const allFlat=compareQueue.map(e=>extractFlatParams(e.type,e.parsed,e.meta));
   const keyOrder=[];const keySeen=new Set();
@@ -2367,7 +3310,7 @@ function renderComparison(){
     if(uniq.size>1) diffKeys.add(k);
   }
 
-  const typeLabel={sdwebui:'SD WebUI',comfyui:'ComfyUI',novelai:'NovelAI',midjourney:'Midjourney',unknown:'Unknown'};
+  const typeLabel={sdwebui:'SD WebUI',comfyui:'ComfyUI',novelai:'NovelAI',midjourney:'Midjourney',unknown:t('source_unknown')};
   const typeCls={sdwebui:'sd',comfyui:'cf',novelai:'nai',midjourney:'mj',unknown:'uk'};
   const diffRenderMap=buildDiffRenderMap(diffKeys, allFlat);
 
@@ -2375,11 +3318,11 @@ function renderComparison(){
   hdr.className='cmp-header';
   hdr.innerHTML=`
     <div>
-      <h3>⚖️ 多图参数对比</h3>
-      <span class="cmp-subtext">${compareQueue.length} 张图片 · <span style="color:var(--diff-border);font-weight:800">${diffKeys.size} 个差异参数</span> · ${keyOrder.length} 个参数总计</span>
+      <h3>${esc(t('compare_title'))}</h3>
+      <span class="cmp-subtext">${esc(t('compare_subtext', {count: compareQueue.length, diff: diffKeys.size, total: keyOrder.length}))}</span>
     </div>
-    <button class="cmp-dl" onclick="downloadAllJSON()">⬇ 下载全部 JSON</button>
-    <button class="cmp-clear" onclick="clearCompare()">✕ 清除</button>`;
+    <button class="cmp-dl" onclick="downloadAllJSON()">${esc(t('download_all_json'))}</button>
+    <button class="cmp-clear" onclick="clearCompare()">${esc(t('clear_compare'))}</button>`;
   rc.appendChild(hdr);
 
   if(mixedWarning){const w=document.createElement('div');w.innerHTML=mixedWarning;rc.appendChild(w.firstElementChild);}
@@ -2388,8 +3331,8 @@ function renderComparison(){
   if(diffKeyList.length){
     appendCompareSection(
       rc,
-      '🔎 差异项速览',
-      `仅展示 ${diffKeyList.length} 个存在差异的参数`,
+      t('diff_overview'),
+      t('diff_overview_note', {count: diffKeyList.length}),
       diffKeyList,
       allFlat,
       diffKeys,
@@ -2401,14 +3344,14 @@ function renderComparison(){
     const empty=document.createElement('div');
     empty.className='cmp-wrap';
     empty.style.marginBottom='16px';
-    empty.innerHTML=`<div class="sec-hd">🔎 差异项速览<span class="cmp-section-note">当前图片参数一致</span></div><div class="cmp-empty-box">未检测到差异项。</div>`;
+    empty.innerHTML=`<div class="sec-hd">${esc(t('diff_overview'))}<span class="cmp-section-note">${esc(t('diff_none_note'))}</span></div><div class="cmp-empty-box">${esc(t('diff_none'))}</div>`;
     rc.appendChild(empty);
   }
 
   appendCompareSection(
     rc,
-    '📋 全部参数',
-    `完整展示 ${keyOrder.length} 个参数`,
+    t('all_params'),
+    t('all_params_note', {count: keyOrder.length}),
     keyOrder,
     allFlat,
     diffKeys,
@@ -2420,7 +3363,7 @@ function renderComparison(){
   const mainWrap=rc.lastElementChild;
   if(mainWrap&&compareQueue.length<6){
     const hint=document.createElement('div');hint.className='cmp-add-hint';
-    hint.innerHTML=`📎 可继续上传图片加入对比（当前 ${compareQueue.length}/6 张）`;
+    hint.innerHTML=esc(t('continue_upload_hint', {count: compareQueue.length}));
     mainWrap.appendChild(hint);
   }
 
@@ -2542,14 +3485,14 @@ function buildDiffRenderMap(diffKeys, allFlat){
 }
 
 function getCompareDisplayKey(k){
-  return k==='__pos__'?'正向提示词':k==='__neg__'?'负向提示词':esc(k);
+  return k==='__pos__'?t('compare_positive_prompt'):k==='__neg__'?t('compare_negative_prompt'):esc(k);
 }
 
 function renderCmpValueBlock(rawValue, htmlValue){
   const needsExpand=rawValue.length>160||rawValue.includes('\n');
   return `<div class="cmp-val-wrap${needsExpand?' is-collapsible':''}">
     <div class="cmp-val">${htmlValue}</div>
-    ${needsExpand?'<button class="cmp-expand" type="button" onclick="toggleCmpExpand(this)">展开</button>':''}
+    ${needsExpand?`<button class="cmp-expand" type="button" onclick="toggleCmpExpand(this)">${esc(t('expand'))}</button>`:''}
   </div>`;
 }
 
@@ -2557,7 +3500,7 @@ function renderCompareCell(rawValue, isDiff, diffHTML=''){
   const value=normalizeCmpValue(rawValue);
   const cellCls=isDiff?'diff-cell':'';
   if(value===null){
-    return `<td class="${cellCls}"><span class="cmp-empty">${isDiff?'缺失':'—'}</span></td>`;
+    return `<td class="${cellCls}"><span class="cmp-empty">${isDiff?esc(t('missing')):'—'}</span></td>`;
   }
   const htmlValue=isDiff&&diffHTML?diffHTML:esc(value);
   return `<td class="${cellCls}">${renderCmpValueBlock(value,htmlValue)}</td>`;
@@ -2569,7 +3512,7 @@ function buildCompareStackHTML(keys, allFlat, diffKeys, diffRenderMap, typeLabel
     const vals=allFlat.map(f=>f[k]??null);
     const isDiff=diffKeys.has(k);
     const renderInfo=diffRenderMap[k];
-    html+=`<div class="cmp-card ${isDiff?'diff':''}"><div class="cmp-card-hd"><span class="cmp-card-key">${getCompareDisplayKey(k)}</span>${isDiff?'<span class="diff-badge">差异</span>':''}</div><div class="cmp-stack-list">`;
+    html+=`<div class="cmp-card ${isDiff?'diff':''}"><div class="cmp-card-hd"><span class="cmp-card-key">${getCompareDisplayKey(k)}</span>${isDiff?`<span class="diff-badge">${esc(t('diff'))}</span>`:''}</div><div class="cmp-stack-list">`;
     for(let i=0;i<compareQueue.length;i++){
       const entry=compareQueue[i];
       const cellHTML=renderCompareCell(vals[i], isDiff, renderInfo?renderInfo.htmls[i]:'').replace(/^<td[^>]*>/,'').replace(/<\/td>$/,'');
@@ -2582,7 +3525,7 @@ function buildCompareStackHTML(keys, allFlat, diffKeys, diffRenderMap, typeLabel
 }
 
 function buildCompareTableHTML(keys, allFlat, diffKeys, diffRenderMap, typeLabel, typeCls){
-  let th=`<div class="cmp-scroll"><table class="cmp-table"><thead><tr><th><div class="cmp-th-inner"><span style="font-size:11px;color:var(--text-muted)">参数</span></div></th>`;
+  let th=`<div class="cmp-scroll"><table class="cmp-table"><thead><tr><th><div class="cmp-th-inner"><span style="font-size:11px;color:var(--text-muted)">${esc(t('param'))}</span></div></th>`;
   for(const entry of compareQueue){
     th+=`<th><div class="cmp-th-inner">
       <img src="${getEntryThumb(entry)}" class="cmp-thumb ${entry.imgURL?'':'thumb-ph'}" alt="">
@@ -2598,7 +3541,7 @@ function buildCompareTableHTML(keys, allFlat, diffKeys, diffRenderMap, typeLabel
     const isDiff=diffKeys.has(k);
     const renderInfo=diffRenderMap[k];
     rows+=`<tr class="${isDiff?'diff-row':''}">`;
-    rows+=`<td>${getCompareDisplayKey(k)}${isDiff?'<span class="diff-badge">差异</span>':''}</td>`;
+    rows+=`<td>${getCompareDisplayKey(k)}${isDiff?`<span class="diff-badge">${esc(t('diff'))}</span>`:''}</td>`;
     for(let i=0;i<compareQueue.length;i++){
       rows+=renderCompareCell(vals[i], isDiff, renderInfo?renderInfo.htmls[i]:'');
     }
@@ -2620,7 +3563,7 @@ function toggleCmpExpand(btn){
   const wrap=btn.closest('.cmp-val-wrap');
   if(!wrap) return;
   wrap.classList.toggle('expanded');
-  btn.textContent=wrap.classList.contains('expanded')?'收起':'展开';
+  btn.textContent=wrap.classList.contains('expanded')?t('collapse'):t('expand');
 }
 
 // ─── Favorites ───────────────────────────────────────────────────────────────
@@ -2633,10 +3576,44 @@ function getFavorites(){
 function setFavorites(list){
   localStorage.setItem(FAVORITE_KEY, JSON.stringify(list));
 }
+function measureStoredTextBytes(text=''){
+  const safe=String(text ?? '');
+  try{ return new Blob([safe]).size; }catch{ return unescape(encodeURIComponent(safe)).length; }
+}
+function formatStorageSize(bytes){
+  const size=Number(bytes)||0;
+  if(size>=1024*1024) return `${(size/1024/1024).toFixed(size>=10*1024*1024?1:2)} MB`;
+  if(size>=1024) return `${(size/1024).toFixed(size>=100*1024?0:1)} KB`;
+  return `${size} B`;
+}
+function getFavoriteStorageStats(){
+  const raw=localStorage.getItem(FAVORITE_KEY) || '[]';
+  const usedBytes=measureStoredTextBytes(FAVORITE_KEY) + measureStoredTextBytes(raw);
+  const percent5Raw=usedBytes/LOCALSTORAGE_SAFE_BASELINE*100;
+  const percent10Raw=usedBytes/LOCALSTORAGE_TYPICAL_MAX*100;
+  return {
+    usedBytes,
+    percent5Raw,
+    percent10Raw,
+    percent5:Math.max(0, Math.min(100, percent5Raw))
+  };
+}
+function renderFavoriteStorageUsage(){
+  const usedEl=document.getElementById('favStorageUsed');
+  const percentEl=document.getElementById('favStoragePercent');
+  const fillEl=document.getElementById('favStorageFill');
+  const hintEl=document.getElementById('favStorageHint');
+  if(!usedEl || !percentEl || !fillEl || !hintEl) return;
+  const stats=getFavoriteStorageStats();
+  usedEl.textContent=t('fav_storage_used', {size: formatStorageSize(stats.usedBytes)});
+  percentEl.textContent=`${stats.percent5Raw.toFixed(stats.percent5Raw>=10?1:2)}%`;
+  fillEl.style.width=`${stats.percent5}%`;
+  hintEl.textContent=t('fav_storage_hint_dynamic', {p5: stats.percent5Raw.toFixed(stats.percent5Raw>=10?1:2)+'%', p10: stats.percent10Raw.toFixed(stats.percent10Raw>=10?1:2)+'%'});
+}
 function buildFavoriteTitle(payload){
-  if(payload.mode==='compare') return `对比收藏 · ${payload.entries.length} 张`;
+  if(payload.mode==='compare') return t('compare_favorite', {count: payload.entries.length});
   const e=payload.entries[0];
-  return `单图收藏 · ${e?.name||'未命名图片'}`;
+  return t('single_favorite', {name: e?.name||t('unnamed_image')});
 }
 async function createThumbnailFromSource(src, label='META'){
   if(!src) return getPlaceholderThumb(label);
@@ -2675,7 +3652,7 @@ function hydrateEntry(item){
   return {file:{name:item.name||'favorite.png',size:item.size||0},meta:item.meta||{},type:item.type||detectType(item.meta||{}),parsed:item.parsed||parseByType(item.type||detectType(item.meta||{}), item.meta||{}),imgURL:null,thumb64:item.thumb64||null};
 }
 function getTypeLabel(type){
-  return {sdwebui:'SD WebUI',comfyui:'ComfyUI',novelai:'NovelAI',midjourney:'Midjourney',unknown:'未知格式'}[type] || '未知格式';
+  return {sdwebui:'SD WebUI',comfyui:'ComfyUI',novelai:'NovelAI',midjourney:'Midjourney',unknown:t('unknown_format')}[type] || t('unknown_format');
 }
 function collectFavoriteSearchInfo(item){
   const entries=(item.entries||[]).map(e=>e.parsed?e:hydrateEntry(e));
@@ -2761,7 +3738,7 @@ function buildFavoriteThumbStack(item){
   return html;
 }
 async function saveCurrentFavorite(){
-  if(!currentViewData || !currentViewData.entries || !currentViewData.entries.length){ showToast('⚠️ 当前没有可收藏的元数据'); return; }
+  if(!currentViewData || !currentViewData.entries || !currentViewData.entries.length){ showToast(t('cannot_read_metadata')); return; }
   const favorites=getFavorites();
   const entries=await Promise.all(currentViewData.entries.map(serializeEntry));
   const payload={id:`fav_${Date.now()}_${Math.random().toString(36).slice(2,8)}`,createdAt:new Date().toISOString(),mode:currentViewData.mode,entries};
@@ -2770,17 +3747,17 @@ async function saveCurrentFavorite(){
   try{
     setFavorites(favorites.slice(0,40));
     renderFavoritesMenu();
-    showToast('⭐ 已收藏到本地');
+    showToast(t('fav_saved'));
   }catch(err){
     console.error(err);
-    showToast('⚠️ 收藏失败，可能超出 localStorage 容量');
+    showToast(t('fav_save_failed'));
   }
 }
 function deleteFavorite(id){
   const list=getFavorites().filter(x=>x.id!==id);
   setFavorites(list);
   renderFavoritesMenu();
-  showToast('🗑 已删除收藏');
+  showToast(t('fav_deleted'));
 }
 function exportFavorites(){
   downloadJSON({version:2, exportedAt:new Date().toISOString(), favorites:getFavorites()}, 'awp_favorites_export.json');
@@ -2793,16 +3770,16 @@ async function importFavoritesFromFile(file){
     const txt=await file.text();
     const data=JSON.parse(txt);
     const items=Array.isArray(data)?data:(Array.isArray(data.favorites)?data.favorites:[]);
-    if(!items.length){ showToast('⚠️ 未发现可导入的收藏数据'); return; }
+    if(!items.length){ showToast(t('fav_import_empty')); return; }
     const merged=[...items.filter(x=>x&&x.id&&Array.isArray(x.entries)), ...getFavorites()];
     const dedup=[]; const seen=new Set();
     for(const item of merged){ if(seen.has(item.id)) continue; seen.add(item.id); dedup.push(item); }
     setFavorites(dedup.slice(0,80));
     renderFavoritesMenu();
-    showToast(`✓ 已导入 ${items.length} 条收藏`);
+    showToast(t('fav_import_done', {count: items.length}));
   }catch(err){
     console.error(err);
-    showToast('⚠️ 收藏导入失败');
+    showToast(t('fav_import_failed'));
   }
 }
 function loadFavorite(id){
@@ -2820,7 +3797,7 @@ function loadFavorite(id){
   document.getElementById('favMenu').classList.remove('on');
   document.getElementById('favBtn').classList.remove('on');
   document.getElementById('favBtn').setAttribute('aria-expanded','false');
-  showToast('✓ 已载入收藏元数据');
+  showToast(t('fav_loaded'));
 }
 function resetFavoriteFilters(){
   ['favFilterModel','favFilterPrompt','favFilterResolution','favFilterKeyword'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
@@ -2828,28 +3805,29 @@ function resetFavoriteFilters(){
   renderFavoritesMenu();
 }
 function renderFavoritesMenu(){
+  renderFavoriteStorageUsage();
   const host=document.getElementById('favList'); if(!host) return;
   const list=getFavorites();
   const filters=getFavoriteFilters();
   const filtered=list.filter(item=>favoriteMatchesFilter(item, filters));
   const stat=document.getElementById('favFilterStats');
-  if(stat) stat.textContent=`${filtered.length} / ${list.length} 条`;
+  if(stat) stat.textContent=t('fav_stat_items', {shown: filtered.length, total: list.length});
   if(!filtered.length){
-    host.innerHTML=`<div class="fav-empty">${list.length?'没有符合当前筛选条件的收藏。':'还没有本地收藏。先解析图片，再点星标收藏当前结果。'}</div>`;
+    host.innerHTML=`<div class="fav-empty">${list.length?esc(t('fav_empty_filtered')):esc(t('fav_empty_none'))}</div>`;
     return;
   }
   host.innerHTML='';
   for(const item of filtered){
     const div=document.createElement('div');
     div.className='fav-item';
-    const time=new Date(item.createdAt).toLocaleString('zh-CN',{hour12:false});
+    const time=new Date(item.createdAt).toLocaleString(getHtmlLang(currentLang),{hour12:false});
     const info=item.__filterInfo || collectFavoriteSearchInfo(item);
     const sourceText=info.sourceList.map(getTypeLabel).join(' · ');
     const metaParts=[time, sourceText];
-    if(info.model) metaParts.push(`模型：${info.model}`);
-    if(info.resolution) metaParts.push(`分辨率：${info.resolution}`);
-    if(info.prompt) metaParts.push(`提示词：${info.prompt.slice(0,88)}${info.prompt.length>88?'…':''}`);
-    div.innerHTML=`${buildFavoriteThumbStack(item)}<div class="fav-main"><div class="fav-title">${esc(item.title||buildFavoriteTitle(item))}<span class="badge ${item.mode==='compare'?'cf':'sd'}">${item.mode==='compare'?'对比':'单图'}</span></div><div class="fav-meta">${esc(metaParts.join(' ｜ '))}<br>${esc((item.entries||[]).map(e=>e.name).join(' · '))}</div></div><div class="fav-ops"><button class="fav-op" type="button">载入</button><button class="fav-op" type="button">删除</button></div>`;
+    if(info.model) metaParts.push(t('fav_meta_model', {value: info.model}));
+    if(info.resolution) metaParts.push(t('fav_meta_resolution', {value: info.resolution}));
+    if(info.prompt) metaParts.push(t('fav_meta_prompt', {value: info.prompt.slice(0,88)+(info.prompt.length>88?'…':'')}));
+    div.innerHTML=`${buildFavoriteThumbStack(item)}<div class="fav-main"><div class="fav-title">${esc(buildFavoriteTitle(item))}<span class="badge ${item.mode==='compare'?'cf':'sd'}">${item.mode==='compare'?esc(t('fav_badge_compare')):esc(t('fav_badge_single'))}</span></div><div class="fav-meta">${esc(metaParts.join(' ｜ '))}<br>${esc((item.entries||[]).map(e=>e.name).join(' · '))}</div></div><div class="fav-ops"><button class="fav-op" type="button">${esc(t('fav_load'))}</button><button class="fav-op" type="button">${esc(t('fav_delete'))}</button></div>`;
     const [loadBtn,delBtn]=div.querySelectorAll('.fav-op');
     loadBtn.onclick=()=>loadFavorite(item.id);
     delBtn.onclick=()=>deleteFavorite(item.id);
@@ -2903,9 +3881,9 @@ function renderSingleEntry(entry){
   else if(type==='midjourney') renderMJ(parsed,main);
   else if(type==='comfyui'){
     if(parsed&&parsed.nodes&&parsed.nodes.length) renderCF(parsed,main);
-    else main.innerHTML=`<div class="error">⚠️ ComfyUI 工作流数据解析失败，格式可能不受支持。</div>`;
+    else main.innerHTML=`<div class="error">${esc(t('comfy_parse_failed'))}</div>`;
   } else {
-    let h=`<div class="card"><div class="sec-hd">🔍 发现的元数据字段 (${Object.keys(meta).length})</div><div class="pgrid">`;
+    let h=`<div class="card"><div class="sec-hd">${esc(t('metadata_fields', {count:Object.keys(meta).length}))}</div><div class="pgrid">`;
     for(const [k,v] of Object.entries(meta)){h+=`<div class="pitem"><span class="pkey">${esc(k)}</span><span class="pval">${esc(String(v).slice(0,120))}</span>${copyBtnHTML('cbtn', v, '⎘')}</div>`;}
     h+=`</div></div>`;
     main.innerHTML=h;
@@ -2913,7 +3891,7 @@ function renderSingleEntry(entry){
 
   const raw=document.createElement('div');
   raw.className='raw-wrap';
-  raw.innerHTML=`<button class="raw-tog" onclick="this.nextElementSibling.classList.toggle('on');this.querySelector('span').textContent=this.nextElementSibling.classList.contains('on')?'▼':'▶'"><span>▶</span> 查看原始元数据 JSON</button><div class="raw-body">${esc(JSON.stringify(meta,null,2))}</div>`;
+  raw.innerHTML=`<button class="raw-tog" onclick="this.nextElementSibling.classList.toggle('on');this.querySelector('span').textContent=this.nextElementSibling.classList.contains('on')?'▼':'▶'"><span>▶</span> ${esc(t('view_raw_json'))}</button><div class="raw-body">${esc(JSON.stringify(meta,null,2))}</div>`;
   rc.appendChild(raw);
 }
 
@@ -2923,9 +3901,9 @@ async function handleFile(file){
   const rc=document.getElementById('rc');
 
   if(currentMode==='compare'){
-    if(compareQueue.length>=6){showToast('⚠️ 最多支持 6 张图片对比');return;}
+    if(compareQueue.length>=6){showToast(t('max_compare'));return;}
     const meta=await readImageMeta(file);
-    if(!meta){showToast('⚠️ 无法读取元数据');return;}
+    if(!meta){showToast(t('cannot_read_metadata'));return;}
     const type=detectType(meta);
     const parsed=parseByType(type, meta);
     const imgURL=URL.createObjectURL(file);
@@ -2936,18 +3914,18 @@ async function handleFile(file){
   }
 
   res.classList.add('on');
-  rc.innerHTML=`<div class="loading"><div class="spin"></div> 正在读取图片元数据...</div>`;
+  rc.innerHTML=`<div class="loading"><div class="spin"></div> ${esc(t('loading_reading'))}</div>`;
   try{
     const meta=await readImageMeta(file);
-    if(!meta){rc.innerHTML=`<div class="error">⚠️ 无法读取元数据，请上传带有元数据的 PNG / JPG / WEBP 格式 AI 图片。</div>`;return;}
+    if(!meta){rc.innerHTML=`<div class="error">${esc(t('error_read_image'))}</div>`;return;}
     const keys=Object.keys(meta);
-    if(!keys.length){rc.innerHTML=`<div class="error">⚠️ 图片中未发现 AI 元数据，可能已被清除或不是 AI 生成图片。</div>`;return;}
+    if(!keys.length){rc.innerHTML=`<div class="error">${esc(t('error_no_ai_metadata'))}</div>`;return;}
     const type=detectType(meta);
     const parsed=parseByType(type, meta);
     const imgURL=URL.createObjectURL(file);
     renderSingleEntry({file,meta,type,parsed,imgURL});
   } catch(err){
-    rc.innerHTML=`<div class="error">⚠️ 解析出错: ${esc(err.message)}</div>`;
+    rc.innerHTML=`<div class="error">${esc(t('error_parse', {message: err.message}))}</div>`;
     console.error(err);
   }
 }
