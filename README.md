@@ -1,8 +1,9 @@
 <p align="center">
-  <img src="./static/logo.png" alt="FlowLY Logo" width="96" />
+  <img src="./static/logo.png" alt="FlowLY Logo" width="400" />
+
 </p>
 
-<h1 align="center">FlowLY</h1>
+  <h1 align="center">FlowLY</h1>
 <p align="center"><strong>AI 图片工作流解析器</strong></p>
 
 <p align="center">
