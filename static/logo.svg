@@ -1,1 +1,32 @@
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l2.021 6.218a1 1 0 0 0 .95.69h6.537c.969 0 1.371 1.24.588 1.81l-5.288 3.842a1 1 0 0 0-.364 1.118l2.02 6.218c.3.922-.755 1.688-1.539 1.118l-5.287-3.842a1 1 0 0 0-1.176 0l-5.287 3.842c-.784.57-1.838-.196-1.539-1.118l2.02-6.218a1 1 0 0 0-.364-1.118L.953 11.645c-.783-.57-.38-1.81.588-1.81h6.537a1 1 0 0 0 .95-.69z"></path></svg>
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .logo-container {
+            width: 300px;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="logo-container">
+        <svg viewBox="0 0 240 120" xmlns="http://www.w3.org/2000/svg">
+            <g stroke="black" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round">
+                
+                <path d="M40,80 Q20,80 20,60 Q20,35 45,35 Q50,15 80,15 Q110,15 115,35 Q145,35 145,60 Q145,80 125,80 Z" 
+                      fill="#AEDFF7" />
+
+                <polygon points="82,25 91,48 116,48 96,63 103,87 82,72 61,87 68,63 48,48 73,48" 
+                         fill="white" />
+
+                <path d="M160,40 L210,40" />
+                <path d="M165,55 L225,55" />
+                <path d="M162,70 L205,70" />
+                <path d="M168,85 L195,85" />
+            </g>
+        </svg>
+        </div>
+
+</body>
+</html>
