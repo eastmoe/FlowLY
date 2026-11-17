@@ -134,7 +134,5 @@
 
 如果这个项目对你有帮助，欢迎通过以下方式支持我：
 
-| 微信支付 | 支付宝 |
-|---|---|
-| <img src="./static/wechatpay.png" alt="WeChat Pay" width="260" /> | <img src="./static/alipay.png" alt="Alipay" width="260" /> |
-| WeChat Pay | Alipay |
+<https://afdian.com/a/eastmoe>
+
